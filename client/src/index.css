@@ -1,0 +1,256 @@
+@import "tailwindcss";
+
+body {
+  background: #F0F2F5;
+ 
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-[#D8D8D8] px-4 py-3 text-sm text-[#323232] mb-4;
+  }
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.flex::-webkit-scrollbar {
+  display: none;
+}
+
+.flex {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.montserratB {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.gradientButton {
+  background: linear-gradient(135deg, #2a7da3 0%, #63a8c4 100%);
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gradientButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-calendar {
+  border: none;
+  width: 100%;
+  font-size: small;
+  font-family: "Montserrat", sans-serif !important;
+  background: transparent;
+}
+
+/* Navigation */
+.custom-calendar .react-calendar__navigation {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.custom-calendar .react-calendar__navigation button {
+  color: #5f6b7a;
+  font-weight: 600;
+  min-width: 36px;
+  background: transparent;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.custom-calendar .react-calendar__navigation button:hover {
+  background: #edf6fb;
+  color: #1980B2;
+}
+
+.custom-calendar .react-calendar__navigation button:disabled {
+  background: transparent;
+  opacity: 0.4;
+}
+
+.custom-calendar .react-calendar__month-view__weekdays {
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  color: #a0a8b0;
+  margin-bottom: 8px;
+}
+
+.custom-calendar .react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+/* Calendar tiles */
+.custom-calendar .react-calendar__tile {
+  position: relative;
+  height: 32px;
+  width: 32px;
+  max-width: 42px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.18s ease;
+  font-weight: 500;
+  color: #2f2f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+/* Hover */
+.custom-calendar .react-calendar__tile:hover {
+  background: #eaf5fb;
+  transform: scale(1.05);
+}
+
+/* Today */
+.custom-calendar .react-calendar__tile--now {
+  background: #d9eef8 !important;
+  color: #1980B2 !important;
+  font-weight: 700;
+}
+
+/* Selected */
+.custom-calendar .react-calendar__tile--active {
+  background: #1980B2 !important;
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(74, 144, 181, 0.25);
+}
+
+/* Selected hover */
+.custom-calendar .react-calendar__tile--active:hover {
+  background: #3f81a3 !important;
+}
+
+/* Neighbor month dates */
+.custom-calendar .react-calendar__month-view__days__day--neighboringMonth {
+  color: #c5c5c5;
+}
+
+/* Remove focus border */
+.custom-calendar button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Event circles */
+.has-event {
+  position: relative;
+  color: transparent !important;
+  overflow: visible !important;
+}
+
+.has-event abbr {
+  visibility: hidden;
+}
+
+.react-calendar__tile--now.has-event {
+  background: transparent !important;
+}
+
+@keyframes bounceScale {
+  0%, 80%, 100% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-dot1 {
+  animation: bounceScale 1.2s infinite;
+}
+
+.animate-dot2 {
+  animation: bounceScale 1.2s infinite;
+  animation-delay: 0.2s;
+}
+
+.animate-dot3 {
+  animation: bounceScale 1.2s infinite;
+  animation-delay: 0.4s;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.35s ease-out;
+}
+
+.your-tab-class:focus {
+  outline: none;
+}
+
+.your-tab-class:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #646464;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #4f4f4f;
+}
+
+@keyframes popup {
+  0% {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-popup {
+  animation: popup 0.2s ease-out;
+}
+
