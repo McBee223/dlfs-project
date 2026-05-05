@@ -20,6 +20,7 @@ function AdminPersonalInformation() {
     const [microsoftaccount, setMicrosoftaccount] = useState("");
     const [adminId, setAdminId] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
@@ -36,7 +37,8 @@ function AdminPersonalInformation() {
                 setPassword(u.password || "");
                 setMicrosoftaccount(u.microsoftaccount || "");
                 setAdminId(u.id || "");
-            });
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     const handleSave = () => {
@@ -60,6 +62,12 @@ function AdminPersonalInformation() {
             setShowPassword(false);
         });
     };
+
+    if (loading) return (
+        <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full flex items-center justify-center h-40">
+            <p className="text-gray-400 text-sm 2xl:text-base">Loading...</p>
+        </div>
+    );
 
     return (
         <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full">

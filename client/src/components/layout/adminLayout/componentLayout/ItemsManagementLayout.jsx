@@ -496,7 +496,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                         claimant: item.claimant || '-',
                         item_number: item.itemNumber || `#${item.id}`,
                         item_name: item.itemName || item.name,
-                        status: item.status,
+                        status: activeTab.key === 'lost' ? 'Unclaimed' : item.status,
                         original_id: item.claimDbId || item.id || null,
                         user_id: item.userId || null,
                         lost_item_id: item.lostItemId || null,
