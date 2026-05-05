@@ -50,7 +50,7 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
         const token = localStorage.getItem("userToken");
         try {
             if (!isPinned) {
-                const res = await authfetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items", {
+                const res = await authfetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                     body: JSON.stringify({ lost_item_id: item.id })

@@ -46,7 +46,7 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 
     const fetchPinnedItems = useCallback(() => {
         const token = localStorage.getItem("userToken");
-        authfetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items", {
+        authfetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
