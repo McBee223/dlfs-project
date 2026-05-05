@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
-const { createNotification } = require('./notificationController');
+const { createNotification } = require('./NotificationController');
 const { createAdminNotification } = require('./adminNotificationController');
 
 cloudinary.config({
