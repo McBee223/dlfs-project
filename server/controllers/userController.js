@@ -1,7 +1,7 @@
 const db = require('../config/db');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { createNotification } = require('./notificationController');
+const { createNotification } = require('./NotificationController');
 const { createAdminNotification } = require('./adminNotificationController');
 
 exports.signup = (req, res) => {
