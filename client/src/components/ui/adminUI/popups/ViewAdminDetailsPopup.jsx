@@ -9,8 +9,7 @@ import HidePasswordIcon from "../../../../assets/icons/HidePasswordIcon.svg";
 function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
     const [showPassword, setShowPassword] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [firstName, setFirstName] = useState(admin?.firstname || "");
-    const [lastName, setLastName] = useState(admin?.lastname || "");
+    const [fullName, setFullName] = useState(admin?.name || "");
     const [password, setPassword] = useState(admin?.password || "");
     const [adminId, setAdminId] = useState(admin?.id || "");
     const [microsoftaccount, setMicrosoftAccount] = useState(admin?.microsoftaccount || "");
@@ -20,14 +19,6 @@ function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
     const { setName: setContextName } = useProfile();
     const modalRef = useRef();
     const token = localStorage.getItem('adminToken');
-
-    useEffect(() => {
-        if (admin?.name) {
-            const parts = admin.name.split(' ');
-            setFirstName(parts[0] || '');
-            setLastName(parts.slice(1).join(' ') || '');
-        }
-    }, [admin]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -40,15 +31,13 @@ function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
     }, [onClose]);
 
     const handleSave = () => {
-        const fullName = `${firstName} ${lastName}`.trim();
-
         fetch(`${import.meta.env.VITE_API_URL}/api/admin/admins/${originalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({ id: adminId, firstname: firstName, lastname: lastName, password, microsoftaccount })
+            body: JSON.stringify({ id: adminId, name: fullName, password, microsoftaccount })
         })
             .then(res => res.json())
             .then(data => {
@@ -79,27 +68,15 @@ function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
                 </div>
 
                 <div className="flex flex-col">
-                    <div className="flex gap-2 2xl:gap-3">
-                        <div className="flex-1">
-                            <label className="text-xs 2xl:text-sm text-[#000000] font-semibold mb-1 2xl:mb-2 block">First Name</label>
-                            <input
-                                type="text"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                disabled={fieldDisabled}
-                                className={`input 2xl:text-base w-full ${!fieldDisabled ? "bg-gray-100" : "bg-white"}`}
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <label className="text-xs 2xl:text-sm text-[#000000] font-semibold mb-1 2xl:mb-2 block">Last Name</label>
-                            <input
-                                type="text"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                disabled={fieldDisabled}
-                                className={`input 2xl:text-base w-full ${!fieldDisabled ? "bg-gray-100" : "bg-white"}`}
-                            />
-                        </div>
+                    <div>
+                        <label className="text-xs 2xl:text-sm text-[#000000] font-semibold mb-1 2xl:mb-2 block">Full Name</label>
+                        <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            disabled={fieldDisabled}
+                            className={`input 2xl:text-base w-full ${!fieldDisabled ? "bg-gray-100" : "bg-white"}`}
+                        />
                     </div>
 
                     <div>
@@ -170,7 +147,3 @@ function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
 }
 
 export default ViewAdminDetailsPopup;
-
-
-
-

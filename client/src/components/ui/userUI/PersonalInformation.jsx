@@ -11,8 +11,7 @@ import ContactIcon from '../../../assets/icons/ContactIcon.svg';
 
 function PersonalInformation() {
     const [editMode, setEditMode] = useState(false);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [fullName, setFullName] = useState("");
     const [localGender, setLocalGender] = useState("");
     const [localContact, setLocalContact] = useState("");
 
@@ -22,9 +21,7 @@ function PersonalInformation() {
     useEffect(() => {
         if (!name || name === "Loading...") return;
         if (editMode) return;
-        const parts = name.split(' ');
-        setFirstName(parts[0] || '');
-        setLastName(parts.slice(1).join(' ') || '');
+        setFullName(name);
     }, [name, editMode]);
 
     useEffect(() => {
@@ -38,8 +35,6 @@ function PersonalInformation() {
     }, [contact, editMode]);
 
     const handleSave = () => {
-        const fullName = `${firstName} ${lastName}`.trim();
-
         authFetch(`${import.meta.env.VITE_API_URL}/api/user/profile`, {
             method: 'PUT',
             headers: {
@@ -57,34 +52,21 @@ function PersonalInformation() {
     };
 
     return (
-        <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full">            <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg 2xl:text-xl font-semibold text-gray-700">Personal Information</h2>
-            {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
-        </div>
+        <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full">
+            <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg 2xl:text-xl font-semibold text-gray-700">Personal Information</h2>
+                {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
+            </div>
 
             <div className="grid grid-cols-2 gap-6 2xl:gap-8">
-                <div>
-                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">First Name</label>
+                <div className="col-span-2">
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">Full Name</label>
                     <div className={`flex items-center input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
                         <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1" />
                         <input
                             type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            readOnly={!editMode}
-                            className="flex-1 focus:outline-none bg-transparent"
-                        />
-                    </div>
-                </div>
-
-                <div>
-                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">Last Name</label>
-                    <div className={`flex items-center input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                        <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1" />
-                        <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
                             readOnly={!editMode}
                             className="flex-1 focus:outline-none bg-transparent"
                         />
@@ -139,7 +121,3 @@ function PersonalInformation() {
 }
 
 export default PersonalInformation;
-
-
-
-

@@ -15,8 +15,7 @@ function AdminPersonalInformation() {
     const { setName: setContextName, fetchProfile } = useProfile();
     const [editMode, setEditMode] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [fullName, setFullName] = useState("");
     const [contact, setContact] = useState("");
     const [microsoftaccount, setMicrosoftaccount] = useState("");
     const [adminId, setAdminId] = useState("");
@@ -32,9 +31,7 @@ function AdminPersonalInformation() {
             .then(data => {
                 const u = data.user;
                 if (!u) return;
-                const parts = u.name.split(' ');
-                setFirstName(parts[0] || '');
-                setLastName(parts.slice(1).join(' ') || '');
+                setFullName(u.name || "");
                 setContact(u.contact || "");
                 setPassword(u.password || "");
                 setMicrosoftaccount(u.microsoftaccount || "");
@@ -44,7 +41,6 @@ function AdminPersonalInformation() {
 
     const handleSave = () => {
         const token = localStorage.getItem('adminToken');
-        const fullName = `${firstName} ${lastName}`.trim();
 
         fetch(`${import.meta.env.VITE_API_URL}/api/admin/profile`, {
             method: 'PUT',
@@ -72,37 +68,21 @@ function AdminPersonalInformation() {
                 {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
             </div>
 
-            <div className="grid grid-cols-2 gap-6 2xl:gap-8">
+            <div className="flex flex-col gap-4 2xl:gap-6">
                 <div>
-                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">First Name</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Full Name</label>
                     <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
                         <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
                         <input
                             type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
                             readOnly={!editMode}
                             className="flex-1 bg-transparent outline-none 2xl:text-base"
                         />
                     </div>
                 </div>
 
-                <div>
-                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Last Name</label>
-                    <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                        <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
-                        <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            readOnly={!editMode}
-                            className="flex-1 bg-transparent outline-none 2xl:text-base"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="mt-6 2xl:mt-8 flex flex-col gap-4 2xl:gap-6">
                 <div>
                     <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Password</label>
                     <div className={`input flex items-center justify-between ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
@@ -137,27 +117,27 @@ function AdminPersonalInformation() {
                         <input type="text" value={microsoftaccount} readOnly className="flex-1 bg-transparent outline-none 2xl:text-base" />
                     </div>
                 </div>
-            </div>
 
-            <div className="mt-6 2xl:mt-8">
-                <label className="text-sm 2xl:text-base text-gray-500 mb-1 2xl:mb-2 block">
-                    Contact <span className="text-gray-400">(Optional)</span>
-                </label>
-                <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                    <img src={ContactIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
-                    <input
-                        type="text"
-                        value={contact}
-                        onChange={(e) => setContact(e.target.value)}
-                        readOnly={!editMode}
-                        maxLength={20}
-                        inputMode="numeric"
-                        className="flex-1 bg-transparent outline-none 2xl:text-base"
-                        onKeyDown={(e) => {
-                            if (["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
-                            if (!/^\d$/.test(e.key)) e.preventDefault();
-                        }}
-                    />
+                <div>
+                    <label className="text-sm 2xl:text-base text-gray-500 mb-1 2xl:mb-2 block">
+                        Contact <span className="text-gray-400">(Optional)</span>
+                    </label>
+                    <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
+                        <img src={ContactIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
+                        <input
+                            type="text"
+                            value={contact}
+                            onChange={(e) => setContact(e.target.value)}
+                            readOnly={!editMode}
+                            maxLength={20}
+                            inputMode="numeric"
+                            className="flex-1 bg-transparent outline-none 2xl:text-base"
+                            onKeyDown={(e) => {
+                                if (["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
+                                if (!/^\d$/.test(e.key)) e.preventDefault();
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,7 +145,3 @@ function AdminPersonalInformation() {
 }
 
 export default AdminPersonalInformation;
-
-
-
-
