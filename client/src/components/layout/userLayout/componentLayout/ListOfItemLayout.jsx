@@ -246,8 +246,8 @@ function ListOfItemLayout() {
 
             <div className="flex justify-between items-center my-1 py-2">
                 <div className="flex gap-2 items-center">
-                    <h1 className="text-lg text-[#646464] font-semibold">List of Items</h1>
-                    <p className="text-[10px] text-[#047EAF] rounded-4xl bg-[#E8F7FF] px-3 py-0.5">
+                    <h1 className="text-lg 2xl:text-xl text-[#646464] font-semibold">List of Items</h1>
+                    <p className="text-[10px] 2xl:text-[12px] text-[#047EAF] rounded-4xl bg-[#E8F7FF] px-3 py-0.5">
                         {filteredItems.length} Total Items
                     </p>
                 </div>
@@ -259,7 +259,7 @@ function ListOfItemLayout() {
                             onClick={() => setOpenFilter(prev => !prev)}
                         />
                         {openFilter && (
-                            <div className="absolute -top-17 right-23 mt-2 z-50">
+                            <div className="absolute -top-17 2xl:-top-14 right-23 2xl:right-29 mt-2 z-50">
                                 <FilterPopup
                                     onApply={handleFilterApply}
                                     onClearAll={handleClearFilters}
@@ -283,8 +283,9 @@ function ListOfItemLayout() {
                                 type="checkbox"
                                 onChange={toggleSelectAll}
                                 checked={selectedItems.length === currentItems.length && currentItems.length > 0}
+                                className="w-4 h-4 2xl:w-5 2xl:h-5 cursor-pointer"
                             />
-                            <p className="text-xs text-[#969696]">{selectedItems.length} Selected</p>
+                            <p className="text-xs 2xl:text-sm text-[#969696]">{selectedItems.length} Selected</p>
                         </>
                     )}
                 </div>
@@ -293,13 +294,13 @@ function ListOfItemLayout() {
             <div className="flex gap-6 border-b border-[#D8D8D8] mb-3">
                 <button
                     onClick={() => setActiveTab("items")}
-                    className={`pb-2 font-semibold focus:outline-none focus:ring-0 ${activeTab === "items" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
+                    className={`pb-2 2xl:text-lg font-semibold focus:outline-none focus:ring-0 ${activeTab === "items" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
                 >
                     Items
                 </button>
                 <button
                     onClick={() => setActiveTab("trash")}
-                    className={`pb-2 font-semibold focus:outline-none focus:ring-0 ${activeTab === "trash" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
+                    className={`pb-2 2xl:text-lg font-semibold focus:outline-none focus:ring-0 ${activeTab === "trash" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
                 >
                     Trash
                 </button>

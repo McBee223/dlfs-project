@@ -73,18 +73,18 @@ function TopBar({ title, bg, iconbg }) {
     };
 
     return (
-        <div className={`h-14 px-4 py-4 flex items-center justify-between shrink-0 my-2 mx-2 bg-${bg}`}>
-            <h1 className="montserrat text-2xl font-semibold text-[#000000]">
+        <div className={`h-14 px-4 py-4 flex items-center justify-between shrink-0 my-2 mx-2 2xl:mr-3 bg-${bg}`}>
+            <h1 className="montserrat text-2xl 2xl:text-3xl font-semibold text-[#000000]">
                 {title}
             </h1>
 
             <div className="flex items-center gap-4">
                 <div className={`rounded-full px-4 py-2 flex items-center gap-2 w-64 ${iconbg}`}>
-                    <img src={SearchIcon} alt="search" className="w-5 h-5 opacity-60" />
+                    <img src={SearchIcon} alt="search" className="w-5 h-5 2xl:w-6 2xl:h-6 opacity-60" />
                     <input
                         type="text"
                         placeholder="Search your item"
-                        className="bg-transparent outline-none text-xs text-[#646464] w-full"
+                        className="bg-transparent outline-none text-xs 2xl:text-sm text-[#646464] w-full"
                         value={searchValue}
                         onChange={handleSearchChange}
                         onKeyDown={handleSearchKeyDown}
@@ -92,7 +92,7 @@ function TopBar({ title, bg, iconbg }) {
                     {isDashboard && searchValue && (
                         <button
                             onClick={handleClearSearch}
-                            className="text-gray-400 hover:text-[#047EAF] text-sm font-bold transition"
+                            className="text-gray-400 hover:text-[#047EAF] text-sm 2xl:text-base font-bold transition"
                         >
                             ✕
                         </button>
@@ -108,10 +108,10 @@ function TopBar({ title, bg, iconbg }) {
                         <img
                             src={NotifIcon}
                             alt="notification"
-                            className={`w-5 h-5 ${notifOpen ? "brightness-0 invert" : ""}`}
+                            className={`w-5 h-5 2xl:w-6 2xl:h-6  ${notifOpen ? "brightness-0 invert" : ""}`}
                         />
                         {unreadCount > 0 && (
-                            <span className="absolute top-2 right-2  w-2 h-2 bg-blue-500 rounded-full border border-white" />
+                            <span className="absolute top-2 right-2 w-2 h-2 2xl:w-2.5 2xl:h-2.5 bg-blue-500 rounded-full border border-white" />
                         )}
                     </button>
                     {notifOpen && <NotificationPopUp />}
@@ -124,17 +124,17 @@ function TopBar({ title, bg, iconbg }) {
                         ${chatOpen ? "bg-[#047EAF]" : `${iconbg}`}`}
                     >
                         <img src={ChatIcon} alt="chat"
-                            className={`w-5 h-5 ${chatOpen ? "brightness-0 invert" : ""}`} />
+                            className={`w-5 h-5 2xl:w-6 2xl:h-6 ${chatOpen ? "brightness-0 invert" : ""}`} />
                     </button>
                     {chatOpen && <ChatPopup onClose={() => setChatOpen(false)} />}
                 </div>
 
-                <span className="w-px h-6 bg-gray-300"></span>
+                <span className="w-px h-6 2xl:h-7 bg-gray-300"></span>
 
                 <div className="flex items-center gap-2">
                     <img
                         src={profileImg || ProfileImage2}
-                        className="w-8 h-8 rounded-full object-cover"
+                        className="w-8 h-8 2xl:w-9 2xl:h-9 rounded-full object-cover"
                         alt="profile"
                     />
                     <span

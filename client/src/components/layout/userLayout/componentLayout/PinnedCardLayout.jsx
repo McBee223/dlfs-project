@@ -4,7 +4,7 @@ import ViewDetailsPopup from "../../../ui/userUI/popups/ViewDetailsPopup";
 import ClaimItemPopup from "../../../ui/userUI/popups/ClaimItemPopup";
 import ClaimSuccesPopup from "../../../ui/userUI/popups/ClaimSuccesPopup";
 
-function PinnedCardLayout({ pinnedItems, scrollRef, onUnpin }) {
+function PinnedCardLayout({ pinnedItems, scrollRef, onUnpin, dismissedCancels = [], onDismissCancelNotif }) {
     const [selectedItem, setSelectedItem] = useState(null);
     const [showClaimPopup, setShowClaimPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -38,11 +38,16 @@ function PinnedCardLayout({ pinnedItems, scrollRef, onUnpin }) {
     return (
         <>
             <div ref={scrollRef} className="overflow-x-auto overflow-y-visible scrollbar-none scroll-smooth">
-                <div className="flex gap-4 px-1 py-3">
+                <div className="flex gap-4 px-1 py-3 2xl:text-base">
                     {pinnedItems.map((item) => {
                         const description = `This ${item.name} was found on ${item.dateFound} and was last seen near ${item.lastSeen}.`;
+                        const showApprovedCount =
+                            (item.approvedClaims?.length ?? 0) > 0 &&
+                            item.claimStatus !== 'Approved' &&
+                            item.claimStatus !== 'Returned' &&
+                            item.status !== 'Returned';
                         return (
-                            <div key={item.id} className="w-68 shrink-0">
+                            <div key={item.id} className="w-68 2xl:w-78 shrink-0">
                                 <PinnedItemsCard
                                     item={item}
                                     category={item.category}
@@ -56,6 +61,9 @@ function PinnedCardLayout({ pinnedItems, scrollRef, onUnpin }) {
                                     onClaim={handleClaimClick}
                                     onEditClaim={handleEditClaim}
                                     onUnpin={onUnpin}
+                                    approvedClaimsCount={showApprovedCount ? (item.approvedClaims?.length ?? 0) : 0}
+                                    hasCancelNotif={item.hasCancelNotif && !dismissedCancels.includes(String(item.id))}
+                                    onDismissCancelNotif={() => onDismissCancelNotif?.(item.id, item.userClaimId)}
                                 />
                             </div>
                         );
@@ -70,6 +78,11 @@ function PinnedCardLayout({ pinnedItems, scrollRef, onUnpin }) {
                     onClaim={() => handleClaimClick(selectedItem)}
                     onEditClaim={() => handleEditClaim(selectedItem)}
                     claimStatus={selectedItem?.claimStatus}
+                    itemStatus={selectedItem?.status}
+                    returnedByName={selectedItem?.returnedByName}
+                    returnedAt={selectedItem?.returnedAt}
+                    approvedClaims={selectedItem?.approvedClaims}
+                    hasOtherApprovedClaim={selectedItem?.hasOtherApprovedClaim}
                 />
             )}
 

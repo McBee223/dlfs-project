@@ -42,25 +42,25 @@ function HeroSection() {
             <img
                 src={HeroBackground}
                 alt=""
-                className="absolute right-0 -bottom-40 w-220 max-w-none"
+                className="absolute right-0 -bottom-40 w-230 2xl:w-310 max-w-none"
             />
 
             <img
                 src={PhoneImage}
                 alt=""
-                className="absolute right-6 -bottom-62 w-150 max-w-none z-10"
+                className="absolute right-15 2xl:right-17 -bottom-52 2xl:-bottom-72 w-150 2xl:w-220 max-w-none z-10"
             />
 
-            <div className="relative z-20 w-full max-w-7xl mx-20 px-12 grid grid-cols-2 items-center">
+            <div className="relative z-20 w-full max-w-8xl mx-20 2xl:mx-30 px-12 2xl:px-22 grid grid-cols-2 items-center">
 
                 <div>
-                    <h1 className="montserrat text-5xl font-bold text-[#323232] leading-tight">
+                    <h1 className="montserrat text-5xl 2xl:text-7xl font-bold text-[#323232] leading-tight">
                         DLFS: Find it <br />
                         faster, claim it <br />
                         smarter
                     </h1>
 
-                    <p className="montserrat text-md text-[#646464] font-semibold my-3 max-w-md">
+                    <p className="montserrat text-base 2xl:text-xl text-[#646464] font-semibold my-3 max-w-md 2xl:max-w-xl">
                         DLFS streamlines the lost-and-found process by providing a
                         faster and more efficient way to claim lost items through
                         a digital platform.
@@ -75,7 +75,7 @@ function HeroSection() {
                             alt="example"
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
-                            className={`w-35 cursor-pointer transition-transform duration-300 ${isHovered ? "scale-110" : "scale-100"
+                            className={`w-35 2xl:w-55 cursor-pointer transition-transform duration-300 ${isHovered ? "scale-110" : "scale-100"
                                 }`}
                         />
                     </button>

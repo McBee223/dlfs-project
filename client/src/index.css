@@ -5,10 +5,16 @@ body {
  
 }
 
+html, body {
+  height: 100%;
+  overflow-y: auto;
+}
+
 @layer components {
   .input {
     @apply w-full rounded-lg border border-[#D8D8D8] px-4 py-3 text-sm text-[#323232] mb-4;
   }
+  
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -21,15 +27,14 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-.flex::-webkit-scrollbar {
+.hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-.flex {
+.hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
 .montserrat {
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;

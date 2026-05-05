@@ -20,16 +20,16 @@ function FilterNavigateLayout({ activeCategory, onCategoryChange }) {
     };
 
     return (
-        <div className="w-full max-w-240 my-5">
+        <div className="w-full max-w-240 2xl:max-w-337 my-5">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold montserrat text-[#323232]">
+                <h2 className="text-xl 2xl:text-2xl font-semibold montserrat text-[#323232]">
                     Lost Item
                 </h2>
                 <div className="flex gap-2">
-                    <button onClick={scrollLeft} className="w-8 h-8 flex items-center justify-center rounded-full">
+                    <button onClick={scrollLeft} className="w-8 h-8 2xl:w-9 2xl:h-9 flex items-center justify-center rounded-full">
                         <img src={active === "left" ? DashboardButtonLeftActive : DashboardButtonLeft} alt="" />
                     </button>
-                    <button onClick={scrollRight} className="w-8 h-8 flex items-center justify-center rounded-full">
+                    <button onClick={scrollRight} className="w-8 h-8 2xl:w-9 2xl:h-9 flex items-center justify-center rounded-full">
                         <img src={active === "right" ? DashboardButtonRightActive : DashboardButtonRight} alt="" />
                     </button>
                 </div>

@@ -9,7 +9,7 @@ function GenderPopup({ disabled, value, onChange }) {
 
     const handleSelect = (option) => {
         if (disabled) return;
-        onChange(option);  // 👈 tell the parent
+        onChange(option); 
         setOpen(false);
     };
 
@@ -30,13 +30,13 @@ function GenderPopup({ disabled, value, onChange }) {
 
     return (
         <div className="montserrat" ref={dropdownRef}>
-            <label className="text-sm font-semibold text-gray-500 mb-1 block">Gender</label>
+            <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">Gender</label>
 
             <div className="flex flex-col w-full">
-                <div className={`flex items-center rounded-lg px-3 py-2.5 border
+                <div className={`flex items-center rounded-lg px-3 2xl:px-5 py-2.5 2xl:py-3.5 border
                     ${disabled ? "border-gray-300 bg-white cursor-default" : "border-gray-300 bg-gray-100"}
                     focus-within:border-gray-400`}>
-                    <img src={GenderIcon} className="w-5 h-5 mr-2" />
+                    <img src={GenderIcon} className="w-5 h-5 2xl:w-5.5 2xl:h-5.5 mr-2" />
                     <button
                         type="button"
                         onClick={toggleDropdown}
@@ -45,7 +45,7 @@ function GenderPopup({ disabled, value, onChange }) {
                         <span className="text-gray-500">{value}</span> {/* 👈 use prop */}
                         {!disabled && (
                             <img src={DropdownIcon} alt="Dropdown arrow"
-                                className={`w-5 h-5 ml-2 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+                                className={`w-5 h-5 2xl:w-5.5 2xl:h-5.5 ml-2 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
                         )}
                     </button>
                 </div>
@@ -56,7 +56,7 @@ function GenderPopup({ disabled, value, onChange }) {
                             <button
                                 key={option}
                                 onClick={() => handleSelect(option)}
-                                className="block w-full text-left text-sm pl-10 py-2 hover:bg-[#F9F9F9] focus:outline-none"
+                                className="block w-full text-left text-sm 2xl:text-base  pl-10 py-2 hover:bg-[#F9F9F9] focus:outline-none"
                             >
                                 {option}
                             </button>

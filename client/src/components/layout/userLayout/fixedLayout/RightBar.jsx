@@ -5,7 +5,7 @@ import ELMSButtonCard from "../../../ui/userUI/cards/ELMSButtonCard ";
 
 function RightBar({ pinnedCount, claimedCount }) {
     return (
-        <div className="min-h-screen w-60 transition-all duration-200 mx-2 mr-6">
+        <div className="min-h-screen w-60 2xl:w-70 transition-all duration-200 mx-2 mr-6 2xl:mr-7">
             <div className="flex flex-1 min-h-0 h-full">
                 <div className="flex-1">
                     <TotalItemsCard total={claimedCount} />

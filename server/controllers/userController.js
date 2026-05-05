@@ -180,21 +180,47 @@ exports.getPinnedItems = (req, res) => {
   const sql = `
     SELECT l.*,
       c.id AS user_claim_id,
-      c.status AS claim_status
+      c.status AS claim_status,
+      c.has_cancel_notif,
+      (
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'claim_id', c2.id,
+            'user_id', c2.user_id,
+            'name', u2.name,
+            'approved_at', c2.date_submitted,
+            'pickup_date', c2.pickup_date,
+            'pickup_time', c2.pickup_time
+          )
+        )
+        FROM claims_items c2
+        LEFT JOIN users u2 ON u2.id = c2.user_id
+        WHERE c2.lost_item_id = l.id AND c2.status = 'Approved'
+      ) AS approved_claims,
+      ret.returned_at AS returned_at,
+      ret_user.name AS returned_by_name
     FROM lost_items l
     INNER JOIN pinned_items p ON l.id = p.lost_item_id
     LEFT JOIN claims_items c 
       ON c.id = (
         SELECT id FROM claims_items 
-        WHERE lost_item_id = l.id AND user_id = ?
+        WHERE lost_item_id = l.id AND user_id = ? AND status != 'Trashed'
         ORDER BY id DESC LIMIT 1
       )
+    LEFT JOIN returned_items ret ON ret.lost_item_id = l.id
+    LEFT JOIN users ret_user ON ret_user.id = ret.user_id
     WHERE p.user_id = ?
     ORDER BY p.pinned_at DESC
   `;
   db.query(sql, [req.user.id, req.user.id], (err, results) => {
     if (err) return res.status(500).json({ message: 'Failed to fetch pinned items', error: err.message });
-    res.status(200).json({ items: results });
+    const parsed = results.map(row => ({
+      ...row,
+      approved_claims: row.approved_claims
+        ? (typeof row.approved_claims === 'string' ? JSON.parse(row.approved_claims) : row.approved_claims)
+        : []
+    }));
+    res.status(200).json({ items: parsed });
   });
 };
 

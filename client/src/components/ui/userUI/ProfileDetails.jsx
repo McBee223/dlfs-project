@@ -44,8 +44,8 @@ function ProfileDetails() {
     };
 
     return (
-        <div className="montserrat w-full h-auto bg-[#FFFFFF] px-5 py-8 rounded-2xl mt-2">
-            <div className="flex items-center gap-3">
+        <div className="montserrat w-full h-auto bg-[#FFFFFF] px-5 py-8 2xl:px-6 2xl:py-9 rounded-2xl">
+            <div className="flex items-center gap-3 2xl:gap-5">
                 <label
                     className="cursor-pointer flex items-center justify-center"
                     onMouseEnter={() => setHovering(true)}
@@ -54,12 +54,12 @@ function ProfileDetails() {
                     <img
                         src={profileImg || ProfileImage2}
                         alt="Profile"
-                        className="rounded-full w-15 h-15 object-cover"
+                        className="rounded-full w-15 h-15 2xl:w-20 2xl:h-20 object-cover"
                     />
                     <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                     {hovering && (
                         <div
-                            className="fixed z-50 bg-gray-500/80 text-white text-xs px-2 py-1 rounded-md pointer-events-none"
+                            className="fixed z-50 bg-gray-500/80 text-white text-xs 2xl:text-sm px-2 py-1 rounded-md pointer-events-none"
                             style={{ top: `${window.event?.clientY + 10}px`, left: `${window.event?.clientX}px` }}
                         >
                             Change Photo
@@ -68,8 +68,8 @@ function ProfileDetails() {
                 </label>
 
                 <div className="flex flex-col">
-                    <h1 className="font-semibold text-lg">{name?.replace('|', ' ')}</h1>
-                    <p className="text-xs text-[#969696]">(Student)</p>
+                    <h1 className="font-semibold text-lg 2xl:text-xl">{name?.replace('|', ' ')}</h1>
+                    <p className="text-xs 2xl:text-sm text-[#969696]">(Student)</p>
                 </div>
             </div>
         </div>

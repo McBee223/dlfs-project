@@ -96,63 +96,80 @@ function AdminAccountLayout({
         else setSelectedIds(admins.map((a) => a.id));
     };
 
-    return (
-        <div className="montserrat text-sm text-[#646464] font-semibold overflow-x-auto">
-            <div className={`grid ${editMode ? "grid-cols-[auto_1fr_1.8fr_2.2fr_1fr_1.2fr_1fr_auto]" : "grid-cols-[1fr_1.8fr_2.2fr_1fr_1.2fr_1fr_auto]"} bg-[#D9EEF9] p-3 rounded-sm text-[#047EAF] font-semibold min-w-max`}>
-                {editMode && (
-                    <div className="px-2 flex items-center">
-                        <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} className="w-4 h-4 accent-[#047EAF] cursor-pointer" />
-                    </div>
-                )}
-                <div className="px-2">Admin ID</div>
-                <div className="px-2">Name</div>
-                <div className="px-2">Microsoft Account</div>
-                <div className="px-2">Password</div>
-                <div className="px-2">Date Registered</div>
-                <div className="px-2">User Level</div>
-                <div className="px-2 text-center w-20">Actions</div>
-            </div>
+    const gridCols = editMode
+        ? "grid-cols-[20px_100px_140px_280px_120px_150px_100px_auto]"
+        : "grid-cols-[100px_150px_280px_120px_150px_100px_auto]";
 
-            {admins.length === 0 ? (
-                <NoAccountYetLayout info="admins" />
-            ) : filteredData.length === 0 ? (
-                <NoAccountFoundLayout onClear={onClear} />
-            ) : filteredData.map((a) => (
-                <div
-                    key={a.id}
-                    className={`grid ${editMode ? "grid-cols-[auto_1fr_1.8fr_2.2fr_1fr_1.2fr_1fr_auto]" : "grid-cols-[1fr_1.8fr_2.2fr_1fr_1.2fr_1fr_auto]"} p-3 border-b border-gray-100 items-center min-w-max ${editMode && selectedIds.includes(a.id) ? "bg-[#EAF5FB]" : ""} ${a.id === currentAdminId ? "opacity-50" : ""}`}
-                >
-                    {editMode && (
-                        <div className="px-2 flex items-center">
-                            <input
-                                type="checkbox"
-                                checked={selectedIds.includes(a.id)}
-                                onChange={() => toggleSelect(a.id)}
-                                disabled={a.id === currentAdminId}
-                                className="w-4 h-4 accent-[#047EAF] cursor-pointer disabled:cursor-not-allowed"
-                            />
-                        </div>
-                    )}
-                    <div className="px-2 truncate">{a.id}</div>
-                    <div className="px-2 truncate">{a.name?.replace(/\|/g, ' ')}</div>
-                    <div className="px-2 w-60 truncate">{a.microsoftaccount}</div>
-                    <div className="px-2 truncate">{showPassword === a.id ? a.password : "********"}</div>
-                    <div className="px-2 truncate">{a.date}</div>
-                    <div className="px-2">
-                        <span className="bg-[#FFF6D4] text-[#FFCC00] px-3 py-1 rounded-lg text-xs inline-block truncate max-w-full">{a.role}</span>
-                    </div>
-                    <div className="px-2 flex justify-center relative w-20">
-                        <button onClick={() => setActiveMenu(activeMenu === a.id ? null : a.id)} className="text-lg font-bold">•••</button>
-                        {activeMenu === a.id && (
-                            <div data-popup="true" className="absolute right-0 -top-9 bg-white shadow-md border border-[#646464] rounded-md w-50 z-50">
-                                <button data-popup="true" onClick={() => { setSelectedAdmin(a); setActiveMenu(null); }} className="text-[#646464] w-full px-3 py-2 hover:bg-gray-100 hover:rounded-md text-left">
-                                    View Admin Detail
-                                </button>
+    const gridCols2xl = editMode
+        ? "2xl:grid-cols-[20px_145px_215px_390px_170px_215px_120px_auto]"
+        : "2xl:grid-cols-[145px_215px_390px_170px_215px_120px_auto]";
+
+    return (
+        <div className="2xl:w-full montserrat text-sm 2xl:text-base text-[#646464] font-semibold">
+            <div className="w-full">
+                <div className="overflow-x-auto max-w-277 2xl:max-w-410">
+                    <div className={`grid ${gridCols} ${gridCols2xl} bg-[#D9EEF9] w-full p-3 2xl:p-4 rounded-sm text-[#047EAF] font-semibold`}>
+                        {editMode && (
+                            <div className="px-2 flex items-center">
+                                <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} className="accent-[#047EAF] cursor-pointer 2xl:scale-120" />
                             </div>
                         )}
+                        <div className="px-2">Admin ID</div>
+                        <div className="px-2">Name</div>
+                        <div className="px-2">Microsoft Account</div>
+                        <div className="px-2">Password</div>
+                        <div className="px-2">Date Registered</div>
+                        <div className="px-2">User Level</div>
+                        <div className="px-2 text-center">Actions</div>
                     </div>
+
+                    {admins.length === 0 ? (
+                        <NoAccountYetLayout info="admins" />
+                    ) : filteredData.length === 0 ? (
+                        <NoAccountFoundLayout onClear={onClear} />
+                    ) : filteredData.map((a) => (
+                        <div
+                            key={a.id}
+                            className={`grid ${gridCols} ${gridCols2xl} p-3 2xl:p-4 border-b border-gray-100 items-center ${editMode && selectedIds.includes(a.id) ? "bg-[#EAF5FB]" : ""} ${a.id === currentAdminId ? "opacity-50" : ""}`}
+                        >
+                            {editMode && (
+                                <div className="px-2 flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedIds.includes(a.id)}
+                                        onChange={() => toggleSelect(a.id)}
+                                        disabled={a.id === currentAdminId}
+                                        className="mt-0 2xl:mt-0 accent-[#047EAF] cursor-pointer disabled:cursor-not-allowed 2xl:scale-120"
+                                    />
+                                </div>
+                            )}
+                            <div className="px-2 truncate">{a.id}</div>
+                            <div className="px-2 truncate">{a.name?.replace(/\|/g, ' ')}</div>
+                            <div className="px-2 truncate">{a.microsoftaccount}</div>
+                            <div className="px-2 truncate">{showPassword === a.id ? a.password : "********"}</div>
+                            <div className="px-2 truncate">{a.date}</div>
+                            <div className="px-2">
+                                <span className="bg-[#FFF6D4] text-[#FFCC00] px-3 py-1 2xl:px-4 2xl:py-1.5 rounded-lg text-xs 2xl:text-sm inline-block truncate max-w-full">{a.role}</span>
+                            </div>
+                            <div className="px-2 flex justify-center relative items-center">
+                                <button
+                                    onClick={() => setActiveMenu(activeMenu === a.id ? null : a.id)}
+                                    className={`flex items-center justify-center text-lg 2xl:text-xl font-bold w-full ${editMode ? "ml-0" : "ml-0"}`}
+                                >
+                                    •••
+                                </button>
+                                {activeMenu === a.id && (
+                                    <div data-popup="true" className="absolute right-2 -top-7 2xl:right-20 2xl:-top-9 bg-white shadow-md border border-[#646464] rounded-md w-50 2xl:w-48 z-50">
+                                        <button data-popup="true" onClick={() => { setSelectedAdmin(a); setActiveMenu(null); }} className="text-[#646464] w-full px-3 py-2 hover:bg-gray-100 hover:rounded-md text-left text-sm 2xl:text-base">
+                                            View Admin Detail
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            ))}
+            </div>
 
             {selectedAdmin && (
                 <ViewAdminDetailsPopup

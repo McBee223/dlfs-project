@@ -52,16 +52,16 @@ function LoginLayout({ onSwitch }) {
         <>
             {success && <LoadingScreen message="Logging in..." />}
 
-            <div className="w-full max-w-md">
-                <h2 className="text-3xl font-semibold mb-2">Welcome to DFLS</h2>
-                <p className="text-gray-500 mb-6 text-sm">
+            <div className="w-full max-w-md 2xl:max-w-2xl">
+                <h2 className="text-4xl 2xl:text-5xl font-semibold mb-2">Welcome to DFLS</h2>
+                <p className="text-gray-500 mb-6 text-sm 2xl:text-lg">
                     Please log in to your account to continue.
                 </p>
 
                 <input
                     type="text"
                     placeholder="Microsoft 365 Account"
-                    className="input mb-3"
+                    className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-4 mb-3"
                     value={microsoftaccount}
                     onChange={(e) => setMicrosoftaccount(e.target.value)}
                 />
@@ -70,24 +70,24 @@ function LoginLayout({ onSwitch }) {
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
-                        className="input"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-5"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <span
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-6 -translate-y-1/2 cursor-pointer"
+                        className="absolute right-4 top-6 2xl:right-6 2xl:top-8 -translate-y-1/2 cursor-pointer"
                     >
                         <img
                             src={showPassword ? HidePasswordIcon : ShowPasswordIcon}
                             alt="toggle password"
-                            className="w-4.5 h-4.5"
+                            className="w-4.5 h-4.5 2xl:w-5.5 2xl:h-5.5"
                         />
                     </span>
                 </div>
 
                 {message.text && (
-                    <p className={`text-sm mb-2 ${message.color === "red" ? "text-red-500" : "text-green-500"}`}>
+                    <p className={`text-sm 2xl:text-lg mb-2 ${message.color === "red" ? "text-red-500" : "text-green-500"}`}>
                         {message.text}
                     </p>
                 )}
@@ -95,12 +95,12 @@ function LoginLayout({ onSwitch }) {
                 <button
                     onClick={handleLogin}
                     disabled={loading}
-                    className="w-full bg-[#047EAF] text-white py-3 rounded-lg hover:scale-105 transform transition-transform disabled:opacity-60"
+                    className="w-full bg-[#047EAF] text-white py-3 2xl:text-xl rounded-lg hover:scale-105 transform transition-transform disabled:opacity-60"
                 >
                     {loading ? "Checking..." : "Log in"}
                 </button>
 
-                <p className="text-sm text-gray-500 mt-4">
+                <p className="text-sm 2xl:text-lg text-gray-500 mt-4">
                     Don't have an account?{" "}
                     <span onClick={onSwitch} className="text-blue-600 cursor-pointer">
                         Register

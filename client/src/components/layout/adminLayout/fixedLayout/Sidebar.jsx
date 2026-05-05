@@ -36,17 +36,17 @@ function Sidebar() {
 
   return (
     <>
-      <div className="bg-[#132A3F] text-white flex flex-col w-45 h-screen rounded-tr-2xl rounded-br-2xl fixed">
+      <div className="bg-[#132A3F] text-white flex flex-col w-45 2xl:w-50 h-screen rounded-tr-2xl rounded-br-2xl fixed">
 
         <div className="flex justify-center p-7">
           <img src={Logo} alt="Logo" />
         </div>
 
-        <div className="pl-8 mt-5 pb-2 text-[10px] montserrat text-[#D0EDFB]">
+        <div className="pl-8 mt-5 pb-2 text-[10px] 2xl:text-[12px] montserrat text-[#D0EDFB]">
           OVERVIEW
         </div>
 
-        <nav className="flex flex-col h-full pl-2 text-xs">
+        <nav className="flex flex-col h-full pl-2 text-xs 2xl:text-sm">
 
           <div className="flex flex-col gap-1">
 
@@ -95,7 +95,7 @@ function Sidebar() {
 
           </div>
 
-          <div className="mt-auto mb-4">
+          <div className="mt-auto mb-4 2xl:mb-6">
             <div onClick={() => setLogoutOpen(true)}>
               <SidebarItem
                 to="#"
@@ -123,7 +123,7 @@ function SidebarItem({
   to,
   icon,
   activeIcon,
-  iconSize = "w-5 h-5",
+  iconSize = "w-5 h-5 2xl:w-6 2xl:h-6",
   label,
   isDropdownOpen,
   forceActive = false,
@@ -141,7 +141,7 @@ function SidebarItem({
         const active = forceActive || isActive;
 
         if (nested) {
-          return "flex items-center px-2 py-2 rounded-l-lg rounded-r-none transition text-[#D0EDFB] hover:bg-white hover:text-black";
+          return "flex items-center px-2 py-2 rounded-l-lg rounded-r-none transition text-[#D0EDFB] hover:bg-white hover:text-black 2xl:text-sm";
         }
 
         if (active && !isHovered && !isDropdownOpen && !hideActiveStyle) {
@@ -158,7 +158,7 @@ function SidebarItem({
       {({ isActive }) => (
         <>
           {!nested && forceActive && (
-            <span className="absolute -left-2 top-2.5 h-6 w-1 bg-[#D0EDFB] rounded-r"></span>
+            <span className="absolute -left-2 top-2.5 h-6 2xl:h-8 w-1 2xl:w-1.3 bg-[#D0EDFB] rounded-r"></span>
           )}
 
           {icon && !nested && (

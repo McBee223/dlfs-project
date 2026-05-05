@@ -102,7 +102,7 @@ function AddItemPopup({ onClose, onSuccess }) {
         <>
             {loading && (
                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-1000">
-                    <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 2xl:w-14 2xl:h-14 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
 
@@ -110,26 +110,26 @@ function AddItemPopup({ onClose, onSuccess }) {
                 <div
                     ref={modalRef}
                     onMouseDown={(e) => e.stopPropagation()}
-                    className="montserrat bg-white w-140 max-h-[90vh] rounded-2xl shadow-lg p-6 flex flex-col"
+                    className="montserrat bg-white w-140 2xl:w-170 max-h-[90vh] rounded-2xl shadow-lg p-6 2xl:p-8 flex flex-col"
                 >
                     <div className="flex justify-between items-center mb-4">
-                        <p className="text-lg font-semibold">Add Item</p>
+                        <p className="text-lg 2xl:text-xl font-semibold">Add Item</p>
                         <button onClick={onClose} className="focus:outline-none focus:ring-0">
-                            <img src={ExitIcon} alt="close" className="w-5 h-5" />
+                            <img src={ExitIcon} alt="close" className="w-5 h-5 2xl:w-6 2xl:h-6" />
                         </button>
                     </div>
 
                     <div className={`overflow-y-auto pr-2 space-y-4 ${categoryOpen ? "pb-12" : "pb-0"}`}>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">Images</label>
-                            <label className="flex flex-col items-center justify-center w-full h-44 border-2 border-dashed border-[#047EAF] rounded-xl cursor-pointer bg-[#E8F7FF] hover:bg-blue-50 transition">
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">Images</label>
+                            <label className="flex flex-col items-center justify-center w-full h-44 2xl:h-52 border-2 border-dashed border-[#047EAF] rounded-xl cursor-pointer bg-[#E8F7FF] hover:bg-blue-50 transition">
                                 {imagePreview ? (
                                     <img src={imagePreview} className="h-full object-contain rounded-lg" />
                                 ) : (
                                     <div className="flex flex-col items-center gap-2">
-                                        <img src={FileUploadIcon} alt="upload" className="w-12 h-auto" />
-                                        <span className="text-sm text-[#047EAF] underline">Browse files to upload</span>
+                                        <img src={FileUploadIcon} alt="upload" className="w-12 2xl:w-14 h-auto" />
+                                        <span className="text-sm 2xl:text-base text-[#047EAF] underline">Browse files to upload</span>
                                     </div>
                                 )}
                                 <input type="file" className="hidden" onChange={handleImageUpload} />
@@ -137,7 +137,7 @@ function AddItemPopup({ onClose, onSuccess }) {
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">
                                 Item Number <span className="text-red-500">*</span>
                             </label>
                             <div className="flex w-full">
@@ -146,13 +146,13 @@ function AddItemPopup({ onClose, onSuccess }) {
                                     placeholder="0001"
                                     value={itemNumber}
                                     onChange={(e) => setItemNumber(e.target.value.replace(/^#/, ''))}
-                                    className="input w-full rounded-l-none"
+                                    className="input w-full rounded-l-none 2xl:py-3 2xl:text-base"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">
                                 Item Name <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -160,26 +160,26 @@ function AddItemPopup({ onClose, onSuccess }) {
                                 placeholder="Aquaflask Tumbler"
                                 value={itemName}
                                 onChange={(e) => setItemName(e.target.value)}
-                                className="input w-full"
+                                className="input w-full 2xl:py-3 2xl:text-base"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">
                                 Category <span className="text-red-500">*</span>
                             </label>
                             <div className="relative" ref={categoryRef}>
                                 <button
                                     type="button"
                                     onClick={() => setCategoryOpen(prev => !prev)}
-                                    className="input w-full flex justify-between items-center focus:outline-none focus:ring-0"
+                                    className="input w-full flex justify-between items-center focus:outline-none focus:ring-0 2xl:py-3 2xl:text-base"
                                 >
                                     <span className={category ? "text-black" : "text-[#969696]"}>
                                         {category || "Select category"}
                                     </span>
                                     <img
                                         src={DropdownIcon}
-                                        className={`w-4 h-4 transition-transform ${categoryOpen ? "rotate-180" : ""}`}
+                                        className={`w-4 h-4 2xl:w-5 2xl:h-5 transition-transform ${categoryOpen ? "rotate-180" : ""}`}
                                     />
                                 </button>
                                 {categoryOpen && (
@@ -189,7 +189,7 @@ function AddItemPopup({ onClose, onSuccess }) {
                                                 key={c}
                                                 type="button"
                                                 onClick={() => { setCategory(c); setCategoryOpen(false); }}
-                                                className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50 transition"
+                                                className="block w-full px-4 py-2.5 2xl:py-3 text-left text-sm 2xl:text-base hover:bg-gray-50 transition"
                                             >
                                                 {c}
                                             </button>
@@ -200,19 +200,19 @@ function AddItemPopup({ onClose, onSuccess }) {
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">
                                 Date Found <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="datetime-local"
                                 value={dateFound}
                                 onChange={(e) => setDateFound(e.target.value)}
-                                className="input w-full"
+                                className="input w-full 2xl:py-3 2xl:text-base"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">
                                 Last Seen <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -220,20 +220,20 @@ function AddItemPopup({ onClose, onSuccess }) {
                                 placeholder="Room 209"
                                 value={lastSeen}
                                 onChange={(e) => setLastSeen(e.target.value)}
-                                className="input w-full"
+                                className="input w-full 2xl:py-3 2xl:text-base"
                             />
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block">
-                                Additional Information <span className="text-gray-400 text-xs font-normal">(Optional)</span>
+                            <label className="text-sm 2xl:text-base font-medium mb-1 block">
+                                Additional Information <span className="text-gray-400 text-xs 2xl:text-sm font-normal">(Optional)</span>
                             </label>
                             <textarea
                                 placeholder="Any extra details about the item..."
                                 value={additionalInfo}
                                 onChange={(e) => setAdditionalInfo(e.target.value)}
                                 rows={4}
-                                className="input w-full resize-none"
+                                className="input w-full resize-none 2xl:py-3 2xl:text-base"
                             />
                         </div>
                     </div>
@@ -241,13 +241,13 @@ function AddItemPopup({ onClose, onSuccess }) {
                     <button
                         onClick={handleSubmit}
                         disabled={!isFormValid || loading}
-                        className="mt-5 w-full bg-[#047EAF] text-white py-2.5 rounded-xl font-semibold focus:outline-none focus:ring-0 disabled:opacity-60"
+                        className="mt-5 w-full bg-[#047EAF] text-white py-2.5 2xl:py-3 2xl:text-lg rounded-xl font-semibold focus:outline-none focus:ring-0 disabled:opacity-60"
                     >
                         Add Item
                     </button>
 
                     {!isFormValid && (
-                        <p className="text-xs text-red-500 mt-1">Please fill up everything first</p>
+                        <p className="text-xs 2xl:text-sm text-red-500 mt-1">Please fill up everything first</p>
                     )}
                 </div>
             </div>

@@ -31,7 +31,7 @@ import CancelledIcon from "../../../../assets/icons/CancelledIcon.svg";
 import ReturnItemIcon from "../../../../assets/icons/ReturnItemIcon.svg";
 import ReturnItemIcon2 from "../../../../assets/icons/ReturnItemIcon2.svg";
 
-function ItemsManagementLayout({ onClaimCountChange }) {
+function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     const location = useLocation();
     const navigate = useNavigate();
     const filterRef = useRef(null);
@@ -43,11 +43,20 @@ function ItemsManagementLayout({ onClaimCountChange }) {
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedSubmission, setSelectedSubmission] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
     const [openFilter, setOpenFilter] = useState(false);
     const [lostItems, setLostItems] = useState([]);
     const [restoreTarget, setRestoreTarget] = useState(null);
     const [rejectTarget, setRejectTarget] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(initialSearch);
+
+    useEffect(() => {
+        if (initialSearch) {
+            setSearchTerm(initialSearch);
+            navigate("/admin/items_management/lost");
+        }
+    }, [initialSearch]);
+
+
 
     const getToken = () => localStorage.getItem('adminToken');
 
@@ -380,9 +389,11 @@ function ItemsManagementLayout({ onClaimCountChange }) {
         const keyword = filters.keyword?.toLowerCase() || "";
         const matchSearch = activeTab.key === "lost"
             ? `#${String(item.id)}`.toLowerCase().includes(term) ||
-            String(item.id).toLowerCase().includes(term)
+            String(item.id).toLowerCase().includes(term) ||
+            item.name?.toLowerCase().includes(term)
             : item.name?.toLowerCase().includes(term) ||
             item.claimant?.toLowerCase().includes(term) ||
+            item.itemName?.toLowerCase().includes(term) ||
             item.itemNumber?.toLowerCase().includes(term) ||
             String(item.id)?.toLowerCase().includes(term);
         const matchKeyword = keyword
@@ -570,29 +581,29 @@ function ItemsManagementLayout({ onClaimCountChange }) {
     );
 
     return (
-        <div className="mx-4 montserrat bg-white rounded-xl h-150 flex flex-col">
+        <div className="mx-4 montserrat bg-white rounded-xl h-170 2xl:h-250 flex flex-col">
             <span className="w-full h-0.5 bg-gray-200 mt-2"></span>
 
             <div className="flex items-center justify-between mb-4 pt-4">
                 <div className="flex items-center gap-2">
-                    <h1 className="text-xl text-[#646464] font-semibold">{activeTab.label}</h1>
-                    <span className="text-xs text-[#047EAF] bg-[#E8F7FF] px-3 py-0.5 rounded-full">
+                    <h1 className="text-xl 2xl:text-2xl text-[#646464] font-semibold">{activeTab.label}</h1>
+                    <span className="text-xs 2xl:text-sm text-[#047EAF] bg-[#E8F7FF] px-3 py-0.5 rounded-full">
                         {currentData.length} Items
                     </span>
                 </div>
 
                 <div className="flex items-center gap-3">
                     <div className="relative flex items-center border border-[#969696] rounded-md px-3 py-1.5 gap-2 group">
-                        <img src={SearchIcon} className="w-4 h-4" />
+                        <img src={SearchIcon} className="w-4 h-4 2xl:w-5 2xl:h-5" />
                         <input
                             type="text"
                             placeholder={activeTab.key === "lost" ? "Search item number" : "Search claimant name"}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="text-sm outline-none"
+                            className="text-sm 2xl:text-base outline-none"
                         />
                         {activeTab.key === "lost" && (
-                            <div className="absolute -bottom-8 left-0 bg-gray-800 text-white text-xs px-2 py-1 rounded hidden group-hover:block whitespace-nowrap z-50">
+                            <div className="absolute -bottom-8 left-0 bg-gray-800 text-white text-xs 2xl:text-sm px-2 py-1 rounded hidden group-hover:block whitespace-nowrap z-50">
                                 There's no claimant in this tab
                             </div>
                         )}
@@ -624,9 +635,9 @@ function ItemsManagementLayout({ onClaimCountChange }) {
 
                     <button
                         onClick={() => setAddItemOpen(true)}
-                        className="flex items-center gap-2 bg-[#047EAF] text-white text-sm px-4 py-1.5 rounded-md"
+                        className="flex items-center gap-2 bg-[#047EAF] text-white text-sm 2xl:text-base px-4 py-1.5 2xl:px-5 2xl:py-2.5 rounded-md"
                     >
-                        <img src={AddItemIcon} className="w-3 h-3" />
+                        <img src={AddItemIcon} className="w-3 h-3 2xl:w-4 2xl:h-4" />
                         Add Item
                     </button>
                 </div>
@@ -638,7 +649,7 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                         <button
                             key={tab.key}
                             onClick={() => navigate(tab.path)}
-                            className={`pb-2 font-semibold focus:outline-none focus:ring-0 ${location.pathname === tab.path ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
+                            className={`pb-2 font-semibold 2xl:text-lg focus:outline-none focus:ring-0 ${location.pathname === tab.path ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
                         >
                             {tab.label}
                         </button>
@@ -659,33 +670,33 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                     <>
                         {activeTab.key === "lost" && (
                             <>
-                                <div className={`grid ${editMode ? "grid-cols-[auto_180px_260px_180px_220px_180px_80px]" : "grid-cols-[180px_260px_180px_220px_180px_80px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm`}>
+                                <div className={`grid ${editMode ? "grid-cols-[auto_160px_260px_180px_210px_150px_100px] 2xl:grid-cols-[50px_230px_310px_230px_270px_290px_80px]" : "grid-cols-[180px_260px_180px_220px_180px_80px] 2xl:grid-cols-[230px_310px_230px_270px_290px_80px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm 2xl:text-base`}>
                                     {editMode && checkboxHeader}
                                     <div>Item Number</div>
                                     <div>Item Name</div>
                                     <div>Category</div>
                                     <div>Date Found</div>
                                     <div>Status</div>
-                                    <div></div>
+                                    <div>Action</div>
                                 </div>
                                 {[...currentData]
                                     .sort((a, b) => Number(String(a.id).replace(/^#/, '')) - Number(String(b.id).replace(/^#/, '')))
                                     .map((item) => (
-                                        <div key={item.id} className={`grid ${editMode ? "grid-cols-[auto_180px_260px_180px_220px_180px_80px]" : "grid-cols-[180px_260px_180px_220px_180px_80px]"} p-3 items-center text-sm border-b border-gray-100 ${editMode && selectedIds.includes(item.id) ? "bg-[#EAF5FB]" : ""}`}>
+                                        <div key={item.id} className={`grid ${editMode ? "grid-cols-[auto_160px_260px_180px_210px_150px_100px] 2xl:grid-cols-[50px_230px_310px_230px_270px_290px_80px]" : "grid-cols-[180px_260px_180px_220px_180px_80px] 2xl:grid-cols-[230px_310px_230px_270px_290px_80px]"} p-3 items-center text-sm 2xl:text-base  border-b border-gray-100 ${editMode && selectedIds.includes(item.id) ? "bg-[#EAF5FB]" : ""}`}>
                                             {editMode && checkboxCell(item.id)}
                                             <div>#{String(item.id).replace(/^#/, '')}</div>
                                             <div className="truncate w-50">{item.name}</div>
                                             <div>{item.category}</div>
                                             <div>{formatDisplayDate(item.dateFound)}</div>
-                                            <div><img src={UnclaimedIcon} className="w-24" /></div>
+                                            <div><img src={UnclaimedIcon} className="w-24 2xl:w-26" /></div>
                                             <div className="menu-container relative flex justify-center">
                                                 <button
                                                     onClick={() => setActiveMenu(activeMenu === getRowId(item) ? null : getRowId(item))}
-                                                    className="text-lg font-bold focus:outline-none focus:ring-0"
+                                                    className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0 ${editMode ? "-ml-13 2xl:-ml-7" : "-ml-8"}`}
                                                 >•••</button>
                                                 {activeMenu === getRowId(item) && (
                                                     <div onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: true }), 0); setActiveMenu(null); }} className="absolute -right-3 -top-10 bg-white shadow-md border rounded-md w-36 z-20">
-                                                        <button className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">View Item</button>
+                                                        <button className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm  2xl:text-base">View Item</button>
                                                     </div>
                                                 )}
                                             </div>
@@ -696,7 +707,7 @@ function ItemsManagementLayout({ onClaimCountChange }) {
 
                         {activeTab.key === "claim" && (
                             <>
-                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_140px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm`}>
+                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm 2xl:text-base `}>
                                     {editMode && checkboxHeader}
                                     <div>Claim ID</div>
                                     <div>Claimant Name</div>
@@ -707,26 +718,26 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                                     <div>Actions</div>
                                 </div>
                                 {currentData.map((item) => (
-                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_140px]"} p-3 items-center text-sm border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
+                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} p-3 items-center text-sm 2xl:text-base  border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
                                         {editMode && checkboxCell(item.claimId)}
                                         <div>{item.claimId}</div>
                                         <div className="text-[#047EAF] truncate w-40">{item.claimant}</div>
                                         <div>{item.itemNumber}</div>
                                         <div className="truncate w-35">{item.itemName}</div>
                                         <div>{formatDisplayDate(item.dateSubmitted)}</div>
-                                        <div><img src={PendingIcon} className="w-24 h-auto" /></div>
+                                        <div><img src={PendingIcon} className="w-24 2xl:w-27 h-auto" /></div>
                                         <div className="menu-container flex items-center gap-2 relative">
                                             <button onClick={() => setSelectedSubmission(item)} className="transition-transform duration-150 hover:scale-110">
-                                                <img src={ApproveRequestButton} className="w-5 h-5" />
+                                                <img src={ApproveRequestButton} className="w-5 h-5 2xl:w-6 2xl:h-6 " />
                                             </button>
                                             <button onClick={() => setRejectTarget(item)} className="transition-transform duration-150 hover:scale-110">
-                                                <img src={RejectRequestButton} className="w-5 h-5" />
+                                                <img src={RejectRequestButton} className="w-5 h-5 2xl:w-6 2xl:h-6" />
                                             </button>
-                                            <button onClick={() => setActiveMenu(activeMenu === item.claimId ? null : item.claimId)} className="text-lg font-bold focus:outline-none focus:ring-0">•••</button>
+                                            <button onClick={() => setActiveMenu(activeMenu === item.claimId ? null : item.claimId)} className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0`}>•••</button>
                                             {activeMenu === item.claimId && (
-                                                <div className="absolute right-23 -top-5 bg-white shadow-md border rounded-md w-40 z-20">
-                                                    <button onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">View Item</button>
-                                                    <button onClick={() => { setSelectedSubmission(item); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">View Submission</button>
+                                                <div className="absolute right-9 2xl:-right-22 -top-6 2xl:-top-14 bg-white shadow-md border rounded-md w-40 2xl:w-50 z-20">
+                                                    <button onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base">View Item</button>
+                                                    <button onClick={() => { setSelectedSubmission(item); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base">View Submission</button>
                                                 </div>
                                             )}
                                         </div>
@@ -737,7 +748,7 @@ function ItemsManagementLayout({ onClaimCountChange }) {
 
                         {activeTab.key === "approved" && (
                             <>
-                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm`}>
+                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm 2xl:text-base `}>
                                     {editMode && checkboxHeader}
                                     <div>Claim ID</div>
                                     <div>Claimant Name</div>
@@ -748,36 +759,36 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                                     <div>Actions</div>
                                 </div>
                                 {currentData.map((item) => (
-                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} p-3 items-center text-sm border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
+                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} p-3 items-center text-sm 2xl:text-base  border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
                                         {editMode && checkboxCell(item.claimId)}
                                         <div>{item.claimId}</div>
                                         <div className="text-[#047EAF] truncate w-40">{item.claimant}</div>
                                         <div>{item.itemNumber}</div>
                                         <div className="truncate w-40">{item.itemName}</div>
                                         <div>{formatDisplayDate(item.dateApproved)}</div>
-                                        <div><img src={ApprovedIcon} className="w-24" /></div>
+                                        <div><img src={ApprovedIcon} className="w-24 2xl:w-26" /></div>
                                         <div className="menu-container relative flex items-center gap-2">
                                             <div className="relative group">
                                                 <button onClick={() => handleReturnItem(item)}>
-                                                    <img src={ReturnItemIcon2} className="w-5 h-5 group-hover:hidden" />
-                                                    <img src={ReturnItemIcon} className="w-5 h-5 hidden group-hover:block" />
+                                                    <img src={ReturnItemIcon2} className="w-5 h-5 2xl:w-6 2xl:h-6 group-hover:hidden" />
+                                                    <img src={ReturnItemIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 hidden group-hover:block" />
                                                 </button>
-                                                <div className="absolute bottom-7 left-1/2 -translate-x-1/2 bg-[#047EAF] text-white text-xs px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                                                <div className="absolute bottom-7 left-1/2 -translate-x-1/2 bg-[#047EAF] text-white text-xs 2xl:text-sm px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
                                                     Mark as Returned
                                                     <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#047EAF]"></div>
                                                 </div>
                                             </div>
-                                            <button onClick={() => setActiveMenu(activeMenu === item.claimId ? null : item.claimId)} className="text-lg font-bold focus:outline-none">•••</button>
+                                            <button onClick={() => setActiveMenu(activeMenu === item.claimId ? null : item.claimId)} className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0 mb-2`}>•••</button>
                                             {activeMenu === item.claimId && (
-                                                <div className="absolute right-3 -top-13 bg-white shadow-md border rounded-md w-40 z-20">
+                                                <div className="absolute right-18 2xl:-right-13 -top-6 2xl:-top-14 bg-white shadow-md border rounded-md w-40 2xl:w-50 z-20">
                                                     <button
                                                         onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }}
-                                                        className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">
+                                                        className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base">
                                                         View Item
                                                     </button>
                                                     <button
                                                         onClick={() => { handleCancelSchedule(item); setActiveMenu(null); }}
-                                                        className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm text-red-500">
+                                                        className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base text-red-500">
                                                         Cancel Schedule
                                                     </button>
                                                 </div>
@@ -790,7 +801,7 @@ function ItemsManagementLayout({ onClaimCountChange }) {
 
                         {activeTab.key === "rejected" && (
                             <>
-                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm`}>
+                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm 2xl:text-base `}>
                                     {editMode && checkboxHeader}
                                     <div>Claim ID</div>
                                     <div>Claimant Name</div>
@@ -798,22 +809,22 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                                     <div>Item Name</div>
                                     <div>Date Rejected</div>
                                     <div>Status</div>
-                                    <div></div>
+                                    <div>Actions</div>
                                 </div>
                                 {currentData.map((item) => (
-                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} p-3 items-center text-sm border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
+                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} p-3 items-center text-sm 2xl:text-base  border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
                                         {editMode && checkboxCell(item.claimId)}
                                         <div>{item.claimId}</div>
                                         <div className="text-[#047EAF] truncate w-40">{item.claimant}</div>
                                         <div>{item.itemNumber}</div>
                                         <div className="truncate w-40">{item.itemName}</div>
                                         <div>{formatDisplayDate(item.dateRejected)}</div>
-                                        <div><img src={RejectedIcon} className="w-24" /></div>
+                                        <div><img src={RejectedIcon} className="w-24 2xl:w-26" /></div>
                                         <div className="menu-container relative flex justify-center">
-                                            <button onClick={() => setActiveMenu(activeMenu === getRowId(item) ? null : getRowId(item))} className="text-lg font-bold focus:outline-none focus:ring-0">•••</button>
+                                            <button onClick={() => setActiveMenu(activeMenu === getRowId(item) ? null : getRowId(item))} className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0 ${editMode ? "-ml-8 2xl:-ml-7" : "-ml-8"}`}>•••</button>
                                             {activeMenu === getRowId(item) && (
-                                                <div className="absolute -right-7 -top-10 bg-white shadow-md border rounded-md w-36 z-20">
-                                                    <button onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">View Item</button>
+                                                <div className="absolute -right-3 2xl:-right-4 -top-10 bg-white shadow-md border rounded-md w-36 z-20">
+                                                    <button onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base">View Item</button>
                                                 </div>
                                             )}
                                         </div>
@@ -824,7 +835,7 @@ function ItemsManagementLayout({ onClaimCountChange }) {
 
                         {activeTab.key === "returned" && (
                             <>
-                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm`}>
+                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm 2xl:text-base `}>
                                     {editMode && checkboxHeader}
                                     <div>Claim ID</div>
                                     <div>Claimant Name</div>
@@ -832,22 +843,22 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                                     <div>Item Name</div>
                                     <div>Date Returned</div>
                                     <div>Status</div>
-                                    <div></div>
+                                    <div>Actions</div>
                                 </div>
                                 {currentData.map((item) => (
-                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} p-3 items-center text-sm border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
+                                    <div key={item.claimId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} p-3 items-center text-sm 2xl:text-base  border-b border-gray-100 ${editMode && selectedIds.includes(item.claimId) ? "bg-[#EAF5FB]" : ""}`}>
                                         {editMode && checkboxCell(item.claimId)}
                                         <div>{item.claimId}</div>
                                         <div className="text-[#047EAF] truncate w-40">{item.claimant}</div>
                                         <div>{item.itemNumber}</div>
                                         <div className="truncate w-40">{item.itemName}</div>
                                         <div>{formatDisplayDate(item.dateReturned)}</div>
-                                        <div><img src={ReturnedIcon} className="w-24" /></div>
+                                        <div><img src={ReturnedIcon} className="w-24 2xl:w-26" /></div>
                                         <div className="menu-container relative flex justify-center">
-                                            <button onClick={() => setActiveMenu(activeMenu === getRowId(item) ? null : getRowId(item))} className="text-lg font-bold focus:outline-none focus:ring-0">•••</button>
+                                            <button onClick={() => setActiveMenu(activeMenu === getRowId(item) ? null : getRowId(item))} className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0 ${editMode ? "-ml-8 2xl:-ml-7" : "-ml-8"}`}>•••</button>
                                             {activeMenu === getRowId(item) && (
-                                                <div className="absolute -right-7 -top-10 bg-white shadow-md border rounded-md w-36 z-20">
-                                                    <button onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">View Item</button>
+                                                <div className="absolute -right-3 2xl:-right-4 -top-10 bg-white shadow-md border rounded-md w-36 z-20">
+                                                    <button onClick={() => { setSelectedItem(null); setTimeout(() => setSelectedItem({ ...item, canEdit: false }), 0); setActiveMenu(null); }} className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base">View Item</button>
                                                 </div>
                                             )}
                                         </div>
@@ -858,7 +869,7 @@ function ItemsManagementLayout({ onClaimCountChange }) {
 
                         {activeTab.key === "trash" && (
                             <>
-                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm`}>
+                                <div className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} bg-[#D9EEF9] p-3 text-[#047EAF] font-semibold text-sm 2xl:text-base`}>
                                     {editMode && checkboxHeader}
                                     <div>Claim ID</div>
                                     <div>Claimant Name</div>
@@ -866,30 +877,30 @@ function ItemsManagementLayout({ onClaimCountChange }) {
                                     <div>Item Name</div>
                                     <div>Date Deleted</div>
                                     <div>Status</div>
-                                    <div></div>
+                                    <div>Actions</div>
                                 </div>
                                 {currentData.map((item) => (
-                                    <div key={item.trashDbId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px]"} p-3 items-center text-sm border-b border-gray-100 ${editMode && selectedIds.includes(item.trashDbId) ? "bg-[#EAF5FB]" : ""}`}>
+                                    <div key={item.trashDbId} className={`grid ${editMode ? "grid-cols-[auto_120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[50px_190px_270px_235px_235px_235px_275px_90px]" : "grid-cols-[120px_200px_165px_165px_165px_165px_90px] 2xl:grid-cols-[190px_270px_235px_235px_235px_275px_90px]"} p-3 items-center text-sm 2xl:text-base border-b border-gray-100 ${editMode && selectedIds.includes(item.trashDbId) ? "bg-[#EAF5FB]" : ""}`}>
                                         {editMode && checkboxCell(item.trashDbId)}
                                         <div>{item.claimId || "-"}</div>
-                                        <div className="text-[#047EAF] truncate w-40">{item.claimant || "-"}</div>
+                                        <div className="text-[#047EAF] truncate w-40 2xl:w-50">{item.claimant || "-"}</div>
                                         <div>{item.itemNumber || "-"}</div>
-                                        <div className="truncate w-40">{item.itemName || "-"}</div>
+                                        <div className="truncate w-40 2xl:w-50">{item.itemName || "-"}</div>
                                         <div>{formatDisplayDate(item.dateDeleted)}</div>
-                                        <div><img src={statusIcons[item.status]} className="w-24" /></div>
+                                        <div><img src={statusIcons[item.status]} className="w-24 2xl:w-26" /></div>
                                         <div className="menu-container relative flex justify-center">
-                                            <button onClick={() => setActiveMenu(activeMenu === item.trashDbId ? null : item.trashDbId)} className="text-lg font-bold focus:outline-none focus:ring-0">•••</button>
+                                            <button onClick={() => setActiveMenu(activeMenu === item.trashDbId ? null : item.trashDbId)} className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0 ${editMode ? "-ml-8 2xl:-ml-7" : "-ml-8"}`}>•••</button>
                                             {activeMenu === item.trashDbId && (
-                                                <div className="absolute right-2 -top-10 bg-white shadow-md border rounded-md w-36 z-20">
+                                                <div className="absolute -right-3 2xl:-right-7 -top-10 2xl:-top-15 bg-white shadow-md border rounded-md w-36 2xl:w-44 z-20">
                                                     <button
                                                         onClick={() => { setSelectedItem({ ...item, canEdit: false }); setActiveMenu(null); }}
-                                                        className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm">
+                                                        className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base">
                                                         View Item
                                                     </button>
                                                     {item.status !== 'Cancelled' && (
                                                         <button
                                                             onClick={() => { handleRestoreItem(item); setActiveMenu(null); }}
-                                                            className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm text-[#047EAF]">
+                                                            className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base text-[#047EAF]">
                                                             Restore
                                                         </button>
                                                     )}

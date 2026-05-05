@@ -13,7 +13,7 @@ const TABS = [
     { key: "your_claimed", label: "Your Claimed" },
 ];
 
-function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, searchQuery }) {
+function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, searchQuery, dismissedCancels = [], onDismissCancelNotif, onReactivateNotifs }) {
     const [selectedItem, setSelectedItem] = useState(null);
     const [showClaimPopup, setShowClaimPopup] = useState(false);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -21,26 +21,8 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
     const [lostItems, setLostItems] = useState([]);
     const [editingClaimId, setEditingClaimId] = useState(null);
     const [activeTab, setActiveTab] = useState("lost");
-    const [dismissedCancels, setDismissedCancels] = useState(() => {
-        const stored = localStorage.getItem("dismissedCancelNotifs");
-        return stored ? JSON.parse(stored) : [];
-    });
 
     const isSearching = searchQuery?.trim().length > 0;
-
-    const dismissCancelNotif = (itemId, claimId) => {
-        const updated = [...dismissedCancels, String(itemId)];
-        setDismissedCancels(updated);
-        localStorage.setItem("dismissedCancelNotifs", JSON.stringify(updated));
-
-        if (claimId) {
-            const token = localStorage.getItem("userToken");
-            authFetch(`http://localhost:3000/api/user/claims/${claimId}/dismiss-cancel-notif`, {
-                method: 'PUT',
-                headers: { Authorization: `Bearer ${token}` }
-            }).catch(err => console.error('Failed to dismiss notif:', err));
-        }
-    };
 
     const fetchItems = useCallback(() => {
         const token = localStorage.getItem("userToken");
@@ -50,6 +32,7 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
             .then((res) => res.json())
             .then((data) => {
                 if (data.items) {
+                    onReactivateNotifs?.(data.items);
                     const mapped = data.items.map((item) => ({
                         id: item.id,
                         name: item.name || "Unknown Item",
@@ -76,7 +59,7 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                 }
             })
             .catch((err) => console.error("Failed to fetch lost items:", err));
-    }, []);
+    }, [onReactivateNotifs]);
 
     useEffect(() => {
         fetchItems();
@@ -213,6 +196,10 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
         ? TABS.reduce((sum, tab) => sum + (tabItems[tab.key]?.length ?? 0), 0)
         : 0;
 
+    const cancelNotifItems = lostItems.filter(
+        item => item.hasCancelNotif && !dismissedCancels.includes(String(item.id))
+    );
+
     const tabColors = {
         lost: { active: "bg-[#047EAF] text-white", dot: "bg-[#047EAF]" },
         other_approved: { active: "bg-green-500 text-white", dot: "bg-green-500" },
@@ -221,12 +208,13 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
         your_claimed: { active: "bg-yellow-400 text-white", dot: "bg-yellow-400" },
     };
 
-    const renderGrid = (items) => {
+    const renderGrid = (items, tabKey) => {
         if (items.length === 0) return (
-            <p className="montserrat text-sm text-gray-400">No items found.</p>
+            <p className="montserrat text-sm 2xl:text-base text-gray-400">No items found.</p>
         );
+        const showApprovedCount = tabKey !== 'your_claimed' && tabKey !== 'your_approved';
         return (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-3">
                 {items.map((item) => {
                     const description = `This ${item.name} was found on ${item.dateFound} and was last seen near ${item.lastSeen}.`;
                     return (
@@ -245,9 +233,9 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                             onEditClaim={handleEditClaim}
                             pinnedIds={pinnedIds}
                             onPinChange={onPinChange}
-                            approvedClaimsCount={item.approvedClaims?.length ?? 0}
+                            approvedClaimsCount={showApprovedCount ? (item.approvedClaims?.length ?? 0) : 0}
                             hasCancelNotif={item.hasCancelNotif && !dismissedCancels.includes(String(item.id))}
-                            onDismissCancelNotif={() => dismissCancelNotif(item.id, item.userClaimId)}
+                            onDismissCancelNotif={() => onDismissCancelNotif?.(item.id, item.userClaimId)}
                         />
                     );
                 })}
@@ -255,16 +243,67 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
         );
     };
 
+    const renderTabButtons = () => (
+        <div className="flex flex-wrap gap-2">
+            {TABS.map((tab) => {
+                const count = tabItems[tab.key]?.length ?? 0;
+                const isActive = activeTab === tab.key;
+                const colors = tabColors[tab.key];
+                return (
+                    <button
+                        key={tab.key}
+                        onClick={() => handleTabChange(tab.key)}
+                        className={`montserrat text-xs 2xl:text-sm font-semibold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5
+                            ${isActive
+                                ? `${colors.active} border-transparent`
+                                : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
+                            }`}
+                    >
+                        {!isActive && (
+                            <span className={`w-2 h-2 2xl:w-3 2xl:h-3 rounded-full ${colors.dot}`} />
+                        )}
+                        {tab.label}
+                        <span className={`text-[10px] 2xl:text-[12px] px-1.5 py-0.5 rounded-full font-bold
+                            ${isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
+                            {count}
+                        </span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+
     return (
         <>
             <div className="flex flex-col gap-5 mb-10">
+                {cancelNotifItems.length > 0 && (
+                    <div className="flex items-start gap-2 bg-[#E8F7FF] border border-[#047EAF] rounded-xl px-4 py-3 text-sm 2xl:text-base text-[#047EAF]">
+                        <div className="w-2.5 h-2.5 2xl:w-3.5 2xl:h-3.5 bg-[#047EAF] rounded-full mt-1 animate-pulse shrink-0" />
+                        <div className="flex-1">
+                            <p className="font-semibold montserrat">Pickup schedule canceled</p>
+                            <p className="text-xs 2xl:text-sm text-[#1980B2] montserrat mt-0.5">
+                                Your pickup for{" "}
+                                <span className="font-semibold">
+                                    {cancelNotifItems.map(i => i.name).join(', ')}
+                                </span>{" "}
+                                was canceled by the admin. Please resubmit your claim to arrange a new schedule or wait for the admin to re-check your schedule.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => cancelNotifItems.forEach(i => onDismissCancelNotif?.(i.id, i.userClaimId))}
+                            className="text-[#047EAF] hover:text-[#035f85] text-lg 2xl:text-2xl leading-none mt-0.5 shrink-0"
+                        >
+                            ×
+                        </button>
+                    </div>
+                )}
 
                 {isSearching && (
                     <div className="flex flex-col gap-1">
-                        <p className="montserrat text-sm font-semibold text-[#047EAF]">
+                        <p className="montserrat text-sm 2xl:text-base font-semibold text-[#047EAF]">
                             Search results for <span className="italic">"{searchQuery}"</span>
                         </p>
-                        <div className="flex flex-wrap gap-2 text-xs text-gray-500 montserrat">
+                        <div className="flex flex-wrap gap-2 text-xs 2xl:text-sm text-gray-500 montserrat">
                             {TABS.map(tab => {
                                 const count = tabItems[tab.key]?.length ?? 0;
                                 if (count === 0) return null;
@@ -272,7 +311,7 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                                     <span
                                         key={tab.key}
                                         onClick={() => setActiveTab(tab.key)}
-                                        className={`cursor-pointer px-2 py-0.5 rounded-full border transition montserrat font-semibold
+                                        className={`cursor-pointer px-3 py-0.5 2xl:px-4 2xl:py-0.6 rounded-full border transition montserrat font-semibold
                                         ${activeTab === tab.key
                                                 ? "border-[#69ADCE] text-[#69ADCE]"
                                                 : "border-gray-200 text-gray-400 hover:border-[#69ADCE] hover:text-[#69ADCE]"
@@ -283,73 +322,14 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                                 );
                             })}
                             {totalSearchResults === 0 && (
-                                <span className="text-gray-400">No results found across all tabs.</span>
+                                <span className="text-gray-400 2xl:text-base">No results found across all tabs.</span>
                             )}
                         </div>
                     </div>
                 )}
 
-                {!isSearching && (
-                    <div className="flex flex-wrap gap-2">
-                        {TABS.map((tab) => {
-                            const count = tabItems[tab.key]?.length ?? 0;
-                            const isActive = activeTab === tab.key;
-                            const colors = tabColors[tab.key];
-                            return (
-                                <button
-                                    key={tab.key}
-                                    onClick={() => handleTabChange(tab.key)}
-                                    className={`montserrat text-xs font-semibold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5
-                                        ${isActive
-                                            ? `${colors.active} border-transparent`
-                                            : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
-                                        }`}
-                                >
-                                    {!isActive && (
-                                        <span className={`w-2 h-2 rounded-full ${colors.dot}`} />
-                                    )}
-                                    {tab.label}
-                                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold
-                                        ${isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
-                                        {count}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </div>
-                )}
-
-                {isSearching && (
-                    <div className="flex flex-wrap gap-2">
-                        {TABS.map((tab) => {
-                            const count = tabItems[tab.key]?.length ?? 0;
-                            const isActive = activeTab === tab.key;
-                            const colors = tabColors[tab.key];
-                            return (
-                                <button
-                                    key={tab.key}
-                                    onClick={() => handleTabChange(tab.key)}
-                                    className={`montserrat text-xs font-semibold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5
-                                        ${isActive
-                                            ? `${colors.active} border-transparent`
-                                            : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
-                                        }`}
-                                >
-                                    {!isActive && (
-                                        <span className={`w-2 h-2 rounded-full ${colors.dot}`} />
-                                    )}
-                                    {tab.label}
-                                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold
-                                        ${isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-500"}`}>
-                                        {count}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </div>
-                )}
-
-                {renderGrid(tabItems[activeTab])}
+                {renderTabButtons()}
+                {renderGrid(tabItems[activeTab], activeTab)}
             </div>
 
             {selectedItem && (

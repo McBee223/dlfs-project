@@ -4,19 +4,19 @@ import TrashIcon from '../../../../assets/icons/TrashIcon.svg';
 function MoveToArchiveConfirmationPopup({ onClose, onConfirm }) {
     return (
         <div
-            className="montserrat bg-white rounded-2xl shadow-lg p-5 w-100"
-            onClick={(e) => e.stopPropagation()}  // ← add this
+            className="montserrat bg-white rounded-2xl shadow-lg p-5 2xl:p-6 w-100 2xl:w-120"
+            onClick={(e) => e.stopPropagation()}  
         >
             <div className="flex justify-between items-start mb-3">
-                <h2 className="text-[#323232] text-base font-semibold">
+                <h2 className="text-[#323232] text-base 2xl:text-xl font-semibold">
                     Move this Item to Trash?
                 </h2>
                 <button onClick={onClose}>
-                    <img src={ExitIcon} className="w-5 h-5" />
+                    <img src={ExitIcon} className="w-5 h-5 2xl:w-6 2xl:h-6" />
                 </button>
             </div>
 
-            <p className="text-[#969696] text-sm mb-6">
+            <p className="text-[#969696] text-sm 2xl:text-base mb-6">
                 The item will be removed from the active list but can still be restored later.
             </p>
 
@@ -25,10 +25,10 @@ function MoveToArchiveConfirmationPopup({ onClose, onConfirm }) {
                     e.stopPropagation();
                     onConfirm();
                 }}
-                className="w-full py-3 px-4 rounded-lg text-[#AF0404] bg-[#FEEFEF] text-sm font-semibold flex justify-between items-center"
+                className="w-full py-3 px-4 2xl:py-4 2xl:px-5 rounded-lg text-[#AF0404] bg-[#FEEFEF] text-sm 2xl:text-base font-semibold flex justify-between items-center"
             >
                 <span>Yes, Move to Trash</span>
-                <img src={TrashIcon} className="w-5 h-5" />
+                <img src={TrashIcon} className="w-5 h-5 2xl:w-6 2xl:h-6" />
             </button>
         </div>
     );

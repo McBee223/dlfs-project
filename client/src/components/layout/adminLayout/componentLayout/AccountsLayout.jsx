@@ -168,15 +168,12 @@ function AccountsLayout({ onUserCountChange }) {
     };
 
     return (
-        <div
-            id="accounts-section"
-            className="p-6 montserrat bg-white rounded-xl mx-2 h-150 flex flex-col"
-        >
+        <div id="accounts-section" className="p-6 montserrat bg-white rounded-xl mx-2 h-150 2xl:h-180 flex flex-col">
             <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3 mb-4">
-                    <h1 className="montserrat text-2xl font-semibold">{getTitle()}</h1>
+                <div className="flex gap-3">
+                    <h1 className="montserrat text-xl 2xl:text-2xl font-semibold">{getTitle()}</h1>
                     {resultCount !== null && (search || sortLabel !== "All Time") && (
-                        <span className="text-sm text-[#969696] font-medium">
+                        <span className="text-sm 2xl:text-base text-[#969696] font-medium">
                             {resultCount} {resultCount === 1 ? "account" : "accounts"} found
                         </span>
                     )}
@@ -184,7 +181,7 @@ function AccountsLayout({ onUserCountChange }) {
 
                 <div className="flex items-center gap-3">
                     <div className="flex items-center border border-[#969696] rounded-md px-3 py-1.5 gap-2">
-                        <img src={SearchIcon} alt="" className="w-4 h-4" />
+                        <img src={SearchIcon} alt="" className="w-4 h-4 2xl:w-5 2xl:h-5" />
                         <input
                             type="text"
                             value={search}
@@ -196,11 +193,11 @@ function AccountsLayout({ onUserCountChange }) {
                                         ? "Search admin name..."
                                         : "Search archived name..."
                             }
-                            className="text-sm outline-none"
+                            className="text-sm 2xl:text-base outline-none"
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 text-sm">
+                    <div className="flex items-center gap-2 text-sm 2xl:text-base">
                         <span>Sort by</span>
                         <div className="relative" ref={sortRef}>
                             <button
@@ -211,7 +208,7 @@ function AccountsLayout({ onUserCountChange }) {
                                 <img
                                     src={DropdownIcon}
                                     alt=""
-                                    className={`w-4 h-4 transition-transform ${showSort ? "rotate-180" : ""}`}
+                                    className={`w-4 h-4 2xl:w-5 2xl:h-5 transition-transform ${showSort ? "rotate-180" : ""}`}
                                 />
                             </button>
                             {showSort && (
@@ -241,22 +238,13 @@ function AccountsLayout({ onUserCountChange }) {
 
             <div className="border-b border-[#D8D8D8] mb-4">
                 <div className="flex gap-6">
-                    <button
-                        onClick={() => setActiveTab("user")}
-                        className={`pb-2 font-semibold focus:outline-none focus:ring-0 ${activeTab === "user" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
-                    >
+                    <button onClick={() => setActiveTab("user")} className={`pb-2 text-sm 2xl:text-base font-semibold focus:outline-none focus:ring-0 ${activeTab === "user" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}>
                         User Account
                     </button>
-                    <button
-                        onClick={() => setActiveTab("admin")}
-                        className={`pb-2 font-semibold focus:outline-none focus:ring-0 ${activeTab === "admin" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
-                    >
+                    <button onClick={() => setActiveTab("admin")} className={`pb-2 text-sm 2xl:text-base font-semibold focus:outline-none focus:ring-0 ${activeTab === "admin" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}>
                         Admin Account
                     </button>
-                    <button
-                        onClick={() => setActiveTab("archive")}
-                        className={`pb-2 font-semibold focus:outline-none focus:ring-0 ${activeTab === "archive" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}
-                    >
+                    <button onClick={() => setActiveTab("archive")} className={`pb-2 text-sm 2xl:text-base font-semibold focus:outline-none focus:ring-0 ${activeTab === "archive" ? "text-[#047EAF] border-b-2 border-[#047EAF]" : "text-gray-500"}`}>
                         Archive
                     </button>
                 </div>
@@ -277,7 +265,7 @@ function AccountsLayout({ onUserCountChange }) {
 
             {showPopup === "deleteForever" && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <DeleteForeverConfirmationPopup
+                    <DeleteForeverConafirmationPopup
                         onClose={() => setShowPopup(null)}
                         onConfirm={handleConfirm}
                     />

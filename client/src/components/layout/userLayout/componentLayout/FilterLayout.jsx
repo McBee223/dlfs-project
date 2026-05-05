@@ -10,7 +10,7 @@ import BagFilterIcon from "../../../../assets/icons/BagFilterIcon.svg";
 const filters = [
     { icon: AllFilterIcon, color: "#D4FFFB", hovercolor: "#B9FFF9", title: "All Items", subtitle: "Show all lost items in the list", categoryKey: "All" },
     { icon: PersonalFilterIcon, color: "#D0EDFB", hovercolor: "#AFE5FF", title: "Personal", subtitle: "Wallet / Keys / Eyeglasses / ID", categoryKey: "Personal" },
-    { icon: DocumentFilterIcon, color: "#DAFADB", hovercolor: "#BAFFBD", title: "Document", subtitle: "School ID/Driver's License/Passport", categoryKey: "Document" },
+    { icon: DocumentFilterIcon, color: "#DAFADB", hovercolor: "#BAFFBD", title: "Document", subtitle: "School ID / Driver's License", categoryKey: "Document" },
     { icon: ClothingFilterIcon, color: "#EFD4FF", hovercolor: "#E1AEFF", title: "Clothing", subtitle: "Jacket/Sweater/Towel/Cap", categoryKey: "Clothes" },
     { icon: ElectronicFilterIcon, color: "#FFF6D4", hovercolor: "#FFEEAA", title: "Electronic", subtitle: "Phone/Watch/Tablet/Laptop", categoryKey: "Electronics" },
     { icon: SchoolItemFilterIcon, color: "#FFE3D4", hovercolor: "#FFC9AC", title: "School Items", subtitle: "Ballpen/Notebook/Calculator", categoryKey: "School Item" },
@@ -21,8 +21,7 @@ function FilterLayout({ scrollRef, activeCategory, onCategoryChange }) {
     return (
         <div
             ref={scrollRef}
-            className="flex gap-3 my-5 overflow-x-auto scrollbar-none"
-            style={{ width: "100%", maxWidth: "960px", scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex gap-3 my-5 overflow-x-auto scrollbar-none w-full max-w-240 2xl:max-w-340"
         >
             {filters.map((item, index) => (
                 <FilterCard

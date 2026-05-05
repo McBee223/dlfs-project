@@ -5,7 +5,7 @@ import DashboardButtonLeftActive from '../../../../assets/images/DashboardButton
 import DashboardButtonRightActive from '../../../../assets/images/DashboardButtonRightActive.png';
 import PinnedCardLayout from "./PinnedCardLayout";
 
-function PinnedNavigateLayout({ pinnedItems, scrollRef, onUnpin, onClaim, onEditClaim }) {
+function PinnedNavigateLayout({ pinnedItems, scrollRef, onUnpin, onClaim, onEditClaim, dismissedCancels, onDismissCancelNotif }) {
     const [active, setActive] = useState(null);
 
     const scrollLeft = () => {
@@ -21,16 +21,16 @@ function PinnedNavigateLayout({ pinnedItems, scrollRef, onUnpin, onClaim, onEdit
     };
 
     return (
-        <div className="w-full max-w-240 my-5">
+        <div className="w-full max-w-240 2xl:max-w-337 my-5">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold montserrat text-[#323232]">
+                <h2 className="text-xl 2xl:text-2xl font-semibold montserrat text-[#323232]">
                     Pinned Items
                 </h2>
                 <div className="flex gap-2">
-                    <button onClick={scrollLeft} className="w-8 h-8 flex items-center justify-center">
+                    <button onClick={scrollLeft} className="w-8 h-8 2xl:w-9 2xl:h-9 flex items-center justify-center">
                         <img src={active === "left" ? DashboardButtonLeftActive : DashboardButtonLeft} alt="" />
                     </button>
-                    <button onClick={scrollRight} className="w-8 h-8 flex items-center justify-center">
+                    <button onClick={scrollRight} className="w-8 h-8 2xl:w-9 2xl:h-9 flex items-center justify-center">
                         <img src={active === "right" ? DashboardButtonRightActive : DashboardButtonRight} alt="" />
                     </button>
                 </div>
@@ -42,6 +42,8 @@ function PinnedNavigateLayout({ pinnedItems, scrollRef, onUnpin, onClaim, onEdit
                 onUnpin={onUnpin}
                 onClaim={onClaim}
                 onEditClaim={onEditClaim}
+                dismissedCancels={dismissedCancels}
+                onDismissCancelNotif={onDismissCancelNotif}
             />
         </div>
     );

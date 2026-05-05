@@ -67,25 +67,25 @@ function LoginPopup({ onClose }) {
                     onClick={onClose}
                 >
                     <div
-                        className="bg-white rounded-2xl w-105 h-fit mt-10 p-6 montserrat shadow-xl border border-gray-200 animate-scaleIn overflow-hidden transition-all duration-500"
+                        className="bg-white rounded-2xl w-105 2xl:w-140 h-fit min-h-fit max-h-[90vh] overflow-y-auto mt-10 p-6 2xl:p-8 montserrat shadow-xl border border-gray-200 animate-scaleIn transition-all duration-500"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-6">
-                            <p className="text-gray-700 font-semibold">
+                            <p className="text-gray-700 font-semibold text-base 2xl:text-xl">
                                 {showAdminForm ? "Admin Log In" : "Log In"}
                             </p>
                             <button onClick={onClose} className="focus:outline-none focus:ring-0">
-                                <img src={ExitIcon} alt="close" className="w-5 h-5" />
+                                <img src={ExitIcon} alt="close" className="w-5 2xl:w-7 h-5 2xl:h-7" />
                             </button>
                         </div>
 
-                        <div className={`transition-all duration-500 ease-in-out ${showAdminForm ? "max-h-0 opacity-0 mb-0" : "max-h-40 opacity-100"}`}>
+                        <div className={`transition-all duration-500 ease-in-out ${showAdminForm ? "max-h-0 opacity-0 mb-0 pointer-events-none" : "max-h-40 opacity-100"}`}>
                             <button
                                 onClick={goToLoginPage}
-                                className="w-full flex items-center justify-center gap-1 border border-[#646464] rounded-full py-1.5 mb-5 hover:scale-105 transition"
+                                className="w-full flex items-center justify-center gap-1 border border-[#646464] rounded-full py-1.5 2xl:py-1.7 mb-5 2xl:mb-6 hover:scale-105 transition"
                             >
-                                <img src={DLFSIcon} alt="icon" className="w-5 h-5" />
-                                <span className="text-xs font-semibold text-gray-600">
+                                <img src={DLFSIcon} alt="icon" className="w-5 2xl:w-7 h-5 2xl:h-7" />
+                                <span className="text-xs 2xl:text-base font-semibold text-gray-600">
                                     Log in to DLFS
                                 </span>
                             </button>
@@ -98,51 +98,51 @@ function LoginPopup({ onClose }) {
                             </button>
                         </div>
 
-                        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showAdminForm ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${showAdminForm ? "max-h-96 2xl:max-h-98 opacity-100" : "max-h-0 opacity-0"}`}>
                             <form onSubmit={handleAdminSubmit} className="flex flex-col">
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-sm text-[#646464] font-medium">Admin ID</label>
+                                    <label className="text-sm 2xl:text-lg text-[#646464] font-medium">Admin ID</label>
                                     <input
                                         type="text"
                                         placeholder="Enter your Admin ID"
                                         value={adminId}
                                         onChange={(e) => setAdminId(e.target.value)}
-                                        className="input w-full"
+                                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-7 w-full"
                                     />
                                 </div>
 
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-sm text-[#646464] font-medium">Password</label>
+                                    <label className="text-sm 2xl:text-lg text-[#646464] font-medium">Password</label>
                                     <div className="relative">
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             placeholder="Enter your password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            className="input w-full pr-10"
+                                            className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-7 w-full pr-10"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-6 -translate-y-1/2 focus:outline-none focus:ring-0 cursor-pointer"
+                                            className="absolute right-4 top-6 2xl:right-6 2xl:top-8 -translate-y-1/2 focus:outline-none focus:ring-0 cursor-pointer"
                                         >
                                             <img
                                                 src={showPassword ? HidePasswordIcon : ShowPasswordIcon}
                                                 alt="Toggle Password"
-                                                className="w-4.5 h-4.5"
+                                                className="w-4.5 h-4.5 2xl:w-5.5 2xl:h-5.5"
                                             />
                                         </button>
                                     </div>
                                 </div>
 
                                 {error && (
-                                    <p className="text-red-500 text-xs mt-1 mb-1">{error}</p>
+                                    <p className="text-red-500 text-xs 2xl:text-base mt-1 mb-1">{error}</p>
                                 )}
 
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="text-sm w-full bg-[#047EAF] text-white py-2 rounded-lg font-semibold focus:outline-none focus:ring-0 mt-2 mb-3 disabled:opacity-60"
+                                    className="text-sm 2xl:text-lg w-full bg-[#047EAF] text-white py-2 rounded-lg font-semibold focus:outline-none focus:ring-0 mt-2 2xl:mt-3 mb-3 2xl:mb-4 disabled:opacity-60"
                                 >
                                     {loading ? "Checking..." : "Log in"}
                                 </button>
@@ -150,7 +150,7 @@ function LoginPopup({ onClose }) {
                                 <button
                                     type="button"
                                     onClick={() => setShowAdminForm(false)}
-                                    className="text-sm w-full bg-black text-white py-2 rounded-lg font-semibold focus:outline-none focus:ring-0"
+                                    className="text-sm 2xl:text-lg w-full bg-black text-white py-2 rounded-lg font-semibold focus:outline-none focus:ring-0"
                                 >
                                     Back to SSO
                                 </button>

@@ -69,32 +69,32 @@ function RegisterLayout({ onSwitch }) {
         <>
             {loading && <LoadingScreen message="Creating account..." />}
 
-            <div className={`w-full max-w-md transition-all duration-800 ease-in-out ${animate === "fade-left" ? "opacity-0 -translate-x-10" : animate === "fade-right" ? "opacity-0 translate-x-10" : "opacity-100 translate-x-0"}`}>
-                <h2 className="text-3xl font-semibold mb-2">Create an account</h2>
-                <p className="text-gray-500 mb-6 text-sm">Fill in the fields below to get started</p>
+            <div className={`w-full max-w-md 2xl:max-w-2xl transition-all duration-800 ease-in-out ${animate === "fade-left" ? "opacity-0 -translate-x-10" : animate === "fade-right" ? "opacity-0 translate-x-10" : "opacity-100 translate-x-0"}`}>
+                <h2 className="text-4xl 2xl:text-5xl font-semibold mb-2 2xl:mb-3">Create an account</h2>
+                <p className="text-gray-500 mb-6 2xl:mb-7 text-sm 2xl:text-lg">Fill in the fields below to get started</p>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 2xl:gap-3">
                     <input
                         type="text"
                         placeholder="First Name"
-                        className="input"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Last Name"
-                        className="input"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 2xl:gap-3">
                     <input
                         type="text"
                         placeholder="Section"
-                        className="input"
+                        className="input w-105 2xl:w-157 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
                         value={section}
                         onChange={(e) => setSection(e.target.value)}
                     />
@@ -105,18 +105,18 @@ function RegisterLayout({ onSwitch }) {
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
-                        className="input"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <span
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-6 -translate-y-1/2 cursor-pointer"
+                        className="absolute right-4 top-6 2xl:right-6 2xl:top-8 -translate-y-1/2 cursor-pointer"
                     >
                         <img
                             src={showPassword ? HidePasswordIcon : ShowPasswordIcon}
                             alt="toggle password"
-                            className="w-4.5 h-4.5"
+                            className="w-4.5 h-4.5 2xl:w-5.5 2xl:h-5.5"
                         />
                     </span>
                 </div>
@@ -124,7 +124,7 @@ function RegisterLayout({ onSwitch }) {
                 <input
                     type="text"
                     placeholder="Student Number"
-                    className="input"
+                    className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
                     value={studentNumber}
                     onChange={(e) => setStudentNumber(e.target.value)}
                 />
@@ -132,13 +132,13 @@ function RegisterLayout({ onSwitch }) {
                 <input
                     type="email"
                     placeholder="Microsoft 365 Account"
-                    className="input"
+                    className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
 
                 {message.text && (
-                    <p className={`text-sm mb-2 ${message.color === "red" ? "text-red-500" : "text-green-500"}`}>
+                    <p className={`text-sm 2xl:text-lg mb-2 2xl:mb-3 ${message.color === "red" ? "text-red-500" : "text-green-500"}`}>
                         {message.text}
                     </p>
                 )}
@@ -146,12 +146,12 @@ function RegisterLayout({ onSwitch }) {
                 <button
                     onClick={handleRegister}
                     disabled={loading}
-                    className="w-full bg-[#047EAF] text-white py-3 rounded-lg hover:scale-105 transform transition-transform disabled:opacity-60"
+                    className="w-full bg-[#047EAF] 2xl:text-xl text-white py-3 2xl:py-5 rounded-lg hover:scale-105 transform transition-transform disabled:opacity-60"
                 >
                     Sign up
                 </button>
 
-                <p className="text-sm text-gray-500 mt-4">
+                <p className="text-sm 2xl:text-lg text-gray-500 mt-4 2xl:mt-5">
                     Already have an account?{" "}
                     <span
                         onClick={() => {

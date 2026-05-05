@@ -27,17 +27,17 @@ function AnalyticsLayout({ userCount }) {
     return (
         <div className="montserrat w-full flex h-full overflow-hidden">
             <div className="flex gap-2 flex-1 mt-2 mx-2">
-                <div className="flex flex-col gap-2 flex-1">
+                <div className="flex flex-col gap-2 flex-1 h-92 2xl:h-105">
                     <TotalLostItemsCard />
                     <TotalReturnedItemsCard />
                 </div>
-                <div className="flex flex-col gap-2 flex-1">
+                <div className="flex flex-col gap-2 flex-1 h-92 2xl:h-105">
                     <TotalClaimsRequestCard count={claimsCount} />
                     <TotalUsersCard count={userCount} />
                 </div>
             </div>
-            <div className="w-64">
-                <CalendarCard width="62" />
+            <div className="w-64 2xl:w-70">
+                <CalendarCard width="62"/>
             </div>
         </div>
     );

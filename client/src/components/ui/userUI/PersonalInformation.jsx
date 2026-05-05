@@ -19,7 +19,6 @@ function PersonalInformation() {
     const { name, setName, gender, setGender, contact, setContact, microsoftaccount, fetchProfile } = useProfile();
     const token = localStorage.getItem('userToken');
 
-    // Sync name from context → local fields (skip while editing)
     useEffect(() => {
         if (!name || name === "Loading...") return;
         if (editMode) return;
@@ -28,13 +27,11 @@ function PersonalInformation() {
         setLastName(parts.slice(1).join(' ') || '');
     }, [name, editMode]);
 
-    // Sync gender from context → local field (skip while editing)
     useEffect(() => {
         if (editMode) return;
         setLocalGender(gender);
     }, [gender, editMode]);
 
-    // Sync contact from context → local field (skip while editing)
     useEffect(() => {
         if (editMode) return;
         setLocalContact(contact);
@@ -60,17 +57,16 @@ function PersonalInformation() {
     };
 
     return (
-        <div className="montserrat bg-white rounded-2xl p-6 w-full">
-            <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold text-gray-700">Personal Information</h2>
-                {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
-            </div>
+        <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full">            <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg 2xl:text-xl font-semibold text-gray-700">Personal Information</h2>
+            {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
+        </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6 2xl:gap-8">
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">First Name</label>
-                    <div className={`flex items-center border rounded-lg px-3 input w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                        <img src={NameIcon} className="w-5 h-5 mr-1" />
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">First Name</label>
+                    <div className={`flex items-center input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
+                        <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1" />
                         <input
                             type="text"
                             value={firstName}
@@ -82,9 +78,9 @@ function PersonalInformation() {
                 </div>
 
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">Last Name</label>
-                    <div className={`flex items-center border rounded-lg px-3 input w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                        <img src={NameIcon} className="w-5 h-5 mr-1" />
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">Last Name</label>
+                    <div className={`flex items-center input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
+                        <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1" />
                         <input
                             type="text"
                             value={lastName}
@@ -104,25 +100,25 @@ function PersonalInformation() {
                 </div>
 
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">Microsoft Account</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 block">Microsoft Account</label>
                     <div className="relative">
-                        <img src={EmailIcon} className="absolute left-4 top-6 -translate-y-1/2" />
+                        <img src={EmailIcon} className="absolute left-4 2xl:left-6 top-6 2xl:top-7 -translate-y-1/2 2xl:w-6 2xl:h-6" />
                         <input
                             type="text"
                             value={microsoftaccount}
                             readOnly
-                            className="input pl-10 w-full bg-white pointer-events-none focus:outline-none"
+                            className="input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 pl-10 2xl:pl-13 w-full bg-white pointer-events-none focus:outline-none"
                         />
                     </div>
                 </div>
             </div>
 
             <div className="mt-6">
-                <label className="text-sm text-gray-500 mb-1 block">
+                <label className="text-sm 2xl:text-base text-gray-500 mb-1 block">
                     Contact <span className="text-gray-400">(Optional)</span>
                 </label>
-                <div className={`flex items-center border rounded-lg px-3 input w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                    <img src={ContactIcon} className="w-5 h-5 mr-1" />
+                <div className={`flex items-center input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
+                    <img src={ContactIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1" />
                     <input
                         type="text"
                         value={localContact}

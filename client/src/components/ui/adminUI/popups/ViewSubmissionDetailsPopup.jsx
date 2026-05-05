@@ -103,7 +103,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
 
             {loading && (
                 <div className="fixed inset-0 bg-[rgba(0,0,0,0.35)] flex items-center justify-center z-1000">
-                    <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 2xl:w-14 2xl:h-14 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
 
@@ -114,62 +114,62 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
                 <div
                     ref={modalRef}
                     onMouseDown={(e) => e.stopPropagation()}
-                    className="bg-white w-120 h-[90vh] rounded-2xl shadow-lg flex flex-col overflow-hidden"
+                    className="bg-white w-120 2xl:w-136 h-[90vh] 2xl:h-[92vh] rounded-2xl shadow-lg flex flex-col overflow-hidden"
                 >
                     {step === "details" && (
-                        <div className={`flex flex-col flex-1 min-h-0 p-6 ${animating ? "slide-out-left" : ""}`}>
-                            <div className="flex justify-between items-center mb-4 shrink-0">
-                                <p className="text-lg font-semibold">Submission Details</p>
+                        <div className={`flex flex-col flex-1 min-h-0 p-6 2xl:p-8 ${animating ? "slide-out-left" : ""}`}>
+                            <div className="flex justify-between items-center mb-4 2xl:mb-5 shrink-0">
+                                <p className="text-lg 2xl:text-xl font-semibold">Submission Details</p>
                                 <button onClick={onClose}>
-                                    <img src={ExitIcon} alt="close" className="w-6" />
+                                    <img src={ExitIcon} alt="close" className="w-6 2xl:w-7" />
                                 </button>
                             </div>
 
-                            <div className="overflow-y-auto flex-1 space-y-3 pr-2">
+                            <div className="overflow-y-auto flex-1 space-y-3 2xl:space-y-4 pr-2">
                                 <div>
-                                    <label className="text-xs text-gray-500">Name</label>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Name</label>
                                     <div className="input">{item.claimant}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Item Name</label>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Item Name</label>
                                     <div className="input">{item.itemName || item.item_name}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Brand / Model</label>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Brand / Model</label>
                                     <div className="input">{item.brand || "-"}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Last Seen</label>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Last Seen</label>
                                     <div className="input">{item.lastSeen || item.last_seen}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Date & Time</label>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Date & Time</label>
                                     <div className="input">{formatDate(item.dateSubmitted || item.date_submitted)}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Condition</label>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Condition</label>
                                     <div className="input">{item.item_condition || "-"}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Description</label>
-                                    <div className="input min-h-20">{item.description || "-"}</div>
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Description</label>
+                                    <div className="input min-h-20 2xl:min-h-24">{item.description || "-"}</div>
                                 </div>
                                 <div>
-                                    <label className="text-xs text-gray-500">Color</label>
-                                    <div className="w-8 h-8 rounded border" style={{ backgroundColor: item.color || "#ccc" }} />
+                                    <label className="text-xs 2xl:text-sm text-gray-500">Color</label>
+                                    <div className="w-8 h-8 2xl:w-10 2xl:h-10 rounded border" style={{ backgroundColor: item.color || "#ccc" }} />
                                 </div>
                                 {item.claimImage && (
-                                    <div className="mt-2">
-                                        <label className="text-xs text-gray-500">Submitted Image</label>
-                                        <img src={item.claimImage} alt="submitted" className="w-full h-40 object-cover rounded-xl mt-1" />
+                                    <div className="mt-2 2xl:mt-3">
+                                        <label className="text-xs 2xl:text-sm text-gray-500">Submitted Image</label>
+                                        <img src={item.claimImage} alt="submitted" className="w-full h-40 2xl:h-52 object-cover rounded-xl mt-1" />
                                     </div>
                                 )}
                             </div>
 
-                            <div className="shrink-0 pt-4">
+                            <div className="shrink-0 pt-4 2xl:pt-5">
                                 <button
                                     onClick={goToSchedule}
-                                    className="w-full bg-[#00658D] text-white py-2 rounded-xl hover:bg-[#156394] transition-colors font-medium"
+                                    className="w-full bg-[#00658D] text-white py-2 2xl:py-3 rounded-xl hover:bg-[#156394] transition-colors font-medium text-sm 2xl:text-base"
                                 >
                                     Next
                                 </button>
@@ -178,18 +178,18 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
                     )}
 
                     {step === "schedule" && (
-                        <div className="slide-in-right flex flex-col flex-1 min-h-0 p-6">
-                            <div className="flex justify-between items-center mb-5 shrink-0">
-                                <h2 className="text-lg font-semibold text-[#1a1a1a]">Schedule</h2>
+                        <div className="slide-in-right flex flex-col flex-1 min-h-0 p-6 2xl:p-8">
+                            <div className="flex justify-between items-center mb-5 2xl:mb-6 shrink-0">
+                                <h2 className="text-lg 2xl:text-xl font-semibold text-[#1a1a1a]">Schedule</h2>
                                 <button onClick={onClose}>
-                                    <img src={ExitIcon} className="w-5 h-5" alt="close" />
+                                    <img src={ExitIcon} className="w-5 h-5 2xl:w-6 2xl:h-6" alt="close" />
                                 </button>
                             </div>
 
                             <div className="overflow-y-auto flex-1 pr-1">
-                                <p className="text-sm font-semibold text-[#1a1a1a] mb-4">Available Dates &amp; Times</p>
+                                <p className="text-sm 2xl:text-base font-semibold text-[#1a1a1a] mb-4 2xl:mb-5">Available Dates &amp; Times</p>
 
-                                <div className="flex gap-3 mb-4">
+                                <div className="flex gap-3 2xl:gap-4 mb-4 2xl:mb-5">
                                     <div className="flex-1">
                                         <span className="schedule-label">From</span>
                                         <input className="readonly-field" value={fromDay} readOnly />
@@ -200,21 +200,21 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-4 2xl:mb-5">
                                     <span className="schedule-label">Location</span>
                                     <input className="readonly-field" value={location} readOnly />
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-4 2xl:mb-5">
                                     <span className="schedule-label">Time</span>
                                     <input className="readonly-field" value={scheduleTime} readOnly />
                                 </div>
 
                                 <hr className="schedule-divider" />
 
-                                <p className="text-sm font-semibold text-[#1a1a1a] mb-4">User's Preferred Schedule</p>
+                                <p className="text-sm 2xl:text-base font-semibold text-[#1a1a1a] mb-4 2xl:mb-5">User's Preferred Schedule</p>
 
-                                <div className="mb-4">
+                                <div className="mb-4 2xl:mb-5">
                                     <span className="schedule-label">Date of Pick-up</span>
                                     <input
                                         className="readonly-field"
@@ -227,38 +227,38 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
                                     />
                                 </div>
 
-                                <div className="mb-4">
+                                <div className="mb-4 2xl:mb-5">
                                     <span className="schedule-label">Time</span>
                                     <input className="readonly-field" value={item.pickup_time || '-'} readOnly />
                                 </div>
                             </div>
 
-                            <div className="shrink-0 pt-4 flex items-center justify-between">
+                            <div className="shrink-0 pt-4 2xl:pt-5 flex items-center justify-between">
                                 <button
                                     onClick={() => setStep("details")}
-                                    className="text-sm text-[#646464] hover:text-[#323232] transition-colors flex items-center gap-1"
+                                    className="text-sm 2xl:text-base text-[#646464] hover:text-[#323232] transition-colors flex items-center gap-1 2xl:gap-2"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" className="2xl:w-4 2xl:h-4" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                         <polyline points="15 18 9 12 15 6" />
                                     </svg>
                                     Back
                                 </button>
 
-                                <div className="flex gap-3">
+                                <div className="flex gap-3 2xl:gap-4">
                                     <button
                                         onClick={handleApprove}
                                         disabled={loading}
                                         className="transition-transform duration-150 hover:scale-110 disabled:opacity-60"
                                     >
-                                        <img src={ApproveClaimImage} alt="approve" className="h-10" />
+                                        <img src={ApproveClaimImage} alt="approve" className="h-10 2xl:h-12" />
                                     </button>
                                     <button
                                         onClick={() => setRejectPending(true)}
                                         disabled={loading}
                                         className="transition-transform duration-150 hover:scale-110 disabled:opacity-60"
                                     >
-                                        <img src={RejectClaimImage} alt="reject" className="h-10" />
+                                        <img src={RejectClaimImage} alt="reject" className="h-10 2xl:h-12" />
                                     </button>
                                 </div>
                             </div>

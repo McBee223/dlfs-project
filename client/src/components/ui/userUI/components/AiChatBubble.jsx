@@ -16,7 +16,7 @@ function AiChatBubble({ text }) {
 
     return (
         <div className="flex justify-start">
-            <div className="bg-[#E8F7FF] text-[#047EAF] text-[12px] font-semibold px-4 py-3 rounded-r-2xl rounded-bl-2xl max-w-[80%] wrap-break-word">
+            <div className="bg-[#E8F7FF] text-[#047EAF] text-[12px] 2xl:text-[14px] font-semibold px-4 py-3 rounded-r-2xl rounded-bl-2xl max-w-[80%] wrap-break-word">
                 {displayed}
             </div>
         </div>

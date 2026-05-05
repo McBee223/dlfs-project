@@ -174,119 +174,119 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
 
             {loading && (
                 <div className="fixed inset-0 bg-[rgba(0,0,0,0.35)] flex items-center justify-center z-1000">
-                    <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 2xl:w-16 2xl:h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
 
             <div className="montserrat fixed inset-0 bg-[rgba(0,0,0,0.3)] flex items-center justify-center z-500">
-                <div ref={modalRef} onMouseDown={(e) => e.stopPropagation()} className="bg-white w-120 h-[90vh] rounded-2xl shadow-lg flex flex-col overflow-hidden">
+                <div ref={modalRef} onMouseDown={(e) => e.stopPropagation()} className="bg-white w-120 2xl:w-176 h-[90vh] 2xl:h-[90vh] rounded-2xl shadow-lg flex flex-col overflow-hidden">
                     {step === "claim" && (
-                        <div className={`flex flex-col flex-1 min-h-0 p-6 ${animating ? "slide-out-left" : ""}`}>
-                            <div className="flex justify-between items-center mb-4 shrink-0">
-                                <p className="text-lg font-semibold">{isEditing ? "Edit Your Submission" : "Your Item Details"}</p>
-                                <button onClick={onClose}><img src={ExitIcon} alt="close" className="w-6" /></button>
+                        <div className={`flex flex-col flex-1 min-h-0 p-6 2xl:p-8 ${animating ? "slide-out-left" : ""}`}>
+                            <div className="flex justify-between items-center mb-4 2xl:mb-6 shrink-0">
+                                <p className="text-lg 2xl:text-2xl font-semibold">{isEditing ? "Edit Your Submission" : "Your Item Details"}</p>
+                                <button onClick={onClose}><img src={ExitIcon} alt="close" className="w-6 2xl:w-8" /></button>
                             </div>
 
-                            <div className="overflow-y-auto flex-1 space-y-4 pr-2">
+                            <div className="overflow-y-auto flex-1 space-y-4 2xl:space-y-5 pr-2">
                                 <div className="flex flex-col">
-                                    <label className="mb-1 font-medium">Brand / Model <span className="text-red-500">*</span></label>
-                                    <input className="input w-full" placeholder="e.g., Aquafast 32oz, iPhone 11" value={brand} onChange={(e) => setBrand(e.target.value)} />
+                                    <label className="mb-1 2xl:mb-2 font-medium 2xl:text-lg">Brand / Model <span className="text-red-500">*</span></label>
+                                    <input className="input w-full 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6" placeholder="e.g., Aquafast 32oz, iPhone 11" value={brand} onChange={(e) => setBrand(e.target.value)} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="mb-1 font-medium">Last Seen <span className="text-red-500">*</span></label>
-                                    <input className="input w-full" placeholder="e.g., Room 304, library" value={lastSeen} onChange={(e) => setLastSeen(e.target.value)} />
+                                    <label className="mb-1 2xl:mb-2 font-medium 2xl:text-lg">Last Seen <span className="text-red-500">*</span></label>
+                                    <input className="input w-full 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6" placeholder="e.g., Room 304, library" value={lastSeen} onChange={(e) => setLastSeen(e.target.value)} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="mb-1 font-medium">Date & Time <span className="text-red-500">*</span></label>
-                                    <input type="datetime-local" className="input w-full" value={date} onChange={(e) => setDate(e.target.value)} />
+                                    <label className="mb-1 2xl:mb-2 font-medium 2xl:text-lg">Date & Time <span className="text-red-500">*</span></label>
+                                    <input type="datetime-local" className="input w-full 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6" value={date} onChange={(e) => setDate(e.target.value)} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="mb-1 font-medium">Condition <span className="text-red-500">*</span></label>
-                                    <input className="input w-full" placeholder="e.g., good, slightly scratched" value={itemCondition} onChange={(e) => setItemCondition(e.target.value)} />
+                                    <label className="mb-1 2xl:mb-2 font-medium 2xl:text-lg">Condition <span className="text-red-500">*</span></label>
+                                    <input className="input w-full 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6" placeholder="e.g., good, slightly scratched" value={itemCondition} onChange={(e) => setItemCondition(e.target.value)} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="mb-1 font-medium">Description <span className="text-red-500">*</span></label>
-                                    <textarea className="input w-full h-24 resize-none" placeholder="Unique features or what's inside?" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                    <label className="mb-1 2xl:mb-2 font-medium 2xl:text-lg">Description <span className="text-red-500">*</span></label>
+                                    <textarea className="input w-full 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6 h-24 2xl:h-36 resize-none" placeholder="Unique features or what's inside?" value={description} onChange={(e) => setDescription(e.target.value)} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <label className="mb-1 font-medium">Color</label>
-                                    <input type="color" className="w-10 h-10 p-0 border rounded cursor-pointer" value={color} onChange={(e) => setColor(e.target.value)} />
+                                    <label className="mb-1 2xl:mb-2 font-medium 2xl:text-lg">Color</label>
+                                    <input type="color" className="w-10 h-10 2xl:w-14 2xl:h-14 p-0 border rounded cursor-pointer" value={color} onChange={(e) => setColor(e.target.value)} />
                                 </div>
-                                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer bg-[#E8F7FF] hover:bg-gray-50 transition">
+                                <label className="flex flex-col items-center justify-center w-full h-40 2xl:h-56 border-2 border-dashed rounded-xl cursor-pointer bg-[#E8F7FF] hover:bg-gray-50 transition">
                                     {imagePreview ? (
                                         <img src={imagePreview} className="h-full object-contain rounded-lg" alt="preview" />
                                     ) : (
-                                        <div className="flex flex-col items-center gap-2">
-                                            <img src={FileUploadIcon} alt="upload" className="w-12 h-auto" />
-                                            <span className="text-[#00658D] underline">Browse files to upload</span>
+                                        <div className="flex flex-col items-center gap-2 2xl:gap-3">
+                                            <img src={FileUploadIcon} alt="upload" className="w-12 2xl:w-16 h-auto" />
+                                            <span className="text-[#00658D] underline 2xl:text-lg">Browse files to upload</span>
                                         </div>
                                     )}
                                     <input type="file" className="hidden" onChange={handleImageUpload} />
                                 </label>
                             </div>
 
-                            <div className="shrink-0 pt-4">
-                                <button onClick={goToSchedule} disabled={!isClaimFormValid || loading} className="w-full bg-[#00658D] text-white py-2 rounded hover:bg-[#156394] disabled:opacity-60 transition-colors font-medium">
+                            <div className="shrink-0 pt-4 2xl:pt-5">
+                                <button onClick={goToSchedule} disabled={!isClaimFormValid || loading} className="w-full bg-[#00658D] text-white py-2 2xl:py-3 2xl:text-lg rounded hover:bg-[#156394] disabled:opacity-60 transition-colors font-medium">
                                     Next
                                 </button>
-                                {!isClaimFormValid && <p className="text-xs text-red-500 mt-1">Please fill up everything first</p>}
+                                {!isClaimFormValid && <p className="text-xs 2xl:text-sm text-red-500 mt-1 2xl:mt-2">Please fill up everything first</p>}
                             </div>
                         </div>
                     )}
 
                     {step === "schedule" && (
-                        <div className="slide-in-right flex flex-col flex-1 min-h-0 p-6">
-                            <div className="flex justify-between items-center mb-5 shrink-0">
-                                <h2 className="text-lg font-semibold text-[#1a1a1a]">Schedule</h2>
-                                <button onClick={onClose}><img src={ExitIcon} className="w-5 h-5" alt="close" /></button>
+                        <div className="slide-in-right flex flex-col flex-1 min-h-0 p-6 2xl:p-8">
+                            <div className="flex justify-between items-center mb-5 2xl:mb-7 shrink-0">
+                                <h2 className="text-lg 2xl:text-2xl font-semibold text-[#1a1a1a]">Schedule</h2>
+                                <button onClick={onClose}><img src={ExitIcon} className="w-5 h-5 2xl:w-7 2xl:h-7" alt="close" /></button>
                             </div>
 
                             <div className="overflow-y-auto flex-1 pr-1">
-                                <p className="text-sm font-semibold text-[#1a1a1a] mb-3">Available Dates & Times</p>
+                                <p className="text-sm 2xl:text-base font-semibold text-[#1a1a1a] mb-3 2xl:mb-5">Available Dates & Times</p>
 
-                                <div className="bg-gray-50 rounded-xl p-4 mb-4 space-y-3 border border-[#E8E8E8]">
-                                    <div className="flex gap-3">
+                                <div className="bg-gray-50 rounded-xl p-4 2xl:p-5 2xl:mb-6 mb-4 space-y-3 2xl:space-y-4 border border-[#E8E8E8]">
+                                    <div className="flex gap-3 2xl:gap-4">
                                         <div className="flex-1">
-                                            <span className="schedule-label">From</span>
-                                            <input className="readonly-field" value={fromDay} readOnly />
+                                            <p className="2xl:text-base mb-2">From</p>
+                                            <input className="input 2xl:px-5 2xl:py-4 readonly-field 2xl:text-lg" value={fromDay} readOnly />
                                         </div>
                                         <div className="flex-1">
-                                            <span className="schedule-label">To</span>
-                                            <input className="readonly-field" value={toDay} readOnly />
+                                            <p className="2xl:text-base mb-2">To</p>
+                                            <input className="input 2xl:px-5 2xl:py-4 readonly-field 2xl:text-lg" value={toDay} readOnly />
                                         </div>
                                     </div>
                                     <div>
-                                        <span className="schedule-label">Location</span>
-                                        <input className="readonly-field" value={location} readOnly />
+                                        <spp className="2xl:text-base mb-2">Location</spp>
+                                        <input className="input 2xl:px-5 2xl:py-4 readonly-field 2xl:text-lg mt-2" value={location} readOnly />
                                     </div>
                                     <div>
-                                        <span className="schedule-label">Time</span>
-                                        <input className="readonly-field" value={scheduleTime} readOnly />
+                                        <spp className="2xl:text-base mb-2">Time</spp>
+                                        <input className="input 2xl:px-5 2xl:py-4 readonly-field 2xl:text-lg mt-2" value={scheduleTime} readOnly />
                                     </div>
                                 </div>
 
                                 <hr className="schedule-divider" />
 
-                                <p className="text-sm font-semibold text-[#047EAF] mb-1">Your Schedule</p>
-                                <p className="text-xs text-gray-400">Please fill in your preferred pickup schedule.</p>
+                                <p className="text-sm 2xl:text-base font-semibold text-[#047EAF] mb-1 2xl:mb-2">Your Schedule</p>
+                                <p className="text-xs 2xl:text-sm text-gray-400">Please fill in your preferred pickup schedule.</p>
 
-                                <div className="bg-white rounded-xl p-4 space-y-4">
+                                <div className="bg-white rounded-xl p-4 2xl:p-5 space-y-4 2xl:space-y-5">
                                     <div>
-                                        <span className="schedule-label">Date of pick up <span className="text-red-500">*</span></span>
+                                        <span className="2xl:text-base text-sm">Date of pick up <span className="text-red-500">*</span></span>
                                         <input
                                             type="date"
-                                            className="schedule-input"
+                                            className="input 2xl:px-5 2xl:py-4 2xl:text-base mt-1 2xl:mt-2"
                                             value={pickupDate}
                                             onChange={(e) => setPickupDate(e.target.value)}
                                         />
                                     </div>
 
                                     <div className="relative">
-                                        <span className="schedule-label">Time <span className="text-red-500">*</span></span>
+                                        <span className="2xl:text-base text-sm">Time <span className="text-red-500">*</span></span>
                                         <button
                                             type="button"
                                             onClick={() => setTimeDropdownOpen(prev => !prev)}
-                                            className="schedule-input flex items-center justify-between text-left cursor-pointer"
+                                            className="input 2xl:px-5 2xl:py-4 2xl:text-base mt-1 2xl:mt-2 flex items-center justify-between text-left cursor-pointer"
                                         >
                                             <span style={{ color: pickupTime ? '#323232' : '#9ca3af' }}>
                                                 {pickupTime || 'Select a time slot'}
@@ -304,7 +304,7 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
                                                         key={slot}
                                                         type="button"
                                                         onClick={() => { setPickupTime(slot); setTimeDropdownOpen(false); }}
-                                                        className="w-full text-left px-4 py-2.5 text-sm transition-colors"
+                                                        className="w-full text-left px-4 py-2.5 2xl:px-5 2xl:py-3 text-sm 2xl:text-base transition-colors"
                                                         style={{
                                                             color: slot === pickupTime ? '#047EAF' : '#323232',
                                                             background: slot === pickupTime ? '#E8F7FF' : 'transparent',
@@ -322,9 +322,9 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
                                 </div>
                             </div>
 
-                            <div className="shrink-0 pt-4 flex gap-2">
-                                <button onClick={() => setStep("claim")} className="flex-1 border border-[#D8D8D8] text-[#323232] py-2 rounded-xl font-medium text-sm hover:bg-gray-50">Back</button>
-                                <button onClick={handleSubmit} disabled={!isScheduleValid || loading} className="flex-1 bg-[#047EAF] text-white py-2 rounded-xl font-semibold text-sm hover:bg-[#0369a1] disabled:opacity-60">
+                            <div className="shrink-0 pt-4 2xl:pt-5 flex gap-2 2xl:gap-3">
+                                <button onClick={() => setStep("claim")} className="flex-1 border border-[#D8D8D8] text-[#323232] py-2 2xl:py-3 rounded-xl font-medium text-sm 2xl:text-base hover:bg-gray-50">Back</button>
+                                <button onClick={handleSubmit} disabled={!isScheduleValid || loading} className="flex-1 bg-[#047EAF] text-white py-2 2xl:py-3 rounded-xl font-semibold text-sm 2xl:text-base hover:bg-[#0369a1] disabled:opacity-60">
                                     {isEditing ? "Update Submission" : "Submit Claim"}
                                 </button>
                             </div>

@@ -7,7 +7,7 @@ function RegisterGenderPopup({ value, onChange }) {
   return (
     <div className="relative w-full">
       <div
-        className="input cursor-pointer flex justify-between items-center"
+        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6 cursor-pointer flex justify-between items-center"
         onClick={() => setOpen(!open)}
       >
         <span>{value}</span>
@@ -25,7 +25,7 @@ function RegisterGenderPopup({ value, onChange }) {
           {options.map((opt) => (
             <div
               key={opt}
-              className="px-4 py-2 hover:bg-[#69ADCE] hover:text-white rounded-sm cursor-pointer text-sm"
+              className="px-4 py-2 hover:bg-[#69ADCE] hover:text-white rounded-sm cursor-pointer text-sm 2xl:text-lg"
               onClick={() => {
                 onChange(opt);
                 setOpen(false);

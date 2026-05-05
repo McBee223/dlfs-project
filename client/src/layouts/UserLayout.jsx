@@ -9,7 +9,7 @@ function UserLayout() {
       <NotificationProvider>
         <div className="flex min-h-screen">
           <Sidebar />
-          <div className="flex flex-col flex-1 ml-45">
+          <div className="flex flex-col flex-1 ml-45 2xl:ml-50">
             <Outlet />
           </div>
         </div>

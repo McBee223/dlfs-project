@@ -66,85 +66,85 @@ function AdminPersonalInformation() {
     };
 
     return (
-        <div className="montserrat bg-white rounded-2xl p-6 w-full">
-            <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold text-gray-700">Personal Information</h2>
+        <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full">
+            <div className="flex items-center justify-between mb-3 2xl:mb-5">
+                <h2 className="text-lg 2xl:text-xl font-semibold text-gray-700">Personal Information</h2>
                 {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6 2xl:gap-8">
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">First Name</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">First Name</label>
                     <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                        <img src={NameIcon} className="w-5 h-5 mr-1" />
+                        <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
                         <input
                             type="text"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             readOnly={!editMode}
-                            className="flex-1 bg-transparent outline-none"
+                            className="flex-1 bg-transparent outline-none 2xl:text-base"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">Last Name</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Last Name</label>
                     <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                        <img src={NameIcon} className="w-5 h-5 mr-1" />
+                        <img src={NameIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
                         <input
                             type="text"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                             readOnly={!editMode}
-                            className="flex-1 bg-transparent outline-none"
+                            className="flex-1 bg-transparent outline-none 2xl:text-base"
                         />
                     </div>
                 </div>
             </div>
 
-            <div className="mt-6 flex flex-col gap-4">
+            <div className="mt-6 2xl:mt-8 flex flex-col gap-4 2xl:gap-6">
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">Password</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Password</label>
                     <div className={`input flex items-center justify-between ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
                         <div className="flex items-center flex-1">
-                            <img src={PasswordIcon} className="w-5 h-5 mr-1" />
+                            <img src={PasswordIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 readOnly={!editMode}
-                                className="flex-1 bg-transparent outline-none"
+                                className="flex-1 bg-transparent outline-none 2xl:text-base"
                             />
                         </div>
                         <span onClick={() => editMode && setShowPassword(prev => !prev)} className="cursor-pointer">
-                            <img src={showPassword ? HidePasswordIcon : ShowPasswordIcon} className="w-4 h-4" />
+                            <img src={showPassword ? HidePasswordIcon : ShowPasswordIcon} className="w-4 h-4 2xl:w-5 2xl:h-5" />
                         </span>
                     </div>
                 </div>
 
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">Admin ID</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Admin ID</label>
                     <div className="input flex items-center bg-white pointer-events-none">
-                        <img src={IdIcon} className="w-5 h-5 mr-1" />
-                        <input type="text" value={adminId} readOnly className="flex-1 bg-transparent outline-none" />
+                        <img src={IdIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
+                        <input type="text" value={adminId} readOnly className="flex-1 bg-transparent outline-none 2xl:text-base" />
                     </div>
                 </div>
 
                 <div>
-                    <label className="text-sm font-semibold text-gray-500 mb-1 block">Microsoft Account</label>
+                    <label className="text-sm 2xl:text-base font-semibold text-gray-500 mb-1 2xl:mb-2 block">Microsoft Account</label>
                     <div className="input flex items-center bg-white pointer-events-none">
-                        <img src={EmailIcon} className="w-5 h-5 mr-1" />
-                        <input type="text" value={microsoftaccount} readOnly className="flex-1 bg-transparent outline-none" />
+                        <img src={EmailIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
+                        <input type="text" value={microsoftaccount} readOnly className="flex-1 bg-transparent outline-none 2xl:text-base" />
                     </div>
                 </div>
             </div>
 
-            <div className="mt-6">
-                <label className="text-sm text-gray-500 mb-1 block">
+            <div className="mt-6 2xl:mt-8">
+                <label className="text-sm 2xl:text-base text-gray-500 mb-1 2xl:mb-2 block">
                     Contact <span className="text-gray-400">(Optional)</span>
                 </label>
                 <div className={`input flex items-center ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                    <img src={ContactIcon} className="w-5 h-5 mr-1" />
+                    <img src={ContactIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1 2xl:mr-2" />
                     <input
                         type="text"
                         value={contact}
@@ -152,7 +152,7 @@ function AdminPersonalInformation() {
                         readOnly={!editMode}
                         maxLength={20}
                         inputMode="numeric"
-                        className="flex-1 bg-transparent outline-none"
+                        className="flex-1 bg-transparent outline-none 2xl:text-base"
                         onKeyDown={(e) => {
                             if (["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
                             if (!/^\d$/.test(e.key)) e.preventDefault();

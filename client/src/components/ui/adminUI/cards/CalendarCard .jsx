@@ -10,6 +10,13 @@ function CalendarCard({ width }) {
     const [popupItems, setPopupItems] = useState([]);
     const [popupPos, setPopupPos] = useState({ top: 0, left: 0 });
     const popupRef = useRef();
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => setVisible(false);
+        window.addEventListener("scroll", handleScroll, true);
+        return () => window.removeEventListener("scroll", handleScroll, true);
+    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem("adminToken");
@@ -54,6 +61,7 @@ function CalendarCard({ width }) {
         setPopupPos({ top: rect.bottom + window.scrollY + 8, left: rect.left + window.scrollX - 100 });
         setPopupDate(key);
         setPopupItems(items);
+        setVisible(true);
     };
 
     useEffect(() => {
@@ -133,7 +141,7 @@ function CalendarCard({ width }) {
                     }
                 `}</style>
 
-            <div className={`bg-white rounded-xl p-4 w-${width} h-92 mt-2 mr-2`}>
+            <div className={`bg-white rounded-xl p-4 2xl:p-5 w-${width} 2xl:w h-92 2xl:h-105 mt-2 mr-2`}>
                 <Calendar
                     onChange={setDate}
                     value={date}
@@ -152,27 +160,27 @@ function CalendarCard({ width }) {
                         top: popupPos.top,
                         right: 100,
                         zIndex: 1000,
-
                     }}
-                    className="montserrat bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 w-96"
+                    className={`montserrat bg-white rounded-2xl shadow-2xl border border-gray-100 p-5 w-96 2xl:w-120 transition-opacity duration-300 ${visible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                    onTransitionEnd={() => { if (!visible) setPopupDate(null); }}
                 >
-                    <p style={{ fontFamily: "'Montserrat', sans-serif" }} className="flex gap-2 text-sm font-bold text-[#1a1a1a] mb-4">
-                        <img src={CalendarIcon} />{new Date(popupDate + "T00:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                    <p style={{ fontFamily: "'Montserrat', sans-serif" }} className="flex gap-2 text-sm 2xl:text-base font-bold text-[#1a1a1a] mb-4">
+                        <img src={CalendarIcon} className="2xl:w-5 2xl:h-5" />{new Date(popupDate + "T00:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                     </p>
-                    <table className="w-full text-xs" style={{ fontFamily: "'Montserrat', sans-serif", borderCollapse: "separate", borderSpacing: "0" }}>
+                    <table className="w-full text-xs 2xl:text-sm" style={{ fontFamily: "'Montserrat', sans-serif", borderCollapse: "separate", borderSpacing: "0" }}>
                         <thead>
                             <tr style={{ background: "#f5f5f5" }}>
-                                <th className="py-2 px-3 text-left font-semibold text-gray-500 rounded-l-lg">Claimant</th>
-                                <th className="py-2 px-3 text-left font-semibold text-gray-500">Item</th>
-                                <th className="py-2 px-3 text-left font-semibold text-gray-500 rounded-r-lg">Time</th>
+                                <th className="py-2 px-3 2xl:py-3 2xl:px-4 text-left font-semibold text-gray-500 rounded-l-lg">Claimant</th>
+                                <th className="py-2 px-3 2xl:py-3 2xl:px-4 text-left font-semibold text-gray-500">Item</th>
+                                <th className="py-2 px-3 2xl:py-3 2xl:px-4 text-left font-semibold text-gray-500 rounded-r-lg">Time</th>
                             </tr>
                         </thead>
                         <tbody>
                             {popupItems.map((item, i) => (
                                 <tr key={i} style={{ borderBottom: i < popupItems.length - 1 ? "1px solid #f0f0f0" : "none" }}>
-                                    <td className="py-3 px-3 font-semibold text-[#1a1a1a]">{item.claimant}</td>
-                                    <td className="py-3 px-3 text-[#646464]">{item.item_name}</td>
-                                    <td className="py-3 px-3 font-semibold text-[#00658D] whitespace-nowrap">{item.pickup_time || "-"}</td>
+                                    <td className="py-3 px-3 2xl:py-4 2xl:px-4 font-semibold text-[#1a1a1a]">{item.claimant}</td>
+                                    <td className="py-3 px-3 2xl:py-4 2xl:px-4 text-[#646464]">{item.item_name}</td>
+                                    <td className="py-3 px-3 2xl:py-4 2xl:px-4 font-semibold text-[#00658D] whitespace-nowrap">{item.pickup_time || "-"}</td>
                                 </tr>
                             ))}
                         </tbody>
