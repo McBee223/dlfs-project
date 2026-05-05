@@ -25,7 +25,7 @@ function LoginLayout({ onSwitch }) {
         setMessage({ text: "", color: "" });
 
         try {
-            const response = await axios.post("${import.meta.env.VITE_API_URL}/api/user/login", {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/login`, {
                 microsoftaccount,
                 password
             });
@@ -112,3 +112,4 @@ function LoginLayout({ onSwitch }) {
 }
 
 export default LoginLayout;
+

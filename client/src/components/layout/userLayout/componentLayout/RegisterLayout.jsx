@@ -34,7 +34,7 @@ function RegisterLayout({ onSwitch }) {
         const fullName = `${firstName} ${lastName}`;
 
         try {
-            await axios.post("${import.meta.env.VITE_API_URL}/api/user/signup", {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/user/signup`, {
                 id: studentNumber,
                 name: fullName,
                 microsoftaccount: email,
@@ -169,3 +169,4 @@ function RegisterLayout({ onSwitch }) {
 }
 
 export default RegisterLayout;
+

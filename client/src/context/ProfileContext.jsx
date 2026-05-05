@@ -59,3 +59,4 @@ export function ProfileProvider({ children, role }) {
 export function useProfile() {
     return useContext(ProfileContext);
 }
+

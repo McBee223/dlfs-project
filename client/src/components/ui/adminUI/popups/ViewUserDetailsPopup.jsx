@@ -165,3 +165,4 @@ function ViewUserDetailsPopup({ onClose, user, onUpdate, readOnly = false }) {
 }
 
 export default ViewUserDetailsPopup;
+

@@ -162,3 +162,4 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
 }
 
 export default ItemsCard;
+

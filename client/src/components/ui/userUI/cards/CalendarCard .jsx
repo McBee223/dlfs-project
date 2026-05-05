@@ -16,7 +16,7 @@ function CalendarCard() {
         const token = localStorage.getItem("userToken");
 
         const fetchEvents = () => {
-            fetch(`${import.meta.env.VITE_API_URL}/api/user/calendar-events", {
+            fetch(``${import.meta.env.VITE_API_URL}/api/user/calendar-events`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -206,3 +206,4 @@ function CalendarCard() {
 }
 
 export default CalendarCard;
+

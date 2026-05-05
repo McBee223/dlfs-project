@@ -37,3 +37,4 @@ function ClaimSuccesPopup({ onClose }) {
 }
 
 export default ClaimSuccesPopup;
+

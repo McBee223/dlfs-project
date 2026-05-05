@@ -26,7 +26,7 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
 
     const fetchItems = useCallback(() => {
         const token = localStorage.getItem("userToken");
-        authFetch(`${import.meta.env.VITE_API_URL}/api/user/lost-items", {
+        authFetch(``${import.meta.env.VITE_API_URL}/api/user/lost-items`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then((res) => res.json())
@@ -364,3 +364,4 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
 }
 
 export default CardLayout;
+

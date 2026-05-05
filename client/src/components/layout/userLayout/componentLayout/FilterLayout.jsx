@@ -40,3 +40,4 @@ function FilterLayout({ scrollRef, activeCategory, onCategoryChange }) {
 }
 
 export default FilterLayout;
+

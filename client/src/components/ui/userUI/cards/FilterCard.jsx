@@ -25,3 +25,4 @@ function FilterCard({ color, hovercolor, title, subtitle, icon, active, onClick 
 }
 
 export default FilterCard;
+

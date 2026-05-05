@@ -47,3 +47,4 @@ function TotalClaimsRequestCard() {
 }
 
 export default TotalClaimsRequestCard;
+

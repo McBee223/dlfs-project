@@ -63,7 +63,7 @@ export function AdminNotificationProvider({ children }) {
     };
 
     const markAllAsRead = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/notifications/read-all", {
+        fetch(``${import.meta.env.VITE_API_URL}/api/admin/notifications/read-all`, {
             method: "PUT",
             headers: { Authorization: `Bearer ${getToken()}` },
         })
@@ -91,3 +91,4 @@ export function AdminNotificationProvider({ children }) {
 export function useAdminNotifications() {
     return useContext(AdminNotificationContext);
 }
+

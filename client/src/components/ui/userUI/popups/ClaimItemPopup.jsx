@@ -337,3 +337,4 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
 }
 
 export default ClaimItemPopup;
+
