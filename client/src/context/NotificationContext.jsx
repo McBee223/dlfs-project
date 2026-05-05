@@ -9,7 +9,7 @@ export function NotificationProvider({ children }) {
     const getToken = () => localStorage.getItem("userToken");
 
     const fetchNotifications = useCallback(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications`, {
             headers: { Authorization: `Bearer ${getToken()}` },
         })
             .then((res) => res.json())
