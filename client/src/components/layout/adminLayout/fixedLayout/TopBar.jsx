@@ -25,7 +25,7 @@ function TopBar({ title, bg, iconbg, margin, showActions }) {
 
     const fetchLostItemsCount = () => {
         const token = localStorage.getItem("adminToken");
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/lost-items", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/lost-items`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
