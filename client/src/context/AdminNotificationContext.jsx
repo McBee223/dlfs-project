@@ -9,7 +9,7 @@ export function AdminNotificationProvider({ children }) {
     const getToken = () => localStorage.getItem("adminToken");
 
     const fetchNotifications = useCallback(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/notifications", {
+       fetch(`${import.meta.env.VITE_API_URL}/api/admin/notifications', {
             headers: { Authorization: `Bearer ${getToken()}` },
         })
             .then((res) => res.json())
