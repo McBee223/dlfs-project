@@ -153,3 +153,4 @@ function PinnedItemsCard({ item, category, description, image, onViewDetails, on
 
 export default PinnedItemsCard;
 
+

@@ -11,7 +11,7 @@ function AnalyticsLayout({ userCount }) {
     useEffect(() => {
         const fetchClaims = () => {
             const token = localStorage.getItem("adminToken");
-            fetch(``${import.meta.env.VITE_API_URL}/api/admin/claims/count`, {
+            fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/count`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => res.json())
@@ -44,4 +44,5 @@ function AnalyticsLayout({ userCount }) {
 }
 
 export default AnalyticsLayout;
+
 

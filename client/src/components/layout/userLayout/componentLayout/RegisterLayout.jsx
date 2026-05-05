@@ -170,3 +170,4 @@ function RegisterLayout({ onSwitch }) {
 
 export default RegisterLayout;
 
+

@@ -14,3 +14,4 @@ function RightBar({ total }) {
 
 export default RightBar;
 
+
