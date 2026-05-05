@@ -11,7 +11,7 @@ function Profile() {
     useEffect(() => {
         const token = localStorage.getItem("userToken");
 
-        authfetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items`, {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -20,7 +20,7 @@ function Profile() {
             })
             .catch(err => console.error("Failed to fetch pinned count:", err));
 
-        authfetch(`${import.meta.env.VITE_API_URL}/api/user/item-status", {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/item-status`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())

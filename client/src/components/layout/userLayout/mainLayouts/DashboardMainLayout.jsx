@@ -46,7 +46,7 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 
     const fetchPinnedItems = useCallback(() => {
         const token = localStorage.getItem("userToken");
-        authfetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items`, {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
@@ -90,7 +90,7 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 
     const fetchClaimedCount = useCallback(() => {
         const token = localStorage.getItem("userToken");
-        authfetch(`${import.meta.env.VITE_API_URL}/api/user/item-status", {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/item-status`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())

@@ -27,7 +27,7 @@ function ListOfItemLayout() {
     });
 
     const fetchItemStatus = () => {
-        return authfetch(`${import.meta.env.VITE_API_URL}/api/user/item-status", {
+        return authFetch(`${import.meta.env.VITE_API_URL}/api/user/item-status", {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -65,7 +65,7 @@ function ListOfItemLayout() {
     };
 
     const fetchTrashItems = () => {
-        return authfetch(`${import.meta.env.VITE_API_URL}/api/user/trash", {
+        return authFetch(`${import.meta.env.VITE_API_URL}/api/user/trash", {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -149,7 +149,7 @@ function ListOfItemLayout() {
 
         try {
             await Promise.all(toTrash.map(item =>
-                authfetch(`${import.meta.env.VITE_API_URL}/api/user/trash", {
+                authFetch(`${import.meta.env.VITE_API_URL}/api/user/trash", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
