@@ -38,7 +38,7 @@ export function AdminNotificationProvider({ children }) {
     };
 
     const deleteAllNotifications = () => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/notifications/delete-all", {
+         fetch(`${import.meta.env.VITE_API_URL}/api/admin/notifications/delete-all`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${getToken()}` },
         })
