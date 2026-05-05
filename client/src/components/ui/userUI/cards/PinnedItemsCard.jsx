@@ -48,7 +48,7 @@ function PinnedItemsCard({ item, category, description, image, onViewDetails, on
         setLoading(true);
         const token = localStorage.getItem("userToken");
         try {
-            const res = await authFetch(`http://localhost:3000/api/user/pinned-items/${item.id}`, {
+            const res = await authFetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items/${item.id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` }
             });

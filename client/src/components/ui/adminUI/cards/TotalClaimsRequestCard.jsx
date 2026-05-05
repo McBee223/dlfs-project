@@ -9,7 +9,7 @@ function TotalClaimsRequestCard() {
     const fetchCount = () => {
         const token = localStorage.getItem('adminToken');
         console.log("token:", token);
-        fetch('http://localhost:3000/api/admin/claims/count', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims/count', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {

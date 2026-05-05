@@ -31,7 +31,7 @@ function LoginPopup({ onClose }) {
         setLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:3000/api/admin/login", {
+            const response = await axios.post("${import.meta.env.VITE_API_URL}/api/admin/login", {
                 id: adminId,
                 password: password
             });

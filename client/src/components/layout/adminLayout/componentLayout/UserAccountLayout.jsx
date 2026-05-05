@@ -20,7 +20,7 @@ function UserAccountLayout({
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/admin/users', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/users', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())

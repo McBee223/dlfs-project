@@ -12,8 +12,8 @@ export function ProfileProvider({ children, role }) {
 
     const tokenKey = role === "admin" ? "adminToken" : "userToken";
     const apiBase = role === "admin"
-        ? "http://localhost:3000/api/admin/profile"
-        : "http://localhost:3000/api/user/profile";
+        ? "${import.meta.env.VITE_API_URL}/api/admin/profile"
+        : "${import.meta.env.VITE_API_URL}/api/user/profile";
 
     const fetchProfile = useCallback(() => {
         const token = localStorage.getItem(tokenKey);

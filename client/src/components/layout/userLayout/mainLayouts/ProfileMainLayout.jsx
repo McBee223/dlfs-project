@@ -8,7 +8,7 @@ function ProfileMainLayout({ onPinnedCountChange }) {
     useEffect(() => {
         const token = localStorage.getItem("userToken");
 
-        authFetch("http://localhost:3000/api/user/pinned-items", {
+        authFetch("${import.meta.env.VITE_API_URL}/api/user/pinned-items", {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())

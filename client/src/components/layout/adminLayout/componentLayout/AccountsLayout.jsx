@@ -97,7 +97,7 @@ function AccountsLayout({ onUserCountChange }) {
                 selectedIds.map((key) => {
                     const type = archiveTypeMap[key] || 'user';
                     const id = key.replace(/^(admin-|user-)/, ''); // strip prefix
-                    return fetch(`http://localhost:3000/api/admin/archive/${id}?type=${type}`, {
+                    return fetch(`${import.meta.env.VITE_API_URL}/api/admin/archive/${id}?type=${type}`, {
                         method: 'DELETE',
                         headers: { Authorization: `Bearer ${token}` }
                     });
@@ -105,7 +105,7 @@ function AccountsLayout({ onUserCountChange }) {
             );
         } else {
             const type = activeTab === "admin" ? "admin" : "user";
-            await fetch('http://localhost:3000/api/admin/archive', {
+            await fetch('${import.meta.env.VITE_API_URL}/api/admin/archive', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

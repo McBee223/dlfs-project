@@ -46,7 +46,7 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 
     const fetchPinnedItems = useCallback(() => {
         const token = localStorage.getItem("userToken");
-        authFetch("http://localhost:3000/api/user/pinned-items", {
+        authFetch("${import.meta.env.VITE_API_URL}/api/user/pinned-items", {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
@@ -90,7 +90,7 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 
     const fetchClaimedCount = useCallback(() => {
         const token = localStorage.getItem("userToken");
-        authFetch("http://localhost:3000/api/user/item-status", {
+        authFetch("${import.meta.env.VITE_API_URL}/api/user/item-status", {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -114,7 +114,7 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 
         if (claimId) {
             const token = localStorage.getItem("userToken");
-            authFetch(`http://localhost:3000/api/user/claims/${claimId}/dismiss-cancel-notif`, {
+            authFetch(`${import.meta.env.VITE_API_URL}/api/user/claims/${claimId}/dismiss-cancel-notif`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${token}` }
             }).catch(err => console.error('Failed to dismiss notif:', err));

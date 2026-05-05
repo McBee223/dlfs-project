@@ -50,14 +50,14 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
         const token = localStorage.getItem("userToken");
         try {
             if (!isPinned) {
-                const res = await authFetch("http://localhost:3000/api/user/pinned-items", {
+                const res = await authFetch("${import.meta.env.VITE_API_URL}/api/user/pinned-items", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                     body: JSON.stringify({ lost_item_id: item.id })
                 });
                 if (res.ok) onPinChange?.(item.id, true);
             } else {
-                const res = await authFetch(`http://localhost:3000/api/user/pinned-items/${item.id}`, {
+                const res = await authFetch(`${import.meta.env.VITE_API_URL}/api/user/pinned-items/${item.id}`, {
                     method: "DELETE",
                     headers: { Authorization: `Bearer ${token}` }
                 });

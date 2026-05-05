@@ -27,7 +27,7 @@ function ListOfItemLayout() {
     });
 
     const fetchItemStatus = () => {
-        return authFetch("http://localhost:3000/api/user/item-status", {
+        return authFetch("${import.meta.env.VITE_API_URL}/api/user/item-status", {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -65,7 +65,7 @@ function ListOfItemLayout() {
     };
 
     const fetchTrashItems = () => {
-        return authFetch("http://localhost:3000/api/user/trash", {
+        return authFetch("${import.meta.env.VITE_API_URL}/api/user/trash", {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -149,7 +149,7 @@ function ListOfItemLayout() {
 
         try {
             await Promise.all(toTrash.map(item =>
-                authFetch("http://localhost:3000/api/user/trash", {
+                authFetch("${import.meta.env.VITE_API_URL}/api/user/trash", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -188,7 +188,7 @@ function ListOfItemLayout() {
 
     const confirmDeleteForever = () => {
         const promises = selectedItems.map(id =>
-            authFetch(`http://localhost:3000/api/user/trash/${id}`, {
+            authFetch(`${import.meta.env.VITE_API_URL}/api/user/trash/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${getToken()}` }
             })
@@ -205,7 +205,7 @@ function ListOfItemLayout() {
     };
 
     const handleRestoreTrashItem = (id) => {
-        authFetch(`http://localhost:3000/api/user/trash/${id}/restore`, {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/trash/${id}/restore`, {
             method: "POST",
             headers: { Authorization: `Bearer ${getToken()}` }
         })

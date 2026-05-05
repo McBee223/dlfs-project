@@ -30,7 +30,7 @@ function ViewUserDetailsPopup({ onClose, user, onUpdate, readOnly = false }) {
     }, [onClose]);
 
     const handleSave = () => {
-        fetch(`http://localhost:3000/api/admin/users/${user?.id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/${user?.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

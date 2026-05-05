@@ -20,7 +20,7 @@ function CalendarCard({ width }) {
 
     useEffect(() => {
         const token = localStorage.getItem("adminToken");
-        fetch("http://localhost:3000/api/admin/calendar-events", {
+        fetch("${import.meta.env.VITE_API_URL}/api/admin/calendar-events", {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(r => r.json())

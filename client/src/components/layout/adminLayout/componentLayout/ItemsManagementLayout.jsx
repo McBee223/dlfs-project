@@ -69,7 +69,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     });
 
     const fetchLostItems = () => {
-        fetch('http://localhost:3000/api/admin/lost-items', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/lost-items', {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -96,7 +96,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchClaimItems = () => {
-        fetch('http://localhost:3000/api/admin/claims', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims', {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -136,7 +136,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchApprovedItems = () => {
-        fetch('http://localhost:3000/api/admin/claims/approved', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims/approved', {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -168,7 +168,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchRejectedItems = () => {
-        fetch('http://localhost:3000/api/admin/claims/rejected', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims/rejected', {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -200,7 +200,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchReturnedItems = () => {
-        fetch('http://localhost:3000/api/admin/returned-items', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/returned-items', {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -232,7 +232,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchTrashItems = () => {
-        fetch('http://localhost:3000/api/admin/trash', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/trash', {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -281,7 +281,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
 
     const moveClaim = (item, targetStatus) => {
         const status = targetStatus === 'approved' ? 'Approved' : 'Rejected';
-        fetch(`http://localhost:3000/api/admin/claims/${item.claimDbId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
             body: JSON.stringify({ status })
@@ -292,7 +292,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const handleReturnItem = (item) => {
-        fetch(`http://localhost:3000/api/admin/claims/${item.claimDbId}/return`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}/return`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }
         })
@@ -302,7 +302,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const handleCancelSchedule = (item) => {
-        fetch('http://localhost:3000/api/admin/trash', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/trash', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
             body: JSON.stringify({
@@ -324,13 +324,13 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
         })
             .then(res => res.json())
             .then(() => {
-                fetch(`http://localhost:3000/api/admin/claims/${item.claimDbId}`, {
+                fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
                     body: JSON.stringify({ status: 'Pending' })
                 })
                     .then(() => {
-                        fetch(`http://localhost:3000/api/admin/claims/${item.claimDbId}/cancel-notif`, {
+                        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}/cancel-notif`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }
                         });
@@ -470,7 +470,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     const handleConfirm = () => {
         if (activeTab.key === "trash") {
             const trashIds = selectedIds;
-            fetch('http://localhost:3000/api/admin/trash/delete-forever', {
+            fetch('${import.meta.env.VITE_API_URL}/api/admin/trash/delete-forever', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
                 body: JSON.stringify({ ids: trashIds })
@@ -487,7 +487,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                 .filter(item => selectedIds.includes(getRowId(item)));
 
             const trashPromises = itemsToTrash.map(item =>
-                fetch('http://localhost:3000/api/admin/trash', {
+                fetch('${import.meta.env.VITE_API_URL}/api/admin/trash', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
                     body: JSON.stringify({
@@ -535,7 +535,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
             return;
         }
 
-        fetch(`http://localhost:3000/api/admin/trash/${trashId}/restore`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash/${trashId}/restore`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }
         })

@@ -42,7 +42,7 @@ function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
     const handleSave = () => {
         const fullName = `${firstName} ${lastName}`.trim();
 
-        fetch(`http://localhost:3000/api/admin/admins/${originalId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/admins/${originalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

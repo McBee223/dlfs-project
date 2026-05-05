@@ -21,7 +21,7 @@ function AdminAccountLayout({
     const [admins, setAdmins] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/admin/admins', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/admins', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())

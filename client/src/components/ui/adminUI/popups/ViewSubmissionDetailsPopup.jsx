@@ -48,7 +48,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
         setLoading(true);
         const token = localStorage.getItem('adminToken');
         try {
-            const res = await fetch(`http://localhost:3000/api/admin/claims/${item.claimDbId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ status: "Approved" })
@@ -63,7 +63,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
         setLoading(true);
         const token = localStorage.getItem('adminToken');
         try {
-            const res = await fetch(`http://localhost:3000/api/admin/claims/${item.claimDbId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ status: "Rejected" })

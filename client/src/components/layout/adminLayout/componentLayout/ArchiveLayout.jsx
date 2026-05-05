@@ -23,7 +23,7 @@ function ArchiveLayout({
     const token = localStorage.getItem('adminToken');
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/admin/archive', {
+        fetch('${import.meta.env.VITE_API_URL}/api/admin/archive', {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -51,7 +51,7 @@ function ArchiveLayout({
     }, []);
 
     const handleRestore = async (id, type) => {
-        await fetch(`http://localhost:3000/api/admin/archive/restore/${id}?type=${type}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/admin/archive/restore/${id}?type=${type}`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}` }
         });

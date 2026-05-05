@@ -42,7 +42,7 @@ function AddAdminPopup({ onClose, onConfirm }) {
         const fullName = `${firstName} ${lastName}`.trim();
 
         try {
-            const res = await fetch('http://localhost:3000/api/admin/admins', {
+            const res = await fetch('${import.meta.env.VITE_API_URL}/api/admin/admins', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -31,7 +31,7 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
     useEffect(() => {
         if (!claimId) return;
         const token = localStorage.getItem("userToken");
-        authFetch(`http://localhost:3000/api/user/claims/${claimId}`, {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/claims/${claimId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -119,8 +119,8 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
 
         try {
             const url = isEditing
-                ? `http://localhost:3000/api/user/claims/${claimId}`
-                : "http://localhost:3000/api/user/claims";
+                ? `${import.meta.env.VITE_API_URL}/api/user/claims/${claimId}`
+                : "${import.meta.env.VITE_API_URL}/api/user/claims";
             const method = isEditing ? "PUT" : "POST";
 
             const res = await authFetch(url, {

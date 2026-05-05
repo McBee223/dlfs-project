@@ -30,7 +30,7 @@ function ProfileDetails() {
             const compressed = canvas.toDataURL('image/jpeg', 0.7);
             setProfileImg(compressed);
 
-            authFetch('http://localhost:3000/api/user/profile', {
+            authFetch('${import.meta.env.VITE_API_URL}/api/user/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

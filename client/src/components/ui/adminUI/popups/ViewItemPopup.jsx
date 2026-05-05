@@ -70,7 +70,7 @@ function ViewItemPopup({ onClose, onSave, item }) {
 
         const token = localStorage.getItem('adminToken');
         setIsLoading(true);
-        fetch(`http://localhost:3000/api/admin/lost-items/${lostId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/lost-items/${lostId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -116,7 +116,7 @@ function ViewItemPopup({ onClose, onSave, item }) {
                 const formData = new FormData();
                 formData.append('image', imageFile);
 
-                const uploadRes = await fetch('http://localhost:3000/api/admin/upload-image', {
+                const uploadRes = await fetch('${import.meta.env.VITE_API_URL}/api/admin/upload-image', {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${token}` },
                     body: formData
@@ -130,7 +130,7 @@ function ViewItemPopup({ onClose, onSave, item }) {
                 finalImageUrl = uploadData.url;
             }
 
-            const res = await fetch(`http://localhost:3000/api/admin/lost-items/${originalId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/lost-items/${originalId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
