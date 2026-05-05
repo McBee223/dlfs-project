@@ -9,7 +9,7 @@ function TotalReturnedItemsCard() {
     useEffect(() => {
         const fetchCount = () => {
             const token = localStorage.getItem("adminToken");
-            fetch("${import.meta.env.VITE_API_URL}/api/admin/returned-items", {
+            fetch(`${import.meta.env.VITE_API_URL}/api/admin/returned-items", {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(res => res.json())

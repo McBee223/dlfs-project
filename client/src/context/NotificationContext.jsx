@@ -9,7 +9,7 @@ export function NotificationProvider({ children }) {
     const getToken = () => localStorage.getItem("userToken");
 
     const fetchNotifications = useCallback(() => {
-        fetch("${import.meta.env.VITE_API_URL}/api/user/notifications", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications", {
             headers: { Authorization: `Bearer ${getToken()}` },
         })
             .then((res) => res.json())
@@ -38,7 +38,7 @@ export function NotificationProvider({ children }) {
     };
 
     const deleteAllNotifications = () => {
-        fetch("${import.meta.env.VITE_API_URL}/api/user/notifications/delete-all", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications/delete-all", {
             method: "DELETE",
             headers: { Authorization: `Bearer ${getToken()}` },
         })
@@ -63,7 +63,7 @@ export function NotificationProvider({ children }) {
     };
 
     const markAllAsRead = () => {
-        fetch("${import.meta.env.VITE_API_URL}/api/user/notifications/read-all", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/user/notifications/read-all", {
             method: "PUT",
             headers: { Authorization: `Bearer ${getToken()}` },
         })
