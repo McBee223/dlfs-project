@@ -9,8 +9,8 @@ import HidePasswordIcon from "../../../../assets/icons/HidePasswordIcon.svg";
 function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
     const [showPassword, setShowPassword] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [firstName, setFirstName] = useState(admin?.firstname || "");
+    const [lastName, setLastName] = useState(admin?.lastname || "");
     const [password, setPassword] = useState(admin?.password || "");
     const [adminId, setAdminId] = useState(admin?.id || "");
     const [microsoftaccount, setMicrosoftAccount] = useState(admin?.microsoftaccount || "");
@@ -48,7 +48,7 @@ function ViewAdminDetailsPopup({ onClose, admin, onUpdate, readOnly = false }) {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({ id: adminId, name: fullName, password, microsoftaccount })
+            body: JSON.stringify({ id: adminId, firstname: firstName, lastname: lastName, password, microsoftaccount })
         })
             .then(res => res.json())
             .then(data => {

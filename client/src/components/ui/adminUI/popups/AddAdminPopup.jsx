@@ -50,7 +50,7 @@ function AddAdminPopup({ onClose, onConfirm }) {
                 },
                 body: JSON.stringify({
                     id: adminId,
-                    name: fullName,
+                    firstname: firstName,   
                     password,
                     microsoftaccount: microsoftAccount,
                     date,

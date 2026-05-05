@@ -3,7 +3,7 @@ import Sidebar from "../components/layout/adminLayout/fixedLayout/Sidebar";
 import { ProfileProvider } from "../context/ProfileContext";
 import { AdminNotificationProvider } from "../context/AdminNotificationContext";
 
-function AdminLayout() {
+function AdminLayout() {  
   return (
     <ProfileProvider role="admin">
       <AdminNotificationProvider>
