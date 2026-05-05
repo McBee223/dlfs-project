@@ -34,4 +34,4 @@ function DeleteForeverConfirmationPopup({ onClose, onConfirm }) {
     );
 }
 
-export default DeleteForeverConfirmationPopup;
+export default DeleteForeverConfirmationPopup;      

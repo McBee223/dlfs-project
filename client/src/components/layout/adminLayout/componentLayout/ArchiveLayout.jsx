@@ -36,8 +36,8 @@ function ArchiveLayout({
     useEffect(() => {
         if (!onTypeMapChange) return;
         const map = {};
-        admins.forEach(a => { map[a.id] = 'admin'; });
-        users.forEach(u => { map[u.id] = 'user'; });
+        admins.forEach(a => { map[`admin-${a.id}`] = 'admin'; });
+        users.forEach(u => { map[`user-${u.id}`] = 'user'; });
         onTypeMapChange(map);
     }, [admins, users]);
 

@@ -94,8 +94,9 @@ function AccountsLayout({ onUserCountChange }) {
 
         if (activeTab === "archive") {
             await Promise.all(
-                selectedIds.map((id) => {
-                    const type = archiveTypeMap[id] || 'user';
+                selectedIds.map((key) => {
+                    const type = archiveTypeMap[key] || 'user';
+                    const id = key.replace(/^(admin-|user-)/, ''); // strip prefix
                     return fetch(`http://localhost:3000/api/admin/archive/${id}?type=${type}`, {
                         method: 'DELETE',
                         headers: { Authorization: `Bearer ${token}` }
@@ -265,7 +266,7 @@ function AccountsLayout({ onUserCountChange }) {
 
             {showPopup === "deleteForever" && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <DeleteForeverConafirmationPopup
+                    <DeleteForeverConfirmationPopup
                         onClose={() => setShowPopup(null)}
                         onConfirm={handleConfirm}
                     />
