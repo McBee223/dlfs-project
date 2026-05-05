@@ -69,7 +69,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     });
 
     const fetchLostItems = () => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/lost-items', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/lost-items`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -96,7 +96,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchClaimItems = () => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -136,7 +136,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchApprovedItems = () => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims/approved', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/approved`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -168,7 +168,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchRejectedItems = () => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/claims/rejected', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/rejected`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -200,7 +200,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchReturnedItems = () => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/returned-items', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/returned-items`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -232,7 +232,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const fetchTrashItems = () => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/trash', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash`, {
             headers: { Authorization: `Bearer ${getToken()}` }
         })
             .then(res => res.json())
@@ -302,7 +302,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     };
 
     const handleCancelSchedule = (item) => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/trash', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
             body: JSON.stringify({
@@ -470,7 +470,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     const handleConfirm = () => {
         if (activeTab.key === "trash") {
             const trashIds = selectedIds;
-            fetch('${import.meta.env.VITE_API_URL}/api/admin/trash/delete-forever', {
+            fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash/delete-forever`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
                 body: JSON.stringify({ ids: trashIds })
@@ -487,7 +487,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                 .filter(item => selectedIds.includes(getRowId(item)));
 
             const trashPromises = itemsToTrash.map(item =>
-                fetch('${import.meta.env.VITE_API_URL}/api/admin/trash', {
+                fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
                     body: JSON.stringify({
@@ -1004,5 +1004,6 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
 }
 
 export default ItemsManagementLayout;
+
 
 

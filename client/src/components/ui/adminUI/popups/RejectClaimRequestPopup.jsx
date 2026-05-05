@@ -41,3 +41,4 @@ function RejectClaimRequestPopup({ onClose, onConfirm }) {
 export default RejectClaimRequestPopup;
 
 
+

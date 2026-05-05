@@ -21,3 +21,4 @@ function RightBar({ pinnedCount, claimedCount }) {
 export default RightBar;
 
 
+

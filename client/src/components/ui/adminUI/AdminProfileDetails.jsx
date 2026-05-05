@@ -25,7 +25,7 @@ function AdminProfileDetails() {
             const compressed = canvas.toDataURL('image/jpeg', 0.7);
             setProfileImg(compressed);
 
-            fetch('${import.meta.env.VITE_API_URL}/api/admin/profile', {
+            fetch(`${import.meta.env.VITE_API_URL}/api/admin/profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,5 +70,6 @@ function AdminProfileDetails() {
 }
 
 export default AdminProfileDetails;
+
 
 

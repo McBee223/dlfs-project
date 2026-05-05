@@ -116,7 +116,7 @@ function ViewItemPopup({ onClose, onSave, item }) {
                 const formData = new FormData();
                 formData.append('image', imageFile);
 
-                const uploadRes = await fetch('${import.meta.env.VITE_API_URL}/api/admin/upload-image', {
+                const uploadRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/upload-image`, {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${token}` },
                     body: formData
@@ -307,5 +307,6 @@ function ViewItemPopup({ onClose, onSave, item }) {
 }
 
 export default ViewItemPopup;
+
 
 

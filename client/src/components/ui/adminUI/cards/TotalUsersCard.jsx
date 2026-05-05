@@ -8,7 +8,7 @@ function TotalUsersCard({ count }) {
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
         console.log("token:", token);
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/users', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
@@ -50,5 +50,6 @@ function TotalUsersCard({ count }) {
 }
 
 export default TotalUsersCard;
+
 
 

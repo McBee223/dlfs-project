@@ -105,7 +105,7 @@ function AccountsLayout({ onUserCountChange }) {
             );
         } else {
             const type = activeTab === "admin" ? "admin" : "user";
-            await fetch('${import.meta.env.VITE_API_URL}/api/admin/archive', {
+            await fetch(`${import.meta.env.VITE_API_URL}/api/admin/archive`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -288,5 +288,6 @@ function AccountsLayout({ onUserCountChange }) {
 }
 
 export default AccountsLayout;
+
 
 

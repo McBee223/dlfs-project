@@ -40,7 +40,7 @@ function PersonalInformation() {
     const handleSave = () => {
         const fullName = `${firstName} ${lastName}`.trim();
 
-        authFetch('${import.meta.env.VITE_API_URL}/api/user/profile', {
+        authFetch(`${import.meta.env.VITE_API_URL}/api/user/profile`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -139,5 +139,6 @@ function PersonalInformation() {
 }
 
 export default PersonalInformation;
+
 
 

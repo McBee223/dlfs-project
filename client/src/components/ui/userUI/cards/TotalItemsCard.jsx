@@ -25,3 +25,4 @@ function TotalItemsCard({ total }) {
 export default TotalItemsCard;
 
 
+

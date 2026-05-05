@@ -25,7 +25,7 @@ function AdminPersonalInformation() {
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
 
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/profile', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/profile`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -46,7 +46,7 @@ function AdminPersonalInformation() {
         const token = localStorage.getItem('adminToken');
         const fullName = `${firstName} ${lastName}`.trim();
 
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/profile', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/profile`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -165,5 +165,6 @@ function AdminPersonalInformation() {
 }
 
 export default AdminPersonalInformation;
+
 
 

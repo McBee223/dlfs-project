@@ -23,7 +23,7 @@ function ArchiveLayout({
     const token = localStorage.getItem('adminToken');
 
     useEffect(() => {
-        fetch('${import.meta.env.VITE_API_URL}/api/admin/archive', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/archive`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -269,5 +269,6 @@ function ArchiveLayout({
 }
 
 export default ArchiveLayout;
+
 
 

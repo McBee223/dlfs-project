@@ -51,7 +51,7 @@ function AddItemPopup({ onClose, onSuccess }) {
                 const formData = new FormData();
                 formData.append('image', imageFile);
 
-                const uploadRes = await fetch('${import.meta.env.VITE_API_URL}/api/admin/upload-image', {
+                const uploadRes = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/upload-image`, {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${token}` },
                     body: formData
@@ -65,7 +65,7 @@ function AddItemPopup({ onClose, onSuccess }) {
                 imageUrl = uploadData.url;
             }
 
-            const res = await fetch('${import.meta.env.VITE_API_URL}/api/admin/lost-items', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/lost-items`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -256,5 +256,6 @@ function AddItemPopup({ onClose, onSuccess }) {
 }
 
 export default AddItemPopup;
+
 
 
