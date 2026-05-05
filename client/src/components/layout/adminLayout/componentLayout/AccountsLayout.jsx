@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 
 import EditButton from "../../../ui/adminUI/buttons/EditButton";
 import DeleteButton from "../../../ui/adminUI/buttons/DeleteButton";
-import AddAdminButton from "../../../ui/adminUI/buttons/AddAdminBUtton";
+import AddAdminButton from "../../../ui/adminUI/buttons/AddAdminButton";
 
 import SortByPopup from "../../../ui/adminUI/popups/SortByPopup";
 import MoveToArchiveConfirmationPopup from "../../../ui/adminUI/popups/MoveToArchiveConfirmationPopup";
