@@ -12,8 +12,8 @@ export function ProfileProvider({ children, role }) {
 
     const tokenKey = role === "admin" ? "adminToken" : "userToken";
     const apiBase = role === "admin"
-        ? "${import.meta.env.VITE_API_URL}/api/admin/profile"
-        : "${import.meta.env.VITE_API_URL}/api/user/profile";
+        ? `${import.meta.env.VITE_API_URL}/api/admin/profile`
+        : `${import.meta.env.VITE_API_URL}/api/user/profile`;
 
     const fetchProfile = useCallback(() => {
         const token = localStorage.getItem(tokenKey);
@@ -59,6 +59,7 @@ export function ProfileProvider({ children, role }) {
 export function useProfile() {
     return useContext(ProfileContext);
 }
+
 
 
 

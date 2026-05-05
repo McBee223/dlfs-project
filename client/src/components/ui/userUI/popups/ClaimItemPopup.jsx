@@ -120,7 +120,7 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
         try {
             const url = isEditing
                 ? `${import.meta.env.VITE_API_URL}/api/user/claims/${claimId}`
-                : "${import.meta.env.VITE_API_URL}/api/user/claims";
+                : `${import.meta.env.VITE_API_URL}/api/user/claims`;
             const method = isEditing ? "PUT" : "POST";
 
             const res = await authFetch(url, {
@@ -337,6 +337,7 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
 }
 
 export default ClaimItemPopup;
+
 
 
 
