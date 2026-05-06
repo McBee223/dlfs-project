@@ -42,6 +42,13 @@ function PinnedItemsCard({ item, category, description, image, onViewDetails, on
     const normalizedCategory = category?.toLowerCase().replace(/\s+/g, "");
     const icon = categoryIcons[normalizedCategory];
 
+    const categoryWidths = {
+        personal: "w-16 2xl:w-18",
+        bags: "w-12 2xl:w-14",
+        clothes: "w-16 2xl:w-18",
+    };
+    const iconWidth = categoryWidths[normalizedCategory] ?? "w-20 2xl:w-22";
+
     const handleUnpin = async (e) => {
         e.stopPropagation();
         if (loading) return;
@@ -129,10 +136,9 @@ function PinnedItemsCard({ item, category, description, image, onViewDetails, on
             </div>
 
             <div className="my-3 flex items-center gap-2">
-                <span className="text-[10px] 2xl:text-[12px] px-2 py-1 bg-[#E8F7FF] text-[#1980B2] rounded-xl flex items-center gap-1">
-                    {icon && <img src={icon} alt="" className="w-3 h-3 2xl:w-4 2xl:h-4" />}
-                    {category}
-                </span>
+                {icon && (
+                    <img src={icon} alt={category} className={`${iconWidth} h-auto`} />
+                )}
             </div>
 
             <p className="text-sm 2xl:text-base text-gray-700 leading-snug wrap-break-word line-clamp-3">{description}</p>
@@ -152,7 +158,3 @@ function PinnedItemsCard({ item, category, description, image, onViewDetails, on
 }
 
 export default PinnedItemsCard;
-
-
-
-

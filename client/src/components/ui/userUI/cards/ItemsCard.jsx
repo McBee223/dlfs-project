@@ -18,6 +18,7 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
     const isReturned = claimStatus === 'Returned';
     const [loading, setLoading] = useState(false);
 
+
     const isAlreadyClaimed = item?.status === 'Returned' && claimStatus !== 'Returned';
 
     const badgeConfig = {
@@ -42,6 +43,15 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
     };
     const normalizedCategory = category?.toLowerCase().replace(/\s+/g, "");
     const icon = categoryIcons[normalizedCategory];
+
+    const categoryWidths = {
+        personal: "w-16 2xl:w-18",
+        bags: "w-12 2xl:w-14",
+        clothes: "w-16 2xl:w-18",
+    };
+
+
+    const iconWidth = categoryWidths[normalizedCategory] ?? "w-20 2xl:w-22";
 
     const handlePin = async (e) => {
         e.stopPropagation();
@@ -140,9 +150,7 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
 
             <div className="my-5 flex items-center gap-2">
                 {icon && (
-                    <span className="p-1.5 2xl:p-2 bg-[#E8F7FF] rounded-xl flex items-center justify-center">
-                        <img src={icon} alt={category} className="w-4 h-4 2xl:w-5 2xl:h-5" />
-                    </span>
+                    <img src={icon} alt={category} className={`${iconWidth} h-auto`} />
                 )}
             </div>
 
@@ -155,7 +163,7 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
                     disabled={loading}
                     className="w-8 h-8 2xl:w-9 2xl:h-9 flex items-center justify-center rounded-full border border-gray-200"
                 >
-                    <img src={isPinned ? PinIconActive : PinIcon} alt="pin" className="w-full h-full"/>
+                    <img src={isPinned ? PinIconActive : PinIcon} alt="pin" className="w-full h-full" />
                 </button>
             </div>
         </div>
