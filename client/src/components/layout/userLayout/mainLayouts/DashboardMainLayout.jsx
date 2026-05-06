@@ -75,8 +75,16 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
                                 : false,
                         hasCancelNotif: item.has_cancel_notif === 1 || item.has_cancel_notif === true,
                     }));
-                    setPinnedItems(mapped);
-                    onPinnedCountChange?.(mapped.length);
+
+                    const seen = new Set();
+                    const deduped = mapped.filter(item => {
+                        if (seen.has(item.id)) return false;
+                        seen.add(item.id);
+                        return true;
+                    });
+
+                    setPinnedItems(deduped);
+                    onPinnedCountChange?.(deduped.length);
                 }
             })
             .catch(err => console.error("Failed to fetch pinned items:", err));
@@ -160,7 +168,3 @@ function DashboardMainLayout({ onPinnedCountChange, onClaimedCountChange, search
 }
 
 export default DashboardMainLayout;
-
-
-
-
