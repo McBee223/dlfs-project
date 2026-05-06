@@ -55,7 +55,6 @@ function PersonalInformation() {
         <div className="montserrat bg-white rounded-2xl p-6 2xl:p-8 w-full">
             <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg 2xl:text-xl font-semibold text-gray-700">Personal Information</h2>
-                {editMode ? <SaveButton onClick={handleSave} /> : <EditButton onClick={() => setEditMode(true)} />}
             </div>
 
             <div className="grid grid-cols-2 gap-6 2xl:gap-8">

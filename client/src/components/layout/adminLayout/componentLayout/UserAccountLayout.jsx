@@ -96,27 +96,27 @@ function UserAccountLayout({
     };
 
     const gridCols = editMode
-        ? "grid-cols-[20px_152px_222px_296px_80px_103px_150px_123px_auto]"
-        : "grid-cols-[152px_222px_296px_80px_103px_150px_123px_auto]";
+        ? "grid-cols-[20px_152px_222px_296px_190px_103px_150px_123px_auto]"
+        : "grid-cols-[152px_222px_296px_190px_103px_150px_123px_auto]";
 
     const gridCols2xl = editMode
-        ? "2xl:grid-cols-[20px_180px_260px_380px_95px_120px_175px_145px_auto]"
-        : "2xl:grid-cols-[180px_260px_380px_95px_120px_175px_145px_auto]";
+        ? "2xl:grid-cols-[20px_180px_260px_380px_205px_120px_175px_145px_auto]"
+        : "2xl:grid-cols-[180px_260px_380px_205px_120px_175px_145px_auto]";
 
     return (
         <div className="2xl:w-full montserrat text-sm 2xl:text-base text-[#646464] font-semibold">
             <div className="w-full">
                 <div className="overflow-x-auto max-w-277 2xl:max-w-410">
-                    <div className={`grid ${gridCols} ${gridCols2xl} bg-[#D9EEF9] w-7xl 2xl:w-410 p-3 pr-3 2xl:p-4 rounded-sm text-[#047EAF] font-semibold mr-0 2xl:mr-0`}>
+                    <div className={`grid ${gridCols} ${gridCols2xl} bg-[#D9EEF9] w-347 2xl:w-410 p-3 pr-3 2xl:p-4 rounded-sm text-[#047EAF] font-semibold mr-0 2xl:mr-0`}>
                         {editMode && (
                             <div className="px-2 flex items-center">
                                 <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} className="2xl:scale-120 accent-[#047EAF] cursor-pointer" />
                             </div>
                         )}
-                        <div className="px-2">Student Number</div>
+                        <div className="px-2">ID Number</div>
                         <div className="px-2">Name</div>
-                        <div className="px-2">Microsoft Account</div>
-                        <div className="px-2">Section</div>
+                        <div className="px-2">Email</div>
+                        <div className="px-2">Section/Department</div>
                         <div className="px-2">Password</div>
                         <div className="px-2">Date Registered</div>
                         <div className="px-2">User Level</div>
@@ -140,7 +140,7 @@ function UserAccountLayout({
                             <div className="px-2 truncate">{u.id}</div>
                             <div className="px-2 truncate">{u.name?.replace(/\|/g, ' ')}</div>
                             <div className="px-2 truncate">{u.microsoftaccount}</div>
-                            <div className="px-2 truncate">{u.section}</div>
+                            <div className="px-2 truncate">{u.section || "-"}</div>
                             <div className="px-2 truncate">{showPassword === u.id ? u.password : "********"}</div>
                             <div className="px-2 truncate">{u.date}</div>
                             <div className="px-2">
@@ -181,7 +181,3 @@ function UserAccountLayout({
 }
 
 export default UserAccountLayout;
-
-
-
-

@@ -6,17 +6,21 @@ import LoadingScreen from "../../../ui/LoadingScreen";
 import HidePasswordIcon from '../../../../assets/icons/HidePasswordIcon.svg';
 import ShowPasswordIcon from '../../../../assets/icons/ShowPasswordIcon.svg';
 
-function LoginLayout({ onSwitch }) {
+function LoginLayout({ onSwitch, role, onBack }) {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [microsoftaccount, setMicrosoftaccount] = useState("");
+    const [account, setAccount] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState({ text: "", color: "" });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
 
+    const isStaff = role === "building_staff";
+    const accountLabel = isStaff ? "Email" : "Microsoft 365 Account";
+    const accountPlaceholder = isStaff ? "Enter your email" : "Enter your Microsoft 365 Account";
+
     const handleLogin = async () => {
-        if (!microsoftaccount || !password) {
+        if (!account || !password) {
             setMessage({ text: "Please fill in all fields", color: "red" });
             return;
         }
@@ -26,12 +30,11 @@ function LoginLayout({ onSwitch }) {
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/login`, {
-                microsoftaccount,
+                microsoftaccount: account,
                 password
             });
 
             const { token, user } = response.data;
-
             localStorage.setItem('userToken', token);
             localStorage.setItem('user', JSON.stringify(user));
 
@@ -53,17 +56,27 @@ function LoginLayout({ onSwitch }) {
             {success && <LoadingScreen message="Logging in..." />}
 
             <div className="w-full max-w-md 2xl:max-w-2xl">
+                <button
+                    onClick={onBack}
+                    className="mb-4 2xl:mb-6 text-gray-400 hover:text-gray-700 transition-colors flex items-center gap-1 text-sm 2xl:text-base"
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 2xl:w-5 2xl:h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 5l-7 7 7 7" />
+                    </svg>
+                    Back
+                </button>
+
                 <h2 className="text-4xl 2xl:text-5xl font-semibold mb-2">Welcome to DFLS</h2>
                 <p className="text-gray-500 mb-6 text-sm 2xl:text-lg">
                     Please log in to your account to continue.
                 </p>
 
                 <input
-                    type="text"
-                    placeholder="Microsoft 365 Account"
+                    type={isStaff ? "email" : "text"}
+                    placeholder={accountPlaceholder}
                     className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-4 mb-3"
-                    value={microsoftaccount}
-                    onChange={(e) => setMicrosoftaccount(e.target.value)}
+                    value={account}
+                    onChange={(e) => setAccount(e.target.value)}
                 />
 
                 <div className="relative">
@@ -95,7 +108,7 @@ function LoginLayout({ onSwitch }) {
                 <button
                     onClick={handleLogin}
                     disabled={loading}
-                    className="w-full bg-[#047EAF] text-white py-3 2xl:text-xl rounded-lg hover:scale-105 transform transition-transform disabled:opacity-60"
+                    className="w-full bg-[#047EAF] text-white py-3 2xl:text-xl 2xl:py-4 rounded-lg hover:scale-105 transform transition-transform disabled:opacity-60"
                 >
                     {loading ? "Checking..." : "Log in"}
                 </button>
@@ -112,7 +125,3 @@ function LoginLayout({ onSwitch }) {
 }
 
 export default LoginLayout;
-
-
-
-

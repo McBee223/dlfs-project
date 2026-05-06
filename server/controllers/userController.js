@@ -5,19 +5,20 @@ const { createNotification } = require('./NotificationController');
 const { createAdminNotification } = require('./adminNotificationController');
 
 exports.signup = (req, res) => {
-  const { id, name, microsoftaccount, section, gender, password, date } = req.body;
+  console.log("SIGNUP BODY:", req.body);
+  const { id, name, microsoftaccount, gender, password, date } = req.body;
 
-  if (!id || !name || !microsoftaccount || !section || !gender || !password || !date) {
+  if (!id || !name || !microsoftaccount || !gender || !password || !date) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   const sql = `INSERT INTO users (id, name, microsoftaccount, section, gender, password, date, role)
                VALUES (?, ?, ?, ?, ?, ?, ?, 'User')`;
 
-  db.query(sql, [id, name, microsoftaccount, section, gender, password, date], (err) => {
+  db.query(sql, [id, name, microsoftaccount, req.body.section || null, gender, password, date], (err) => {
     if (err) {
       if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(400).json({ message: 'Student number or Microsoft account already exists' });
+        return res.status(400).json({ message: 'ID or account already exists' });
       }
       return res.status(500).json({ message: 'Signup failed', error: err.message });
     }

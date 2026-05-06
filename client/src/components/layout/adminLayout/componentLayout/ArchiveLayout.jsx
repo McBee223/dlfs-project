@@ -138,12 +138,12 @@ function ArchiveLayout({
         : "2xl:grid-cols-[145px_215px_390px_170px_215px_120px_auto]";
 
     const userGridCols = editMode
-        ? "grid-cols-[20px_152px_222px_296px_80px_103px_150px_123px_auto]"
-        : "grid-cols-[152px_222px_296px_80px_103px_150px_123px_auto]";
+        ? "grid-cols-[20px_152px_222px_296px_190px_103px_150px_123px_auto]"
+        : "grid-cols-[152px_222px_296px_190px_103px_150px_123px_auto]";
 
     const userGridCols2xl = editMode
-        ? "2xl:grid-cols-[20px_180px_260px_380px_95px_120px_175px_145px_auto]"
-        : "2xl:grid-cols-[180px_260px_380px_95px_120px_175px_145px_auto]";
+        ? "2xl:grid-cols-[20px_180px_260px_380px_205px_120px_175px_145px_auto]"
+        : "2xl:grid-cols-[180px_260px_380px_205px_120px_175px_145px_auto]";
 
     return (
         <div className="montserrat text-sm 2xl:text-base text-[#646464] font-semibold space-y-6">
@@ -208,16 +208,16 @@ function ArchiveLayout({
                     <div className="flex-1 h-px bg-[#D8D8D8]" />
                 </div>
                 <div className="overflow-x-auto max-w-277 2xl:max-w-410">
-                    <div className={`grid ${userGridCols} ${userGridCols2xl} bg-[#D9EEF9] w-full p-3 2xl:p-4 rounded-sm text-[#047EAF] font-semibold`}>
+                    <div className={`grid ${userGridCols} ${userGridCols2xl} bg-[#D9EEF9] w-347 2xl:w-414 p-3 2xl:p-4 rounded-sm text-[#047EAF] font-semibold`}>
                         {editMode && (
                             <div className="px-2 flex items-center">
                                 <input type="checkbox" checked={allUsersSelected} onChange={toggleSelectAllUsers} className="accent-[#047EAF] cursor-pointer 2xl:scale-120" />
                             </div>
                         )}
-                        <div className="px-2">Student Number</div>
+                        <div className="px-2">ID Number</div>
                         <div className="px-2">Name</div>
-                        <div className="px-2">Microsoft Account</div>
-                        <div className="px-2">Section</div>
+                        <div className="px-2">Email</div>
+                        <div className="px-2">Section/Department</div>
                         <div className="px-2">Password</div>
                         <div className="px-2">Date Registered</div>
                         <div className="px-2">User Level</div>

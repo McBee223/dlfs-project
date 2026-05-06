@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import SignInImage from "../../assets/images/SignInImage.png";
 import LoginLayout from "../../components/layout/userLayout/componentLayout/LoginLayout";
 import RegisterLayout from "../../components/layout/userLayout/componentLayout/RegisterLayout";
+import RoleCarousel from "../RoleSelectPage";
 
 function LogInPage() {
     const [isRegister, setIsRegister] = useState(false);
+    const [selectedRole, setSelectedRole] = useState(null);
     const reason = new URLSearchParams(window.location.search).get("reason");
     const navigate = useNavigate();
 
@@ -38,16 +40,19 @@ function LogInPage() {
                 </div>
             </div>
 
-            <div className="w-full md:w-1/2 flex items-center justify-center bg-white px-6">
+            <div className="w-full md:w-1/2 flex items-center justify-center bg-white px-6 2xl:px-10">
                 {reason === "deleted" && (
-                    <p className="absolute top-4 text-red-500 text-sm 2xl:text-lg font-medium">
+                    <p className="absolute top-4 text-red-500 text-sm 2xl:text-base font-medium">
                         Your account has been removed. Please contact support.
                     </p>
                 )}
-                {isRegister ? (
-                    <RegisterLayout onSwitch={() => setIsRegister(false)} />
+
+                {!selectedRole ? (
+                    <RoleCarousel onSelect={setSelectedRole} />
+                ) : isRegister ? (
+                    <RegisterLayout onSwitch={() => setIsRegister(false)} role={selectedRole} onBack={() => setIsRegister(false)} />
                 ) : (
-                    <LoginLayout onSwitch={() => setIsRegister(true)} />
+                    <LoginLayout onSwitch={() => setIsRegister(true)} role={selectedRole} onBack={() => setSelectedRole(null)} />
                 )}
             </div>
         </div>
@@ -55,7 +60,3 @@ function LogInPage() {
 }
 
 export default LogInPage;
-
-
-
-

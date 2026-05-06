@@ -37,7 +37,8 @@ function PinnedCardLayout({ pinnedItems, scrollRef, onUnpin, dismissedCancels = 
 
     return (
         <>
-            <div ref={scrollRef} className="overflow-x-auto overflow-y-visible scrollbar-none scroll-smooth">
+            <div ref={scrollRef} className="overflow-x-auto overflow-y-visible scrollbar-none scroll-smooth"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                 <div className="flex gap-4 px-1 py-3 2xl:text-base">
                     {pinnedItems.map((item) => {
                         const description = `This ${item.name} was found on ${item.dateFound} and was last seen near ${item.lastSeen}.`;

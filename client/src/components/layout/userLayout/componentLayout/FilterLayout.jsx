@@ -22,6 +22,7 @@ function FilterLayout({ scrollRef, activeCategory, onCategoryChange }) {
         <div
             ref={scrollRef}
             className="flex gap-3 my-5 overflow-x-auto scrollbar-none w-full max-w-240 2xl:max-w-340"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
             {filters.map((item, index) => (
                 <FilterCard

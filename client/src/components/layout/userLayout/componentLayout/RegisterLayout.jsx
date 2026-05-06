@@ -6,24 +6,34 @@ import HidePasswordIcon from '../../../../assets/icons/HidePasswordIcon.svg';
 import ShowPasswordIcon from '../../../../assets/icons/ShowPasswordIcon.svg';
 import RegisterGenderPopup from "../../../ui/userUI/popups/RegisterGenderPopup";
 
-function RegisterLayout({ onSwitch }) {
+function RegisterLayout({ onSwitch, role, onBack }) {
     const [showPassword, setShowPassword] = useState(false);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [section, setSection] = useState("");
-    const [gender, setGender] = useState("Male");
+    const [fullName, setFullName] = useState("");
     const [password, setPassword] = useState("");
+    const [gender, setGender] = useState("Male");
+    const [section, setSection] = useState("");
+    const [department, setDepartment] = useState("");
+    const [employeeId, setEmployeeId] = useState("");
     const [studentNumber, setStudentNumber] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState({ text: "", color: "" });
     const [animate, setAnimate] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const isStudent = role === "student";
+    const isPersonnel = role === "school_personnel";
+    const isStaff = role === "building_staff";
+
     const today = new Date();
     const date = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(today.getDate()).padStart(2, "0")}/${String(today.getFullYear()).slice(-2)}`;
 
     const handleRegister = async () => {
-        if (!firstName || !lastName || !section || !password || !studentNumber || !email) {
+        const baseValid = fullName && password && gender;
+        const studentValid = isStudent && section && studentNumber && email;
+        const personnelValid = isPersonnel && department && employeeId && email;
+        const staffValid = isStaff && employeeId && email;
+
+        if (!baseValid || (!studentValid && !personnelValid && !staffValid)) {
             setMessage({ text: "Please fill in all fields", color: "red" });
             return;
         }
@@ -31,18 +41,19 @@ function RegisterLayout({ onSwitch }) {
         setLoading(true);
         setMessage({ text: "", color: "" });
 
-        const fullName = `${firstName} ${lastName}`;
+        const payload = {
+            name: fullName,
+            password,
+            gender,
+            date,
+            role,
+            ...(isStudent && { id: studentNumber, microsoftaccount: email, section }),
+            ...(isPersonnel && { id: employeeId, microsoftaccount: email, section: department }),
+            ...(isStaff && { id: employeeId, microsoftaccount: email }),
+        };
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/user/signup`, {
-                id: studentNumber,
-                name: fullName,
-                microsoftaccount: email,
-                section,
-                gender,
-                password,
-                date
-            });
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/user/signup`, payload);
 
             setLoading(false);
             setMessage({ text: "Registered successfully!", color: "green" });
@@ -70,36 +81,27 @@ function RegisterLayout({ onSwitch }) {
             {loading && <LoadingScreen message="Creating account..." />}
 
             <div className={`w-full max-w-md 2xl:max-w-2xl transition-all duration-800 ease-in-out ${animate === "fade-left" ? "opacity-0 -translate-x-10" : animate === "fade-right" ? "opacity-0 translate-x-10" : "opacity-100 translate-x-0"}`}>
+
+                <button
+                    onClick={onBack}
+                    className="mb-4 2xl:mb-6 text-gray-400 hover:text-gray-700 transition-colors flex items-center gap-1 text-sm 2xl:text-base"
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 2xl:w-5 2xl:h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 5l-7 7 7 7" />
+                    </svg>
+                    Back
+                </button>
+
                 <h2 className="text-4xl 2xl:text-5xl font-semibold mb-2 2xl:mb-3">Create an account</h2>
                 <p className="text-gray-500 mb-6 2xl:mb-7 text-sm 2xl:text-lg">Fill in the fields below to get started</p>
 
-                <div className="flex gap-2 2xl:gap-3">
-                    <input
-                        type="text"
-                        placeholder="First Name"
-                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Last Name"
-                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                    />
-                </div>
-
-                <div className="flex gap-2 2xl:gap-3">
-                    <input
-                        type="text"
-                        placeholder="Section"
-                        className="input w-105 2xl:w-157 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
-                        value={section}
-                        onChange={(e) => setSection(e.target.value)}
-                    />
-                    <RegisterGenderPopup value={gender} onChange={setGender} />
-                </div>
+                <input
+                    type="text"
+                    placeholder="Full Name"
+                    className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                />
 
                 <div className="relative">
                     <input
@@ -121,21 +123,73 @@ function RegisterLayout({ onSwitch }) {
                     </span>
                 </div>
 
-                <input
-                    type="text"
-                    placeholder="Student Number"
-                    className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
-                    value={studentNumber}
-                    onChange={(e) => setStudentNumber(e.target.value)}
-                />
+                <div className="flex gap-2 2xl:gap-3">
+                    {isStudent && (
+                        <input
+                            type="text"
+                            placeholder="Section"
+                            className="input w-105 2xl:w-157 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                            value={section}
+                            onChange={(e) => setSection(e.target.value)}
+                        />
+                    )}
+                    {isPersonnel && (
+                        <input
+                            type="text"
+                            placeholder="Department"
+                            className="input w-105 2xl:w-157 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                            value={department}
+                            onChange={(e) => setDepartment(e.target.value)}
+                        />
+                    )}
+                    {(isStudent || isPersonnel) && (
+                        <RegisterGenderPopup value={gender} onChange={setGender} />
+                    )}
+                </div>
 
-                <input
-                    type="email"
-                    placeholder="Microsoft 365 Account"
-                    className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                {isStaff && (
+                    <RegisterGenderPopup value={gender} onChange={setGender} />
+                )}
+
+                {isStudent && (
+                    <input
+                        type="text"
+                        placeholder="Student Number"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                        value={studentNumber}
+                        onChange={(e) => setStudentNumber(e.target.value)}
+                    />
+                )}
+
+                {(isPersonnel || isStaff) && (
+                    <input
+                        type="text"
+                        placeholder="Employee ID"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                        value={employeeId}
+                        onChange={(e) => setEmployeeId(e.target.value)}
+                    />
+                )}
+
+                {(isStudent || isPersonnel) && (
+                    <input
+                        type="text"
+                        placeholder="Microsoft 365 Account"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                )}
+
+                {isStaff && (
+                    <input
+                        type="text"
+                        placeholder="Email"
+                        className="input 2xl:px-5 2xl:py-4 2xl:text-lg 2xl:mb-6"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                )}
 
                 {message.text && (
                     <p className={`text-sm 2xl:text-lg mb-2 2xl:mb-3 ${message.color === "red" ? "text-red-500" : "text-green-500"}`}>
@@ -154,10 +208,7 @@ function RegisterLayout({ onSwitch }) {
                 <p className="text-sm 2xl:text-lg text-gray-500 mt-4 2xl:mt-5">
                     Already have an account?{" "}
                     <span
-                        onClick={() => {
-                            setAnimate("fade-left");
-                            setTimeout(() => onSwitch(), 500);
-                        }}
+                        onClick={onSwitch}
                         className="text-blue-600 cursor-pointer"
                     >
                         Log in
@@ -169,7 +220,3 @@ function RegisterLayout({ onSwitch }) {
 }
 
 export default RegisterLayout;
-
-
-
-
