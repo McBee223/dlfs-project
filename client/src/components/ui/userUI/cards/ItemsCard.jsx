@@ -139,10 +139,11 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
             </div>
 
             <div className="my-5 flex items-center gap-2">
-                <span className="text-[10px] 2xl:text-[12px] px-2 py-1 bg-[#E8F7FF] text-[#1980B2] rounded-xl flex items-center gap-1">
-                    {icon && <img src={icon} alt="" className="w-3 h-3 2xl:w-4 2xl:h-4" />}
-                    {category}
-                </span>
+                {icon && (
+                    <span className="p-1.5 2xl:p-2 bg-[#E8F7FF] rounded-xl flex items-center justify-center">
+                        <img src={icon} alt={category} className="w-4 h-4 2xl:w-5 2xl:h-5" />
+                    </span>
+                )}
             </div>
 
             <p className="text-sm 2xl:text-base text-gray-700 leading-snug wrap-break-word line-clamp-3">{description}</p>
@@ -162,7 +163,3 @@ function ItemsCard({ item, category, description, image, onViewDetails, pinnedId
 }
 
 export default ItemsCard;
-
-
-
-

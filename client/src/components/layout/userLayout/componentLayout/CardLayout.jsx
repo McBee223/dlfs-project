@@ -55,7 +55,15 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                                 : false,
                         hasCancelNotif: item.has_cancel_notif === 1 || item.has_cancel_notif === true,
                     }));
-                    setLostItems(mapped);
+
+                    const seen = new Set();
+                    const deduped = mapped.filter(item => {
+                        if (seen.has(item.id)) return false;
+                        seen.add(item.id);
+                        return true;
+                    });
+
+                    setLostItems(deduped);
                 }
             })
             .catch((err) => console.error("Failed to fetch lost items:", err));
@@ -143,7 +151,6 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
 
     const handleTabChange = (tabKey) => {
         setActiveTab(tabKey);
-        fetchItems();
     };
 
     const applyCategory = (items) =>
@@ -364,7 +371,3 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
 }
 
 export default CardLayout;
-
-
-
-
