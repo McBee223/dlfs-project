@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import { useProfile } from "../../../context/ProfileContext";
 import ProfileImage2 from "../../../assets/images/ProfileImage2.png";
 
-function AdminProfileDetails() {    
-    const { profileImg, setProfileImg, name } = useProfile();
+function AdminProfileDetails() {
+    const { profileImg, setProfileImg, name, fetchProfile } = useProfile();
     const [hovering, setHovering] = useState(false);
     const token = localStorage.getItem('adminToken');
 
@@ -14,6 +15,11 @@ function AdminProfileDetails() {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const img = new Image();
+
+        useEffect(() => {
+            fetchProfile();
+        }, []);
+
 
         img.onload = () => {
             const maxWidth = 300;
