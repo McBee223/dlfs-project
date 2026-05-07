@@ -22,14 +22,26 @@ function ArchiveLayout({
     const [selectedUser, setSelectedUser] = useState(null);
     const token = localStorage.getItem('adminToken');
 
+    const parseDate = (dateStr) => {
+        if (!dateStr) return null;
+        let parts;
+        if (dateStr.includes("/")) parts = dateStr.split("/");
+        else if (dateStr.includes("-")) parts = dateStr.split("-");
+        else return null;
+        let [month, day, year] = parts;
+        if (!year) return null;
+        if (year.length === 2) year = Number(year) < 50 ? "20" + year : "19" + year;
+        return new Date(year, month - 1, day);
+    };
+
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/api/admin/archive`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
             .then(data => {
-                if (data.users) setUsers(data.users);
-                if (data.admins) setAdmins(data.admins);
+                if (data.users) setUsers([...data.users].sort((a, b) => parseDate(b.date) - parseDate(a.date)));
+                if (data.admins) setAdmins([...data.admins].sort((a, b) => parseDate(b.date) - parseDate(a.date)));
             });
     }, []);
 
@@ -63,18 +75,6 @@ function ArchiveLayout({
             if (onUserCountChange) onUserCountChange(prev => prev + 1);
         }
         setActiveMenu(null);
-    };
-
-    const parseDate = (dateStr) => {
-        if (!dateStr) return null;
-        let parts;
-        if (dateStr.includes("/")) parts = dateStr.split("/");
-        else if (dateStr.includes("-")) parts = dateStr.split("-");
-        else return null;
-        let [month, day, year] = parts;
-        if (!year) return null;
-        if (year.length === 2) year = Number(year) < 50 ? "20" + year : "19" + year;
-        return new Date(year, month - 1, day);
     };
 
     const isWithinRange = (dateStr) => {
@@ -147,7 +147,6 @@ function ArchiveLayout({
 
     return (
         <div className="montserrat text-sm 2xl:text-base text-[#646464] font-semibold space-y-6">
-
             <div>
                 <div className="flex items-center gap-3 mb-3">
                     <span className="text-[#047EAF] font-bold text-sm 2xl:text-base">Admin Accounts</span>
@@ -238,11 +237,11 @@ function ArchiveLayout({
                             <div className="px-2 truncate">{u.id}</div>
                             <div className="px-2 truncate">{u.name}</div>
                             <div className="px-2 truncate">{u.microsoftaccount}</div>
-                            <div className="px-2 truncate">{u.section}</div>
+                            <div className="px-2 truncate">{u.section || "-"}</div>
                             <div className="px-2 truncate">{"********"}</div>
                             <div className="px-2 truncate">{u.date}</div>
                             <div className="px-2">
-                                <span className="bg-[#FFF6D4] text-[#FFCC00] px-3 py-1 2xl:px-4 2xl:py-1.5 rounded-lg text-xs 2xl:text-sm inline-block truncate max-w-full">{u.role}</span>
+                                <span className="bg-[#FFF6D4] text-[#FFCC00] px-3 py-1 2xl:px-4 2xl:py-1.5 rounded-lg text-xs 2xl:text-sm inline-block truncate max-w-full">User</span>
                             </div>
                             <div className="px-2 flex justify-center relative items-start">
                                 <button onClick={() => setActiveMenu(activeMenu === `user-${u.id}` ? null : `user-${u.id}`)} className={`flex items-center justify-center text-lg 2xl:text-xl font-bold w-full ${editMode ? "ml-9 2xl:ml-4" : "ml-12 2xl:ml-4"}`}>•••</button>
@@ -269,7 +268,3 @@ function ArchiveLayout({
 }
 
 export default ArchiveLayout;
-
-
-
-

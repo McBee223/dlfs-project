@@ -19,16 +19,6 @@ function UserAccountLayout({
     const token = localStorage.getItem('adminToken');
     const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.users) setUsers(data.users);
-            });
-    }, []);
-
     const parseDate = (dateStr) => {
         if (!dateStr) return null;
         let parts;
@@ -40,6 +30,22 @@ function UserAccountLayout({
         if (year.length === 2) year = Number(year) < 50 ? "20" + year : "19" + year;
         return new Date(year, month - 1, day);
     };
+
+    useEffect(() => {
+        const fetchUsers = () => {
+            fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.users) setUsers([...data.users].sort((a, b) => parseDate(b.date) - parseDate(a.date)));
+                });
+        };
+
+        fetchUsers();
+        const interval = setInterval(fetchUsers, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     const isWithinRange = (dateStr) => {
         if (!sortLabel || sortLabel === "All Time") return true;
@@ -144,7 +150,7 @@ function UserAccountLayout({
                             <div className="px-2 truncate">{showPassword === u.id ? u.password : "********"}</div>
                             <div className="px-2 truncate">{u.date}</div>
                             <div className="px-2">
-                                <span className="bg-[#FFF6D4] text-[#FFCC00] px-3 py-1 2xl:px-4 2xl:py-1.5 rounded-lg text-xs 2xl:text-sm">{u.role}</span>
+                                <span className="bg-[#FFF6D4] text-[#FFCC00] px-3 py-1 2xl:px-4 2xl:py-1.5 rounded-lg text-xs 2xl:text-sm">User</span>
                             </div>
                             <div className="px-2 flex justify-center relative items-start">
                                 <button

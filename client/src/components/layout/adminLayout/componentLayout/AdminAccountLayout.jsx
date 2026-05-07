@@ -186,7 +186,3 @@ function AdminAccountLayout({
 }
 
 export default AdminAccountLayout;
-
-
-
-

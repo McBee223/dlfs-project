@@ -56,7 +56,7 @@ function LogInPage() {
                 )}
             </div>
         </div>
-    );
+    ); 
 }
 
 export default LogInPage;

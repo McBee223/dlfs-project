@@ -28,6 +28,7 @@ function RegisterLayout({ onSwitch, role, onBack }) {
     const date = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(today.getDate()).padStart(2, "0")}/${String(today.getFullYear()).slice(-2)}`;
 
     const handleRegister = async () => {
+        
         const baseValid = fullName && password && gender;
         const studentValid = isStudent && section && studentNumber && email;
         const personnelValid = isPersonnel && department && employeeId && email;
@@ -51,6 +52,8 @@ function RegisterLayout({ onSwitch, role, onBack }) {
             ...(isPersonnel && { id: employeeId, microsoftaccount: email, section: department }),
             ...(isStaff && { id: employeeId, microsoftaccount: email }),
         };
+
+        console.log("PAYLOAD:", payload);
 
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/api/user/signup`, payload);

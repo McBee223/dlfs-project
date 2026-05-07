@@ -31,7 +31,8 @@ function LoginLayout({ onSwitch, role, onBack }) {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/user/login`, {
                 microsoftaccount: account,
-                password
+                password,
+                role
             });
 
             const { token, user } = response.data;

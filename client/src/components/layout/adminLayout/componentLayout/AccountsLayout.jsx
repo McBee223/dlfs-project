@@ -17,7 +17,7 @@ import SearchIcon from "../../../../assets/icons/SearchIcon.svg";
 import DropdownIcon from "../../../../assets/icons/DropdownIcon.svg";
 
 import { jwtDecode } from "jwt-decode";
-
+    
 function AccountsLayout({ onUserCountChange }) {
     const token = localStorage.getItem('adminToken');
     const currentAdminId = token ? jwtDecode(token).id : null;

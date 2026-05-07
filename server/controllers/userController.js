@@ -6,16 +6,16 @@ const { createAdminNotification } = require('./adminNotificationController');
 
 exports.signup = (req, res) => {
   console.log("SIGNUP BODY:", req.body);
-  const { id, name, microsoftaccount, gender, password, date } = req.body;
+  const { id, name, microsoftaccount, gender, password, date, role } = req.body;
 
   if (!id || !name || !microsoftaccount || !gender || !password || !date) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   const sql = `INSERT INTO users (id, name, microsoftaccount, section, gender, password, date, role)
-               VALUES (?, ?, ?, ?, ?, ?, ?, 'User')`;
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-  db.query(sql, [id, name, microsoftaccount, req.body.section || null, gender, password, date], (err) => {
+  db.query(sql, [id, name, microsoftaccount, req.body.section || null, gender, password, date, role || 'User'], (err) => {
     if (err) {
       if (err.code === 'ER_DUP_ENTRY') {
         return res.status(400).json({ message: 'ID or account already exists' });
@@ -28,7 +28,7 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const { microsoftaccount, password } = req.body;
+  const { microsoftaccount, password, role } = req.body;
 
   if (!microsoftaccount || !password) {
     return res.status(400).json({ message: 'All fields are required' });
@@ -41,6 +41,10 @@ exports.login = (req, res) => {
     if (results.length === 0) return res.status(401).json({ message: 'Invalid account or password' });
 
     const user = results[0];
+
+    if (role && user.role !== role) {
+      return res.status(403).json({ message: 'Incorrect role. Please select the right account type.' });
+    }
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
