@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -11,6 +12,8 @@ import ViewItemPopup from "../../../ui/adminUI/popups/ViewItemPopup";
 import ViewSubmissionDetailsPopup from "../../../ui/adminUI/popups/ViewSubmissionDetailsPopup";
 import FilterPopup from "../../../ui/adminUI/popups/FilterPopup";
 import RejectClaimRequestPopup from "../../../ui/adminUI/popups/RejectClaimRequestPopup";
+import CancelSchedulePopup from "../../../ui/adminUI/popups/CancelSchedulePopup";
+import RejectWithReasonPopup from "../../../ui/adminUI/popups/RejectWithReasonPopup";
 
 import NoItemsFoundLayout from "./NoItemFoundLayout";
 import NoItemsYetLayout from "./NoItemsYetLayout";
@@ -48,6 +51,15 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
     const [restoreTarget, setRestoreTarget] = useState(null);
     const [rejectTarget, setRejectTarget] = useState(null);
     const [searchTerm, setSearchTerm] = useState(initialSearch);
+    const [dismissedWarnings, setDismissedWarnings] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem('dismissedWarnings') || '[]');
+        } catch { return []; }
+    });
+    const [cancelScheduleTarget, setCancelScheduleTarget] = useState(null);
+    const [rejectWithReasonTarget, setRejectWithReasonTarget] = useState(null);
+
+
 
     useEffect(() => {
         if (initialSearch) {
@@ -279,12 +291,12 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
         return () => clearInterval(interval);
     }, []);
 
-    const moveClaim = (item, targetStatus) => {
+    const moveClaim = (item, targetStatus, reason = null) => {
         const status = targetStatus === 'approved' ? 'Approved' : 'Rejected';
         fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-            body: JSON.stringify({ status })
+            body: JSON.stringify({ status, reason })
         })
             .then(res => res.json())
             .then(() => fetchClaimItems())
@@ -301,43 +313,44 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
             .catch(err => console.error('Failed to return item:', err));
     };
 
-    const handleCancelSchedule = (item) => {
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash`, {
-            method: 'POST',
+    const handleCancelSchedule = (item, { reason, suggestedTime }) => {
+        console.log('cancelSchedule item:', item);
+        console.log('cancelSchedule claimDbId:', item.claimDbId);
+        console.log('cancelSchedule token:', getToken());
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}/cancel-notif`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-            body: JSON.stringify({
-                source_tab: 'cancelled',
-                claim_id: item.claimId,
-                claimant: item.claimant?.replace(/\|/g, ' '),
-                item_number: item.itemNumber,
-                item_name: item.itemName,
-                status: 'Cancelled',
-                original_id: item.claimDbId,
-                user_id: item.userId,
-                lost_item_id: item.lostItemId,
-                category: item.category || null,
-                date_found: item.dateFound || item.date_found || null,
-                last_seen: item.lastSeen || item.last_seen || null,
-                image: item.image || null,
-                additional_info: item.additional_info || item.additionalInfo || null,
-            })
+            body: JSON.stringify({ reason, suggestedTime })
         })
             .then(res => res.json())
             .then(() => {
-                fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
-                    method: 'PUT',
+                return fetch(`${import.meta.env.VITE_API_URL}/api/admin/trash`, {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-                    body: JSON.stringify({ status: 'Pending' })
-                })
-                    .then(() => {
-                        fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}/cancel-notif`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` }
-                        });
-                        fetchApprovedItems();
-                        fetchClaimItems();
-                        fetchTrashItems();
-                    });
+                    body: JSON.stringify({
+                        source_tab: 'cancelled',
+                        claim_id: item.claimId,
+                        claimant: item.claimant?.replace(/\|/g, ' '),
+                        item_number: item.itemNumber,
+                        item_name: item.itemName,
+                        status: 'Cancelled',
+                        original_id: item.claimDbId,
+                        user_id: item.userId,
+                        lost_item_id: item.lostItemId,
+                        category: item.category || null,
+                        date_found: item.dateFound || item.date_found || null,
+                        last_seen: item.lastSeen || item.last_seen || null,
+                        image: item.image || null,
+                        additional_info: item.additional_info || item.additionalInfo || null,
+                    })
+                });
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('trash POST response:', data);
+                fetchApprovedItems();
+                fetchClaimItems();
+                fetchTrashItems();
             })
             .catch(err => console.error('Failed to cancel schedule:', err));
     };
@@ -580,9 +593,69 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
         </div>
     );
 
+    const autoTrashWarnings = dataMap.lost.filter(item => {
+        if (!item.date_found) return false;
+        const found = new Date(String(item.date_found).replace(" ", "T"));
+        const daysOld = (Date.now() - found.getTime()) / (1000 * 60 * 60 * 24);
+        return daysOld >= 21;
+    }).filter(item => !dismissedWarnings.includes(item.id));
+
+    const autoDeleteWarnings = dataMap.trash.filter(item => {
+        if (!item.dateDeleted) return false;
+        const deleted = new Date(String(item.dateDeleted).replace(" ", "T"));
+        const daysOld = (Date.now() - deleted.getTime()) / (1000 * 60 * 60 * 24);
+        return daysOld >= 21;
+    }).filter(item => !dismissedWarnings.includes(item.trashDbId));
+
     return (
         <div className="mx-4 montserrat bg-white rounded-xl h-170 2xl:h-250 flex flex-col">
             <span className="w-full h-0.5 bg-gray-200 mt-2"></span>
+
+            {autoTrashWarnings.length > 0 && (
+                <div className="flex items-start gap-2 bg-[#FFF2F2] border border-red-400 rounded-xl px-4 py-3 mt-3 text-sm 2xl:text-base text-red-600">
+                    <div className="w-2.5 h-2.5 2xl:w-3.5 2xl:h-3.5 bg-red-500 rounded-full mt-1 animate-pulse shrink-0" />
+                    <div className="flex-1">
+                        <p className="font-semibold montserrat">Items nearing auto-removal</p>
+                        <p className="text-xs 2xl:text-sm text-red-500 montserrat mt-0.5">
+                            {autoTrashWarnings.length === 1
+                                ? <>Item <span className="font-semibold">#{autoTrashWarnings[0].id} — {autoTrashWarnings[0].name}</span> has been unclaimed for over 3 weeks and will be automatically moved to Trash in 7 days.</>
+                                : <><span className="font-semibold">{autoTrashWarnings.length} items</span> ({autoTrashWarnings.map(i => i.name).join(', ')}) have been unclaimed for over 3 weeks and will be automatically moved to Trash in 7 days.</>
+                            }
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => {
+                            const newDismissed = [...dismissedWarnings, ...autoTrashWarnings.map(i => i.id)];
+                            setDismissedWarnings(newDismissed);
+                            localStorage.setItem('dismissedWarnings', JSON.stringify(newDismissed));
+                        }}
+                        className="text-red-400 hover:text-red-600 text-lg 2xl:text-2xl leading-none mt-0.5 shrink-0"
+                    >×</button>
+                </div>
+            )}
+
+            {autoDeleteWarnings.length > 0 && (
+                <div className="flex items-start gap-2 bg-[#FFF2F2] border border-red-400 rounded-xl px-4 py-3 mt-3 text-sm 2xl:text-base text-red-600">
+                    <div className="w-2.5 h-2.5 2xl:w-3.5 2xl:h-3.5 bg-red-500 rounded-full mt-1 animate-pulse shrink-0" />
+                    <div className="flex-1">
+                        <p className="font-semibold montserrat">Trash items nearing permanent deletion</p>
+                        <p className="text-xs 2xl:text-sm text-red-500 montserrat mt-0.5">
+                            {autoDeleteWarnings.length === 1
+                                ? <>Item <span className="font-semibold">{autoDeleteWarnings[0].itemName}</span> has been in Trash for over 3 weeks and will be permanently deleted in 7 days.</>
+                                : <><span className="font-semibold">{autoDeleteWarnings.length} items</span> in Trash will be permanently deleted in 7 days.</>
+                            }
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => {
+                            const newDismissed = [...dismissedWarnings, ...autoDeleteWarnings.map(i => i.trashDbId)];
+                            setDismissedWarnings(newDismissed);
+                            localStorage.setItem('dismissedWarnings', JSON.stringify(newDismissed));
+                        }}
+                        className="text-red-400 hover:text-red-600 text-lg 2xl:text-2xl leading-none mt-0.5 shrink-0"
+                    >×</button>
+                </div>
+            )}
 
             <div className="flex items-center justify-between mb-4 pt-4">
                 <div className="flex items-center gap-2">
@@ -730,7 +803,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                                             <button onClick={() => setSelectedSubmission(item)} className="transition-transform duration-150 hover:scale-110">
                                                 <img src={ApproveRequestButton} className="w-5 h-5 2xl:w-6 2xl:h-6 " />
                                             </button>
-                                            <button onClick={() => setRejectTarget(item)} className="transition-transform duration-150 hover:scale-110">
+                                            <button onClick={() => setRejectWithReasonTarget(item)} className="transition-transform duration-150 hover:scale-110">
                                                 <img src={RejectRequestButton} className="w-5 h-5 2xl:w-6 2xl:h-6" />
                                             </button>
                                             <button onClick={() => setActiveMenu(activeMenu === item.claimId ? null : item.claimId)} className={`text-lg 2xl:text-xl font-bold focus:outline-none focus:ring-0`}>•••</button>
@@ -787,7 +860,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                                                         View Item
                                                     </button>
                                                     <button
-                                                        onClick={() => { handleCancelSchedule(item); setActiveMenu(null); }}
+                                                        onClick={() => { setCancelScheduleTarget(item); setActiveMenu(null); }}
                                                         className="w-full px-3 py-2 hover:bg-gray-100 rounded-md text-left text-sm 2xl:text-base text-red-500">
                                                         Cancel Schedule
                                                     </button>
@@ -918,6 +991,7 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
             {addItemOpen && (
                 <AddItemPopup
                     onClose={() => setAddItemOpen(false)}
+                    existingItems={lostItems}
                     onSuccess={() => {
                         setAddItemOpen(false);
                         fetchLostItems();
@@ -933,6 +1007,17 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                         onConfirm={handleConfirm}
                     />
                 </div>
+            )}
+
+            {cancelScheduleTarget && (
+                <CancelSchedulePopup
+                    item={cancelScheduleTarget}
+                    onClose={() => setCancelScheduleTarget(null)}
+                    onConfirm={(data) => {
+                        handleCancelSchedule(cancelScheduleTarget, data);
+                        setCancelScheduleTarget(null);
+                    }}
+                />
             )}
 
             {showPopup === "deleteForever" && (
@@ -990,12 +1075,13 @@ function ItemsManagementLayout({ onClaimCountChange, initialSearch = "" }) {
                 />
             )}
 
-            {rejectTarget && (
-                <RejectClaimRequestPopup
-                    onClose={() => setRejectTarget(null)}
-                    onConfirm={() => {
-                        moveClaim(rejectTarget, "rejected");
-                        setRejectTarget(null);
+            {rejectWithReasonTarget && (
+                <RejectWithReasonPopup
+                    item={rejectWithReasonTarget}
+                    onClose={() => setRejectWithReasonTarget(null)}
+                    onConfirm={({ reason }) => {
+                        moveClaim(rejectWithReasonTarget, "rejected", reason);
+                        setRejectWithReasonTarget(null);
                     }}
                 />
             )}

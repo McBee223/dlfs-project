@@ -94,27 +94,7 @@ function PersonalInformation() {
                 </div>
             </div>
 
-            <div className="mt-6">
-                <label className="text-sm 2xl:text-base text-gray-500 mb-1 block">
-                    Contact <span className="text-gray-400">(Optional)</span>
-                </label>
-                <div className={`flex items-center input 2xl:px-5 2xl:py-4 2xl:text-base 2xl:mb-1 w-full ${!editMode ? "bg-white pointer-events-none" : "bg-gray-100"}`}>
-                    <img src={ContactIcon} className="w-5 h-5 2xl:w-6 2xl:h-6 mr-1" />
-                    <input
-                        type="text"
-                        value={localContact}
-                        onChange={(e) => setLocalContact(e.target.value)}
-                        readOnly={!editMode}
-                        maxLength={20}
-                        inputMode="numeric"
-                        className="flex-1 focus:outline-none bg-transparent"
-                        onKeyDown={(e) => {
-                            if (["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
-                            if (!/^\d$/.test(e.key)) e.preventDefault();
-                        }}
-                    />
-                </div>
-            </div>
+            
         </div>
     );
 }

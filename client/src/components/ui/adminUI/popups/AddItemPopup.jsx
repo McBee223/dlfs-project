@@ -3,7 +3,7 @@ import ExitIcon from "../../../../assets/icons/ExitIcon.svg";
 import FileUploadIcon from "../../../../assets/icons/FileUploadIcon.svg";
 import DropdownIcon from "../../../../assets/icons/DropdownIcon.svg";
 
-function AddItemPopup({ onClose, onSuccess }) {
+function AddItemPopup({ onClose, onSuccess, existingItems = [] }) {
     const modalRef = useRef();
     const categoryRef = useRef();
 
@@ -19,6 +19,24 @@ function AddItemPopup({ onClose, onSuccess }) {
     const [additionalInfo, setAdditionalInfo] = useState("");
 
     const categories = ["Bags", "Electronics", "Personal", "Document", "Clothes", "School Item"];
+
+    const isDuplicate = existingItems.some(
+        item => String(item.id).replace(/^#/, '') === itemNumber.trim()
+    );
+
+    const isFormValid = itemNumber && itemName && category && dateFound && lastSeen && !isDuplicate;
+    useEffect(() => {
+        if (existingItems.length === 0) {
+            setItemNumber("0001");
+            return;
+        }
+        const existingIds = new Set(
+            existingItems.map(item => parseInt(String(item.id).replace(/^#/, ''), 10))
+        );
+        let next = 1;
+        while (existingIds.has(next)) next++;
+        setItemNumber(String(next).padStart(4, '0'));
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -36,8 +54,6 @@ function AddItemPopup({ onClose, onSuccess }) {
             setImagePreview(URL.createObjectURL(file));
         }
     };
-
-    const isFormValid = itemNumber && itemName && category && dateFound && lastSeen;
 
     const handleSubmit = async () => {
         if (!isFormValid) return;
@@ -248,6 +264,10 @@ function AddItemPopup({ onClose, onSuccess }) {
 
                     {!isFormValid && (
                         <p className="text-xs 2xl:text-sm text-red-500 mt-1">Please fill up everything first</p>
+                    )}
+
+                    {isDuplicate && (
+                        <p className="text-xs text-red-500 mt-1">Item number already exists</p>
                     )}
                 </div>
             </div>

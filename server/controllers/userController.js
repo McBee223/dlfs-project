@@ -82,6 +82,8 @@ exports.getLostItems = (req, res) => {
       my_claim.id AS user_claim_id,
       my_claim.status AS claim_status,
       my_claim.has_cancel_notif,
+      my_claim.cancel_reason,
+      my_claim.cancel_suggested_time,
       (
         SELECT JSON_ARRAYAGG(
           JSON_OBJECT(
@@ -101,13 +103,13 @@ exports.getLostItems = (req, res) => {
       ret_user.name AS returned_by_name
     FROM lost_items l
     LEFT JOIN claims_items my_claim
-  ON my_claim.id = (
-    SELECT id FROM claims_items
-    WHERE lost_item_id = l.id
-      AND user_id = ?
-      AND status != 'Trashed'
-    ORDER BY id DESC LIMIT 1
-  )
+      ON my_claim.id = (
+        SELECT id FROM claims_items
+        WHERE lost_item_id = l.id
+          AND user_id = ?
+          AND status != 'Trashed'
+        ORDER BY id DESC LIMIT 1
+      )
     LEFT JOIN returned_items ret ON ret.lost_item_id = l.id
     LEFT JOIN users ret_user ON ret_user.id = ret.user_id
     WHERE l.status IN ('Unclaimed', 'Returned', 'Claimed')
@@ -119,7 +121,9 @@ exports.getLostItems = (req, res) => {
       ...row,
       approved_claims: row.approved_claims
         ? (typeof row.approved_claims === 'string' ? JSON.parse(row.approved_claims) : row.approved_claims)
-        : []
+        : [],
+      cancel_reason: row.cancel_reason || null,
+      cancel_suggested_time: row.cancel_suggested_time || null,
     }));
     res.status(200).json({ items: parsed });
   });
@@ -278,7 +282,7 @@ exports.submitClaim = (req, res) => {
 
         const claimId = result.insertId;
 
-        // Notify user + admin
+        
         createNotification(req.user.id, 'Pending');
         createAdminNotification('Claim Submitted by User', 'A user has submitted a new claim request.');
 
@@ -365,7 +369,6 @@ exports.moveToUserTrash = (req, res) => {
                 [claim_id, userId],
                 (err3) => {
                   if (err3) return res.status(500).json({ message: 'Failed to update claim status', error: err3.message });
-                  // Notify admin of cancellation
                   createAdminNotification('Claim Cancelled by User', 'A claim request has been cancelled by the user.');
                   res.status(201).json({ message: 'Moved to trash!' });
                 }
@@ -392,11 +395,27 @@ exports.getUserTrash = (req, res) => {
 exports.deleteUserTrashForever = (req, res) => {
   const { id } = req.params;
   db.query(
-    `DELETE FROM user_trash_items WHERE id = ? AND user_id = ?`,
+    `SELECT claim_id FROM user_trash_items WHERE id = ? AND user_id = ?`,
     [id, req.user.id],
-    (err) => {
-      if (err) return res.status(500).json({ message: 'Failed to delete', error: err.message });
-      res.status(200).json({ message: 'Deleted forever!' });
+    (err, results) => {
+      if (err) return res.status(500).json({ message: 'Failed to fetch', error: err.message });
+      const claim_id = results[0]?.claim_id;
+      db.query(
+        `DELETE FROM user_trash_items WHERE id = ? AND user_id = ?`,
+        [id, req.user.id],
+        (err2) => {
+          if (err2) return res.status(500).json({ message: 'Failed to delete', error: err2.message });
+          if (!claim_id) return res.status(200).json({ message: 'Deleted forever!' });
+          db.query(
+            `DELETE FROM claims_items WHERE id = ? AND user_id = ?`,
+            [claim_id, req.user.id],
+            (err3) => {
+              if (err3) console.error('Failed to delete claim:', err3.message);
+              res.status(200).json({ message: 'Deleted forever!' });
+            }
+          );
+        }
+      );
     }
   );
 };

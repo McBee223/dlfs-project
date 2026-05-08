@@ -60,8 +60,6 @@ router.delete('/notifications/delete-all', verifyAdmin, adminNotifController.del
 router.put('/notifications/:id/read', verifyAdmin, adminNotifController.markAdminNotificationRead);
 router.delete('/notifications/:id', verifyAdmin, adminNotifController.deleteAdminNotification);
 
-
-
 router.get('/lost-items/:id', verifyAdmin, adminController.getLostItemById);
 
 module.exports = router;

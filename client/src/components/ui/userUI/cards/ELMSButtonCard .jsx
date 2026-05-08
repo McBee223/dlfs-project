@@ -7,10 +7,11 @@ function ELMSButtonCard() {
 
     const openELMS = () => {
         window.open(
-            "https://elms.sti.edu/site/not_logged_in?from=%2Fuser_dashboard&log_in_required=true",
+            "https://elms.sti.edu.ph",
             "_blank"
         );
     };
+
 
     return (
         <div

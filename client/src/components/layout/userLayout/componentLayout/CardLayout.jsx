@@ -4,6 +4,7 @@ import ItemsCard from "../../../ui/userUI/cards/ItemsCard";
 import ViewDetailsPopup from "../../../ui/userUI/popups/ViewDetailsPopup";
 import ClaimItemPopup from "../../../ui/userUI/popups/ClaimItemPopup";
 import ClaimSuccesPopup from "../../../ui/userUI/popups/ClaimSuccesPopup";
+import ViewScheduleReasonPopup from "../../../ui/userUI/popups/ViewScheduleReasonPopup";
 
 const TABS = [
     { key: "lost", label: "Lost Items" },
@@ -21,6 +22,7 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
     const [lostItems, setLostItems] = useState([]);
     const [editingClaimId, setEditingClaimId] = useState(null);
     const [activeTab, setActiveTab] = useState("lost");
+    const [viewReasonItem, setViewReasonItem] = useState(null);
 
     const isSearching = searchQuery?.trim().length > 0;
 
@@ -54,6 +56,8 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                                 ? item.approved_claims.length > 0 && item.claim_status !== 'Approved'
                                 : false,
                         hasCancelNotif: item.has_cancel_notif === 1 || item.has_cancel_notif === true,
+                        cancelReason: item.cancel_reason || null,
+                        cancelSuggestedTime: item.cancel_suggested_time || null,
                     }));
 
                     const seen = new Set();
@@ -295,6 +299,12 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                                 </span>{" "}
                                 was canceled by the admin. Please resubmit your claim to arrange a new schedule or wait for the admin to re-check your schedule.
                             </p>
+                            <button
+                                onClick={() => setViewReasonItem(cancelNotifItems[0])}
+                                className="montserrat mt-2 text-xs 2xl:text-sm font-semibold underline text-[#047EAF] hover:text-[#035f85]"
+                            >
+                                View Reason
+                            </button>
                         </div>
                         <button
                             onClick={() => cancelNotifItems.forEach(i => onDismissCancelNotif?.(i.id, i.userClaimId))}
@@ -304,7 +314,6 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
                         </button>
                     </div>
                 )}
-
                 {isSearching && (
                     <div className="flex flex-col gap-1">
                         <p className="montserrat text-sm 2xl:text-base font-semibold text-[#047EAF]">
@@ -365,6 +374,13 @@ function CardLayout({ pinnedIds, onPinChange, activeCategory, onClaimSuccess, se
 
             {showSuccessPopup && (
                 <ClaimSuccesPopup onClose={() => setShowSuccessPopup(false)} />
+            )}
+
+            {viewReasonItem && (
+                <ViewScheduleReasonPopup
+                    item={viewReasonItem}
+                    onClose={() => setViewReasonItem(null)}
+                />
             )}
         </>
     );

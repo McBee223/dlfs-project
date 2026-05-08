@@ -3,6 +3,7 @@ import ExitIcon from "../../../../assets/icons/ExitIcon.svg";
 import ApproveClaimImage from "../../../../assets/images/ApproveClaimImage.png";
 import RejectClaimImage from "../../../../assets/images/RejectClaimImage.png";
 import RejectClaimRequestPopup from "./RejectClaimRequestPopup";
+import RejectWithReasonPopup from "./RejectWithReasonPopup";
 
 function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
     const modalRef = useRef();
@@ -11,6 +12,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
     const [loading, setLoading] = useState(false);
     const [timeDropdownOpen, setTimeDropdownOpen] = useState(false);
     const [rejectPending, setRejectPending] = useState(false);
+    const [showRejectReason, setShowRejectReason] = useState(false);
 
     const [fromDay] = useState("Monday");
     const [toDay] = useState("Friday");
@@ -19,7 +21,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (rejectPending) return;
+            if (rejectPending || showRejectReason) return;
             if (modalRef.current && !modalRef.current.contains(e.target)) {
                 onClose();
             } else {
@@ -28,7 +30,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [onClose, rejectPending]);
+    }, [onClose, rejectPending, showRejectReason]);
 
     if (!item) return null;
 
@@ -59,14 +61,14 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
         finally { setLoading(false); }
     };
 
-    const handleReject = async () => {
+    const handleReject = async (reason = null) => {
         setLoading(true);
         const token = localStorage.getItem('adminToken');
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/claims/${item.claimDbId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ status: "Rejected" })
+                body: JSON.stringify({ status: "Rejected", reason })
             });
             if (res.ok) { onReject(item); onClose(); }
             else { const d = await res.json(); alert(d.message || "Failed to reject."); }
@@ -108,8 +110,8 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
             )}
 
             <div
-                className="fixed inset-0 bg-[rgba(0,0,0,0.3)] items-center justify-center z-500"
-                style={{ display: rejectPending ? "none" : "flex" }}
+                className="fixed inset-0 bg-[rgba(0,0,0,0.3)] items-center justify-center z-600"
+                style={{ display: (rejectPending || showRejectReason) ? "none" : "flex" }}
             >
                 <div
                     ref={modalRef}
@@ -254,7 +256,7 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
                                         <img src={ApproveClaimImage} alt="approve" className="h-10 2xl:h-12" />
                                     </button>
                                     <button
-                                        onClick={() => setRejectPending(true)}
+                                        onClick={() => setShowRejectReason(true)}
                                         disabled={loading}
                                         className="transition-transform duration-150 hover:scale-110 disabled:opacity-60"
                                     >
@@ -267,12 +269,14 @@ function ViewSubmissionDetailsPopup({ item, onClose, onApprove, onReject }) {
                 </div>
             </div>
 
-            {rejectPending && (
-                <RejectClaimRequestPopup
-                    onClose={() => setRejectPending(false)}
-                    onConfirm={() => {
-                        setRejectPending(false);
-                        handleReject();
+            {showRejectReason && (
+                <RejectWithReasonPopup
+                    item={item}
+                    onClose={() => setShowRejectReason(false)}
+                    onConfirm={({ reason }) => {
+                        setShowRejectReason(false);
+                        onClose();
+                        handleReject(reason);
                     }}
                 />
             )}

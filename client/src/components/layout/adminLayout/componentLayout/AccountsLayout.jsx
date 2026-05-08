@@ -96,7 +96,7 @@ function AccountsLayout({ onUserCountChange }) {
             await Promise.all(
                 selectedIds.map((key) => {
                     const type = archiveTypeMap[key] || 'user';
-                    const id = key.replace(/^(admin-|user-)/, ''); // strip prefix
+                    const id = key.replace(/^(admin-|user-)/, ''); 
                     return fetch(`${import.meta.env.VITE_API_URL}/api/admin/archive/${id}?type=${type}`, {
                         method: 'DELETE',
                         headers: { Authorization: `Bearer ${token}` }

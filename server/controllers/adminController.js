@@ -328,7 +328,7 @@ exports.getClaimsCount = (req, res) => {
 
 exports.updateClaimStatus = (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { status, reason } = req.body;
 
   if (!['Pending', 'Approved', 'Rejected'].includes(status)) {
     return res.status(400).json({ message: 'Invalid status' });
@@ -338,22 +338,30 @@ exports.updateClaimStatus = (req, res) => {
     if (err0 || rows.length === 0) return res.status(500).json({ message: 'Failed to find claim' });
     const userId = rows[0].user_id;
 
-    db.query('UPDATE claims_items SET status = ? WHERE id = ?', [status, id], (err) => {
+    const updateSql = status === 'Rejected' && reason
+      ? 'UPDATE claims_items SET status = ?, cancel_reason = ? WHERE id = ?'
+      : 'UPDATE claims_items SET status = ? WHERE id = ?';
+    const updateParams = status === 'Rejected' && reason
+      ? [status, reason, id]
+      : [status, id];
+
+    db.query(updateSql, updateParams, (err) => {
       if (err) return res.status(500).json({ message: 'Failed to update claim', error: err.message });
 
       if (status === 'Approved') createNotification(userId, 'Approved');
       if (status === 'Rejected') createNotification(userId, 'Rejected');
 
-      const userStatus = status === 'Approved' ? 'Approved' : status === 'Rejected' ? 'Rejected' : 'Pending';
       const message = status === 'Approved'
         ? 'Your claim has been approved by the admin.'
         : status === 'Rejected'
-          ? 'Your claim request has been rejected by the admin.'
+          ? reason
+            ? `Your claim was rejected. Reason: ${reason}`
+            : 'Your claim request has been rejected by the admin.'
           : 'Your claim request is pending review.';
 
       db.query(
         'UPDATE user_item_status SET status = ?, message = ? WHERE claim_id = ?',
-        [userStatus, message, id],
+        [status === 'Approved' ? 'Approved' : status === 'Rejected' ? 'Rejected' : 'Pending', message, id],
         (err2) => {
           if (err2) console.error('Failed to update user item status:', err2.message);
           res.status(200).json({ message: `Claim ${status}!` });
@@ -535,7 +543,7 @@ exports.restoreTrashItem = (req, res) => {
     } else if (['claim', 'approved', 'rejected'].includes(source_tab)) {
       const restoreStatus = source_tab === 'approved' ? 'Approved'
         : source_tab === 'rejected' ? 'Rejected'
-        : 'Pending';
+          : 'Pending';
 
       db.query(
         `INSERT INTO claims_items (id, user_id, lost_item_id, status, date_submitted)
@@ -603,7 +611,7 @@ exports.moveToTrash = (req, res) => {
     status, original_id, user_id, lost_item_id, category,
     date_found, last_seen, image, additional_info
   } = req.body;
-
+  console.log('moveToTrash body:', JSON.stringify(req.body));
   db.query(
     `INSERT INTO trash_items 
       (source_tab, claim_id, claimant, item_number, item_name, status, 
@@ -639,8 +647,17 @@ exports.moveToTrash = (req, res) => {
           res.status(201).json({ message: 'Moved to trash!' });
         });
       } else if (source_tab === 'cancelled') {
+        console.log('cancelled branch hit, original_id:', original_id);
         if (user_id) createNotification(user_id, 'Cancelled');
-        res.status(201).json({ message: 'Moved to trash as cancelled!' });
+        db.query(
+          'UPDATE claims_items SET status = ?, pickup_date = NULL, pickup_time = NULL WHERE id = ?',
+          ['Pending', original_id],
+          (err2, result) => {
+            console.log('UPDATE result:', result?.affectedRows, err2?.message);
+            if (err2) return res.status(500).json({ message: 'Moved to trash but failed to update claim', error: err2.message });
+            res.status(201).json({ message: 'Moved to trash as cancelled!' });
+          }
+        );
       } else {
         res.status(201).json({ message: 'Moved to trash!' });
       }
@@ -697,12 +714,18 @@ exports.getCalendarEvents = (req, res) => {
 
 exports.setCancelNotif = (req, res) => {
   const { id } = req.params;
-  db.query('UPDATE claims_items SET has_cancel_notif = 1 WHERE id = ?', [id], (err) => {
-    if (err) return res.status(500).json({ message: 'Failed to set notif', error: err.message });
-    res.status(200).json({ message: 'Cancel notif set!' });
-  });
+  const { reason, suggestedTime } = req.body;
+  console.log('setCancelNotif:', { id, reason, suggestedTime });
+  db.query(
+    `UPDATE claims_items SET has_cancel_notif = 1, cancel_reason = ?, cancel_suggested_time = ? WHERE id = ?`,
+    [reason || null, suggestedTime || null, id],
+    (err, result) => {
+      console.log('setCancelNotif affectedRows:', result?.affectedRows);
+      if (err) return res.status(500).json({ message: 'Failed to set cancel notif', error: err.message });
+      res.json({ message: 'Cancel notif updated' });
+    }
+  );
 };
-
 exports.getLostItemById = (req, res) => {
   const { id } = req.params;
   const sql = `SELECT *, DATE_FORMAT(date_found, '%Y-%m-%dT%H:%i') AS date_found FROM lost_items WHERE id = ?`;

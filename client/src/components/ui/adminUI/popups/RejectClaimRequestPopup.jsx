@@ -9,7 +9,7 @@ function RejectClaimRequestPopup({ onClose, onConfirm }) {
                 <div className="w-16 h-16 2xl:w-20 2xl:h-20 rounded-full bg-[#FEEFEF] flex items-center justify-center mb-4 2xl:mb-5">
                     <img src={RejectClaimRequestIcon} alt="warning" className="w-6 h-6 2xl:w-8 2xl:h-8" />
                 </div>
-
+    
                 <h2 className="text-[18px] 2xl:text-[22px] font-semibold text-[#323232] mb-1 2xl:mb-2">
                     Reject this claim?
                 </h2>

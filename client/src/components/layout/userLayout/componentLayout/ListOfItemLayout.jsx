@@ -38,8 +38,8 @@ function ListOfItemLayout() {
                         .filter(i => i != null && i.item_name != null && i.status != null)
                         .map(i => ({
                             id: i.id,
-                            claim_id: i.claim_id ? parseInt(i.claim_id) || null : null,       // ✅
-                            lost_item_id: i.lost_item_id ? parseInt(i.lost_item_id) || null : null,  // ✅
+                            claim_id: i.claim_id ? parseInt(i.claim_id) || null : null,       
+                            lost_item_id: i.lost_item_id ? parseInt(i.lost_item_id) || null : null,  
                             item: i.item_name,
                             type: i.category,
                             message: i.status === 'Returned'
@@ -158,7 +158,7 @@ function ListOfItemLayout() {
                     body: JSON.stringify({
                         item_status_id: item.id,
                         lost_item_id: item.lost_item_id ?? null,
-                        claim_id: item.claim_id ?? null,       // ✅ explicit null fallback
+                        claim_id: item.claim_id ?? null,       
                         item_name: item.item,
                         category: item.type,
                         status: item.status,
@@ -168,7 +168,7 @@ function ListOfItemLayout() {
                 }).then(async res => {
                     if (!res.ok) {
                         const errBody = await res.json().catch(() => ({ message: res.statusText }));
-                        console.error(`Failed for item ${item.id}:`, errBody); // ✅ see exact backend error
+                        console.error(`Failed for item ${item.id}:`, errBody); 
                         throw new Error(`Failed for item ${item.id}: ${errBody.message}`);
                     }
                     return res.json();

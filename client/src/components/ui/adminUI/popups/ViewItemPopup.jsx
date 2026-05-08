@@ -39,7 +39,7 @@ function ViewItemPopup({ onClose, onSave, item }) {
         item?.image && item.image !== "" ? item.image : SampleImage
     );
 
-    const categories = ["Bags", "Electronics", "Personal", "Document", "Clothes", "School Item"];
+    const categories = ["Bags", "Electronics", "Personal", "Document", "Clothing", "School Item"];
 
     useEffect(() => {
         const isTrashItem = !!item?.trashDbId || !!item?.sourceTab;

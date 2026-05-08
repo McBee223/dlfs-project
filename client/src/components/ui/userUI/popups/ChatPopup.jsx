@@ -82,7 +82,7 @@
                 questions: [
                     {
                         q: "How long does the school keep lost items before they are disposed of or donated?",
-                        a: "Unclaimed items are typically held for at least two weeks. The exact duration may vary depending on the nature of the item. After this period, items may be disposed of or donated in accordance with school policy."
+                        a: "Unclaimed items are typically held for at least 1 month. The exact duration may vary depending on the nature of the item. After this period, items may be disposed of or donated in accordance with school policy."
                     },
                     {
                         q: "Is my personal information visible to other students when I make a claim?",

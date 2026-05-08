@@ -51,7 +51,7 @@ function ItemStatusCard({ id, item, editMode, selected, toggleSelect, activeMenu
                     <p>{item.item ?? "-"}</p>
                 </div>
                 <p>{item.type ?? "-"}</p>
-                <p>{displayMessage}</p>
+                <p className="truncate max-w-110 2xl:max-w-125" title={displayMessage}>{displayMessage}</p>
                 <p>{item.date ?? "-"}</p>
                 {Icon && <img src={Icon} className="w-45 2xl:w-27 h-auto" />}
                 <button onClick={() => setActiveMenu(activeMenu === id ? null : id)} className="2xl:text-lg">•••</button>
