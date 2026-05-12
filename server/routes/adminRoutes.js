@@ -42,15 +42,11 @@ router.put('/claims/:id', verifyAdmin, adminController.updateClaimStatus);
 
 router.get('/returned-items', verifyAdmin, adminController.getReturnedItems);
 
-router.post('/trash/test', (req, res) => {
-    res.json({ message: 'test route hit!' });
-});
-
-router.get('/trash', adminController.getTrashItems);
-router.post('/trash', adminController.moveToTrash);
-router.delete('/trash/:id', adminController.deleteTrashItem);
 router.post('/trash/delete-forever', adminController.deleteTrashItemsForever);
 router.post('/trash/:id/restore', verifyAdmin, adminController.restoreTrashItem);
+router.get('/trash', adminController.getTrashItems);
+router.post('/trash', verifyAdmin, adminController.moveToTrash);
+router.delete('/trash/:id', adminController.deleteTrashItem);
 
 router.get('/calendar-events', verifyAdmin, adminController.getCalendarEvents);
 

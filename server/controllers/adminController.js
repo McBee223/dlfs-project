@@ -611,7 +611,7 @@ exports.moveToTrash = (req, res) => {
     status, original_id, user_id, lost_item_id, category,
     date_found, last_seen, image, additional_info
   } = req.body;
-  console.log('moveToTrash body:', JSON.stringify(req.body));
+  console.log('moveToTrash HIT, source_tab:', source_tab);
   db.query(
     `INSERT INTO trash_items 
       (source_tab, claim_id, claimant, item_number, item_name, status, 
@@ -655,7 +655,14 @@ exports.moveToTrash = (req, res) => {
           (err2, result) => {
             console.log('UPDATE result:', result?.affectedRows, err2?.message);
             if (err2) return res.status(500).json({ message: 'Moved to trash but failed to update claim', error: err2.message });
-            res.status(201).json({ message: 'Moved to trash as cancelled!' });
+            db.query(
+              `UPDATE user_item_status SET status = 'In Process', message = 'Your re-claim is currently under review.' WHERE claim_id = ?`,
+              [original_id],
+              (err3) => {
+                if (err3) console.error('Failed to update user item status:', err3.message);
+                res.status(201).json({ message: 'Moved to trash as cancelled!' });
+              }
+            );
           }
         );
       } else {
@@ -715,14 +722,31 @@ exports.getCalendarEvents = (req, res) => {
 exports.setCancelNotif = (req, res) => {
   const { id } = req.params;
   const { reason, suggestedTime } = req.body;
-  console.log('setCancelNotif:', { id, reason, suggestedTime });
+  console.log('setCancelNotif id:', id);
+
   db.query(
     `UPDATE claims_items SET has_cancel_notif = 1, cancel_reason = ?, cancel_suggested_time = ? WHERE id = ?`,
     [reason || null, suggestedTime || null, id],
     (err, result) => {
-      console.log('setCancelNotif affectedRows:', result?.affectedRows);
       if (err) return res.status(500).json({ message: 'Failed to set cancel notif', error: err.message });
-      res.json({ message: 'Cancel notif updated' });
+
+      // ✅ Add these: reset claim status and update user item status
+      db.query(
+        `UPDATE claims_items SET status = 'Pending', pickup_date = NULL, pickup_time = NULL WHERE id = ?`,
+        [id],
+        (err2) => {
+          if (err2) console.error('Failed to reset claim status:', err2.message);
+
+          db.query(
+            `UPDATE user_item_status SET status = 'In Process', message = 'Your re-claim is currently under review.' WHERE claim_id = ?`,
+            [id],
+            (err3) => {
+              if (err3) console.error('Failed to update user item status:', err3.message);
+              res.json({ message: 'Cancel notif updated' });
+            }
+          );
+        }
+      );
     }
   );
 };
