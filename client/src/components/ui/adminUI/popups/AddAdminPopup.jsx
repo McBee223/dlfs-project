@@ -3,28 +3,81 @@ import ExitIcon from '../../../../assets/icons/ExitIcon.svg';
 import ShowPasswordIcon from '../../../../assets/icons/ShowPasswordIcon.svg';
 import HidePasswordIcon from '../../../../assets/icons/HidePasswordIcon.svg';
 
+const passwordRules = [
+    { label: "at least 8 characters",          test: (p) => p.length >= 8 },
+    { label: "one uppercase letter (A–Z)",      test: (p) => /[A-Z]/.test(p) },
+    { label: "one lowercase letter (a–z)",      test: (p) => /[a-z]/.test(p) },
+    { label: "one number (0–9)",                test: (p) => /[0-9]/.test(p) },
+    { label: "one special character (!@#$…)",   test: (p) => /[!@#$%^&*()\-_=+[\]{};:'",.<>?/\\|`~]/.test(p) },
+];
+
+const segColors = ["", "#E24B4A", "#E24B4A", "#EF9F27", "#047EAF", "#1D9E75"];
+
+function PasswordStrengthBar({ score }) {
+    const color = segColors[score] || "#e5e7eb";
+    return (
+        <div className="flex gap-1 mt-1.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="h-0.5 flex-1 rounded-full transition-all duration-300"
+                    style={{ background: i < score ? color : "#e5e7eb" }}
+                />
+            ))}
+        </div>
+    );
+}
+
+function PasswordHint({ password }) {
+    if (!password) return null;
+
+    const nextFail = passwordRules.findIndex((r) => !r.test(password));
+    const allDone  = nextFail === -1;
+
+    return (
+        <div className="flex items-center gap-1.5 mt-1 h-5">
+            {allDone ? (
+                <>
+                    <span className="text-xs" style={{ color: "#1D9E75" }}>✓</span>
+                    <span className="text-xs font-medium" style={{ color: "#1D9E75" }}>Password looks great!</span>
+                </>
+            ) : (
+                <>
+                    <span className="text-xs" style={{ color: "#E24B4A" }}>→</span>
+                    <span className="text-xs text-gray-400">Add {passwordRules[nextFail].label}</span>
+                </>
+            )}
+        </div>
+    );
+}
+
+function validatePassword(p) {
+    return passwordRules.every((r) => r.test(p));
+}
+
 function AddAdminPopup({ onClose, onConfirm }) {
     const modalRef = useRef();
-    const token = localStorage.getItem('adminToken');
+    const token    = localStorage.getItem('adminToken');
 
-    const [adminId, setAdminId] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const [adminId, setAdminId]               = useState("");
+    const [firstName, setFirstName]           = useState("");
+    const [lastName, setLastName]             = useState("");
+    const [password, setPassword]             = useState("");
+    const [showPassword, setShowPassword]     = useState(false);
     const [microsoftAccount, setMicrosoftAccount] = useState("");
     const [userLevel] = useState("Admin");
-    const [error, setError] = useState("");
+    const [error, setError]   = useState("");
     const [loading, setLoading] = useState(false);
 
     const today = new Date();
-    const date = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(today.getDate()).padStart(2, "0")}/${String(today.getFullYear()).slice(-2)}`;
+    const date  = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(today.getDate()).padStart(2, "0")}/${String(today.getFullYear()).slice(-2)}`;
+
+    const passed = passwordRules.filter((r) => r.test(password)).length;
+    const score  = password.length === 0 ? 0 : Math.max(1, passed);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (modalRef.current && !modalRef.current.contains(e.target)) {
-                onClose();
-            }
+            if (modalRef.current && !modalRef.current.contains(e.target)) onClose();
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -32,7 +85,11 @@ function AddAdminPopup({ onClose, onConfirm }) {
 
     const handleSubmit = async () => {
         if (!adminId || !firstName || !lastName || !password || !microsoftAccount) {
-            setError("Please fill in all fields");
+            setError("Please fill in all fields.");
+            return;
+        }
+        if (!validatePassword(password)) {
+            setError("Password doesn't meet all requirements.");
             return;
         }
 
@@ -44,30 +101,15 @@ function AddAdminPopup({ onClose, onConfirm }) {
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/admins`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    id: adminId,
-                    name: fullName,
-                    password,
-                    microsoftaccount: microsoftAccount,
-                    date,
-                    role: 'Admin'
-                })
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                body: JSON.stringify({ id: adminId, name: fullName, password, microsoftaccount: microsoftAccount, date, role: 'Admin' }),
             });
 
             const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.message || "Failed to add admin");
-                return;
-            }
+            if (!res.ok) { setError(data.message || "Failed to add admin"); return; }
 
             onConfirm({ id: adminId, name: fullName, password, microsoftaccount: microsoftAccount, date, role: 'Admin' });
-
-        } catch (err) {
+        } catch {
             setError("Something went wrong. Try again.");
         } finally {
             setLoading(false);
@@ -79,9 +121,7 @@ function AddAdminPopup({ onClose, onConfirm }) {
             <div ref={modalRef} className="montserrat bg-white w-155 2xl:w-180 max-h-[85vh] rounded-2xl shadow-lg p-6 2xl:p-8 flex flex-col">
                 <div className="flex justify-between items-center mb-4 2xl:mb-6">
                     <h2 className="text-lg 2xl:text-xl font-semibold text-[#323232]">Add Admin</h2>
-                    <button onClick={onClose}>
-                        <img src={ExitIcon} className="w-5 h-5 2xl:w-6 2xl:h-6" />
-                    </button>
+                    <button onClick={onClose}><img src={ExitIcon} className="w-5 h-5 2xl:w-6 2xl:h-6" /></button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto pr-3 2xl:pr-4">
@@ -110,11 +150,14 @@ function AddAdminPopup({ onClose, onConfirm }) {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="input 2xl:text-base w-full pr-10 placeholder-gray-400"
                                 placeholder="••••••••"
+                                autoComplete="new-password"
                             />
-                            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 2xl:right-5 top-6 -translate-y-1/2 cursor-pointer">
-                                <img src={showPassword ? HidePasswordIcon : ShowPasswordIcon} className="w-4 h-4 2xl:w-5 2xl:h-5 opacity-80" />
+                            <button type="button" onClick={() => setShowPassword((s) => !s)} className="absolute right-4 2xl:right-5 top-6 -translate-y-1/2 cursor-pointer opacity-50 hover:opacity-80 transition-opacity">
+                                <img src={showPassword ? HidePasswordIcon : ShowPasswordIcon} className="w-4 h-4 2xl:w-5 2xl:h-5" />
                             </button>
                         </div>
+                        {password.length > 0 && <PasswordStrengthBar score={score} />}
+                        <PasswordHint password={password} />
                     </div>
 
                     <div>
@@ -130,11 +173,7 @@ function AddAdminPopup({ onClose, onConfirm }) {
                     {error && <p className="text-red-500 text-xs 2xl:text-sm mt-2">{error}</p>}
                 </div>
 
-                <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="mt-4 2xl:mt-6 bg-[#047EAF] text-white py-3 2xl:py-4 rounded-xl 2xl:text-base font-semibold disabled:opacity-60"
-                >
+                <button onClick={handleSubmit} disabled={loading} className="mt-4 2xl:mt-6 bg-[#047EAF] text-white py-3 2xl:py-4 rounded-xl 2xl:text-base font-semibold disabled:opacity-60">
                     {loading ? "Adding..." : "Add Admin"}
                 </button>
             </div>
@@ -143,7 +182,3 @@ function AddAdminPopup({ onClose, onConfirm }) {
 }
 
 export default AddAdminPopup;
-
-
-
-
