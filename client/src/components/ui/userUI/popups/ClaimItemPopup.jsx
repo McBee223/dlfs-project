@@ -291,7 +291,7 @@ function ClaimItemPopup({ item, onClose, onSuccess, claimId }) {
                                             <span style={{ color: pickupTime ? '#323232' : '#9ca3af' }}>
                                                 {pickupTime || 'Select a time slot'}
                                             </span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
                                                 fill="none" stroke="#323232" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
                                                 style={{ transition: 'transform 0.2s', transform: timeDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}>
                                                 <polyline points="6 9 12 15 18 9" />
